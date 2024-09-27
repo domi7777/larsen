@@ -1,22 +1,7 @@
-import {useEffect, useState} from 'react';
+import {Kit} from './Kit.tsx';
 
 function App() {
-  const  [isLoading, setLoading] = useState(true);
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-  }, []);
-
-  return (
-    <>
-      {
-        isLoading ?
-          <img src="./icons/pwa-512x512.png" alt="loading" />
-          :<>kikoo</>
-      }
-    </>
-  )
+  return <Kit/>;
 }
 
-export default App
+export default App;
