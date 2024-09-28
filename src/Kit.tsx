@@ -4,13 +4,8 @@ import {KitScene} from './scenes/KitScene.ts';
 function resizeGame(game: Phaser.Game) {
   const width = window.innerWidth;
   const height = window.innerHeight;
-
   game.scale.resize(width, height);
-  game.scene.scenes.forEach(scene => {
-    if (scene instanceof Phaser.Scene && scene.sys.scale) {
-      scene.sys.scale.refresh();
-    }
-  });
+  game.scene.scenes.forEach(scene => scene.sys?.scale?.refresh());
 }
 
 let isGameInitialized = false;
@@ -35,6 +30,5 @@ export const Kit = () => {
     window.addEventListener('resize', () => {
       resizeGame(game);
     });
-    return <></>;
   }
 }
