@@ -31,4 +31,5 @@ export const Kit = () => {
       resizeGame(game);
     });
   }
+  return <></>;
 }
