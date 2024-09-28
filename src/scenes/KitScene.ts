@@ -8,11 +8,11 @@ import {playCrashCymbal} from '../samples/crash.ts';
 export class KitScene extends Phaser.Scene {
 
   get gameWidth() {
-    return this.game.canvas.width * window.devicePixelRatio;
+    return this.game.canvas.width;
   }
 
   get gameHeight() {
-    return this.game.canvas.height * window.devicePixelRatio;
+    return this.game.canvas.height;
   }
 
   protected hexToColor(hex: string) {
