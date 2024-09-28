@@ -28,6 +28,9 @@ export const Kit = () => {
       scene: [
         KitScene
       ],
+      input: {
+        activePointers: 4, // Allow four active pointers for multi-touch
+      },
     });
     window.addEventListener('resize', () => {
       resizeGame(game);
