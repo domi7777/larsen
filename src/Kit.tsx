@@ -24,6 +24,7 @@ export const Kit = () => {
       parent: 'phaser-container',
       width: window.innerWidth,
       height: window.innerHeight,
+      backgroundColor: '#FFF',
       scene: [
         KitScene
       ],
