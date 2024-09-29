@@ -6,6 +6,7 @@ import {playKick} from '../samples/kick.ts';
 import {playCrashCymbal} from '../samples/crash.ts';
 
 export class KitScene extends Phaser.Scene {
+  private recordButton!: Phaser.GameObjects.Arc;
 
   protected hexToColor(hex: string) {
     return Phaser.Display.Color.HexStringToColor(hex).color;
@@ -13,6 +14,7 @@ export class KitScene extends Phaser.Scene {
 
   create () {
     this.createPads();
+    this.createRecordButton();
   }
 
   private createPads() {
@@ -46,5 +48,56 @@ export class KitScene extends Phaser.Scene {
     };
     window.addEventListener('resize', resizePads);
     resizePads();
+  }
+
+  private createRecordButton() {
+    const recordRectangle = this.add.rectangle()
+      .setFillStyle(this.hexToColor('#000000'))
+      .setOrigin(0, 0)
+    this.recordButton = this.add.circle()
+      .setFillStyle(this.hexToColor('#FD0041'))
+      .setOrigin(0.5, 0)
+    let isRecordingReady = false;
+    let blinkingRecordButtonTween: Phaser.Tweens.Tween;
+    [recordRectangle, this.recordButton].forEach(button => {
+      button.setInteractive()
+        .on('pointerdown', () => {
+          isRecordingReady = !isRecordingReady;
+          this.recordButton.setAlpha(0.7);
+          this.tweens.add({
+            targets: this.recordButton,
+            alpha: 1,
+            duration: 250
+          });
+
+          if (isRecordingReady) {
+            blinkingRecordButtonTween = this.tweens.add({
+              targets: this.recordButton,
+              alpha: 0.5,
+              duration: 750,
+              repeat: -1,
+              yoyo: true,
+              ease: 'Sine.easeInOut'
+            });
+          } else {
+            blinkingRecordButtonTween.stop();
+            this.recordButton.setAlpha(1);
+          }
+        });
+    });
+
+    const resizeRecordButton = () => {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      let recordButtonSize = Math.max(height, width) / 20;
+      recordRectangle.setSize(width, recordButtonSize).setPosition(0, 0);
+      this.recordButton
+        .setRadius((recordButtonSize / 2) - 5)
+        .setPosition(width / 2, 5)
+        .setStrokeStyle(recordButtonSize / 20, this.hexToColor('#FFF'), 0.8)
+
+    };
+    window.addEventListener('resize', resizeRecordButton);
+    resizeRecordButton();
   }
 }
