@@ -90,7 +90,7 @@ export class KitScene extends Phaser.Scene {
       const width = window.innerWidth;
       const height = window.innerHeight;
       let recordButtonSize = Math.max(height, width) / 20;
-      recordRectangle.setSize(width, recordButtonSize).setPosition(0, 0);
+      recordRectangle.setSize(width, recordButtonSize).setPosition(0, -1);
       this.recordButton
         .setRadius((recordButtonSize / 2) - 5)
         .setPosition(width / 2, 5)
