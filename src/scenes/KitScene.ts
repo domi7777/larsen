@@ -42,7 +42,7 @@ const colors = {
 type ControlState = 'idle' | 'readyToRecord' | 'recording' | 'playing';
 
 export class KitScene extends Phaser.Scene {
-  private controls: {
+  private controls!: {
     state: ControlState,
     stop: ControlButton,
     record: ControlButton,
@@ -149,13 +149,13 @@ export class KitScene extends Phaser.Scene {
       });
     stop.button.setInteractive()
       .on('pointerdown', () => {
-        this.controls.state = 'idle';
         if (this.controls.state === 'recording') {
           stopRecording();
         }
         if (this.controls.state === 'playing') {
           stopPlaying();
         }
+        this.controls.state = 'idle';
         this.updateControlsText();
       });
     play.button.setInteractive()
