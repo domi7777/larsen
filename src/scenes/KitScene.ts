@@ -4,6 +4,7 @@ import {playHiHat} from '../samples/hihat.ts';
 import {playSnare} from '../samples/snare.ts';
 import {playKick} from '../samples/kick.ts';
 import {playCrashCymbal} from '../samples/crash.ts';
+import {HexaColor, hexToColor} from '../colors.ts';
 
 type HexaColor = `#${string}`;
 
@@ -12,6 +13,8 @@ function startRecording() {
 }
 
 function stopRecording() {
+  isRecording = false;
+
   console.log('Recording stopped');
 }
 
@@ -79,10 +82,6 @@ export class KitScene extends Phaser.Scene {
     play: Control,
   }
 
-  protected hexToColor(hex: string) {
-    return Phaser.Display.Color.HexStringToColor(hex).color;
-  }
-
   create () {
     this.createPads();
     this.createControlButtons();
@@ -128,19 +127,20 @@ export class KitScene extends Phaser.Scene {
     return {
       instrument,
       button: this.add.rectangle()
-        .setFillStyle(this.hexToColor(padColors[instrument]))
-        .setStrokeStyle(2, this.hexToColor('#FFF'), 0.8)
+        .setFillStyle(hexToColor(padColors[instrument]))
+        .setStrokeStyle(2, hexToColor('#FFF'), 0.8)
     };
   }
 
+  // controls below, TODO extract
   private createButton() {
     const button =  this.add.rectangle()
-      .setFillStyle(this.hexToColor('#000'))
-      .setStrokeStyle(2, this.hexToColor('#FFF'), 0.8)
+      .setFillStyle(hexToColor('#000'))
+      .setStrokeStyle(2, hexToColor('#FFF'), 0.8)
       .setOrigin(0, 0);
     button.setInteractive()
-      .on('pointerdown', () => button.setFillStyle(this.hexToColor('#666')))
-      .on('pointerup', () => button.setFillStyle(this.hexToColor('#000')));
+      .on('pointerdown', () => button.setFillStyle(hexToColor('#666')))
+      .on('pointerup', () => button.setFillStyle(hexToColor('#000')));
     return button;
   }
 
@@ -180,7 +180,6 @@ export class KitScene extends Phaser.Scene {
         } else if (this.controls.state === 'readyToRecord') {
           this.controls.state = 'idle';
           record.text.setText(record.text.getData('initial'));
-          //this.recordButton.setFillStyle(this.hexToColor('#AAA'));
         } else if (this.controls.state === 'recording') {
           this.controls.state = 'idle';
           stopRecording();
