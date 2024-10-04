@@ -6,23 +6,50 @@ import {playKick} from '../samples/kick.ts';
 import {playCrashCymbal} from '../samples/crash.ts';
 import {HexaColor, hexToColor} from '../colors.ts';
 
-type HexaColor = `#${string}`;
+// loop
+let isRecording = false;
+let startRecordingTime = 0;
+
+type LoopEntry = {
+  instrument: Instrument,
+  time: number,
+}
+let loop: LoopEntry[] = [];
+let currentLoopIndex = 0;
+let loopTimeout: number | null = null;
 
 function startRecording() {
+  isRecording = true;
+  startRecordingTime = Date.now();
+  loop = [];
   console.log('Recording started');
 }
 
 function stopRecording() {
   isRecording = false;
-
   console.log('Recording stopped');
 }
 
 function startPlaying() {
-  console.log('Loop played');
+  const playLoop = () => {
+    if (currentLoopIndex >= loop.length) {
+      currentLoopIndex = 0;
+    }
+    const {instrument, time} = loop[currentLoopIndex];
+    const previousTime = currentLoopIndex === 0 ? 0 : loop[currentLoopIndex - 1].time;
+    loopTimeout = setTimeout(() => {
+      console.log(`Playing ${instrument} after ${time}ms`);
+      playInstrument(instrument);
+      currentLoopIndex++;
+      playLoop();
+    }, time - previousTime);
+  }
+  console.log('Loop play starting');
+  playLoop();
 }
 
 function stopPlaying() {
+  loopTimeout && clearTimeout(loopTimeout);
   console.log('Loop stopped');
 }
 
@@ -41,6 +68,14 @@ const playInstrument = (instrument: Instrument) => {
   case 'crash':
     playCrashCymbal();
     break;
+  }
+  if (isRecording) {
+    const time = Date.now() - startRecordingTime;
+    loop.push({
+      instrument,
+      time
+    });
+    console.log(`Recording ${instrument} at time ${time}ms`);
   }
 }
 
@@ -199,6 +234,9 @@ export class KitScene extends Phaser.Scene {
       });
     play.button.setInteractive()
       .on('pointerdown', () => {
+        if (this.controls.state === 'recording') {
+          stopRecording();
+        }
         this.controls.state = 'playing';
         // TODO show text record loop first when no loop
         startPlaying();
