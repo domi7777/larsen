@@ -22,22 +22,8 @@ function startPlaying() {
 function stopPlaying() {
   console.log('Loop stopped');
 }
-// pads
-type Instrument = 'hihat' | 'snare' | 'kick' | 'crash';
 
-type Pad = {
-    instrument: Instrument,
-    button: Phaser.GameObjects.Rectangle,
-}
-
-const padColors: Record<Instrument, HexaColor> = {
-  hihat: '#FDA341',
-  kick: '#F24E1E',
-  snare: '#4A90E2',
-  crash: '#A0D8C5',
-}
-
-const play = (instrument: Instrument) => {
+const playInstrument = (instrument: Instrument) => {
   console.log(`Playing ${instrument}`);
   switch (instrument) {
   case 'hihat':
@@ -53,6 +39,21 @@ const play = (instrument: Instrument) => {
     playCrashCymbal();
     break;
   }
+}
+
+// pads
+type Instrument = 'hihat' | 'snare' | 'kick' | 'crash';
+
+type Pad = {
+    instrument: Instrument,
+    button: Phaser.GameObjects.Rectangle,
+}
+
+const padColors: Record<Instrument, HexaColor> = {
+  hihat: '#FDA341',
+  kick: '#F24E1E',
+  snare: '#4A90E2',
+  crash: '#A0D8C5',
 }
 
 // controls
@@ -105,7 +106,7 @@ export class KitScene extends Phaser.Scene {
           this.updateControlsText();
           startRecording();
         }
-        play(instrument);
+        playInstrument(instrument);
       }).on('pointerup', () => button.setAlpha(1))
       .on('pointerout', () => button.setAlpha(1))
     );
