@@ -11,7 +11,7 @@ let isRecording = false;
 let startRecordingTime = 0;
 
 type LoopEntry = {
-  instrument: Instrument,
+  instrument: Instrument | null,
   time: number,
 }
 let loop: LoopEntry[] = [];
@@ -27,6 +27,10 @@ function startRecording() {
 
 function stopRecording() {
   isRecording = false;
+  loop.push({
+    instrument: null,
+    time: Date.now() - startRecordingTime
+  });
   console.log('Recording stopped');
 }
 
@@ -39,7 +43,7 @@ function startPlaying() {
     const previousTime = currentLoopIndex === 0 ? 0 : loop[currentLoopIndex - 1].time;
     loopTimeout = setTimeout(() => {
       console.log(`Playing ${instrument} after ${time}ms`);
-      playInstrument(instrument);
+      instrument && playInstrument(instrument);
       currentLoopIndex++;
       playLoop();
     }, time - previousTime);
