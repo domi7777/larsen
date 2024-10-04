@@ -5,6 +5,8 @@ import {playSnare} from '../samples/snare.ts';
 import {playKick} from '../samples/kick.ts';
 import {playCrashCymbal} from '../samples/crash.ts';
 
+type HexaColor = `#${string}`;
+
 function startRecording() {
   console.log('Recording started');
 }
@@ -20,33 +22,60 @@ function startPlaying() {
 function stopPlaying() {
   console.log('Loop stopped');
 }
+// pads
+type Instrument = 'hihat' | 'snare' | 'kick' | 'crash';
 
-type ControlButton = {
+type Pad = {
+    instrument: Instrument,
+    button: Phaser.GameObjects.Rectangle,
+}
+
+const padColors: Record<Instrument, HexaColor> = {
+  hihat: '#FDA341',
+  kick: '#F24E1E',
+  snare: '#4A90E2',
+  crash: '#A0D8C5',
+}
+
+const play = (instrument: Instrument) => {
+  console.log(`Playing ${instrument}`);
+  switch (instrument) {
+  case 'hihat':
+    playHiHat();
+    break;
+  case 'snare':
+    playSnare();
+    break;
+  case 'kick':
+    playKick();
+    break;
+  case 'crash':
+    playCrashCymbal();
+    break;
+  }
+}
+
+// controls
+type ControlState = 'idle' | 'readyToRecord' | 'recording' | 'playing';
+
+type Control = {
   button: Phaser.GameObjects.Rectangle,
   text: Phaser.GameObjects.Text,
 };
 
-type HexaColor = `#${string}`;
-
-const controlFonts: Record<ControlState, HexaColor> = {
+const fontColors: Record<ControlState, HexaColor> = {
   idle: '#FFF',
   readyToRecord: '#0FF',
   recording: '#FD0041',
   playing: '#0F0',
 }
 
-const colors = {
-  fonts: controlFonts
-}
-
-type ControlState = 'idle' | 'readyToRecord' | 'recording' | 'playing';
-
 export class KitScene extends Phaser.Scene {
   private controls!: {
     state: ControlState,
-    stop: ControlButton,
-    record: ControlButton,
-    play: ControlButton,
+    stop: Control,
+    record: Control,
+    play: Control,
   }
 
   protected hexToColor(hex: string) {
@@ -59,38 +88,48 @@ export class KitScene extends Phaser.Scene {
   }
 
   private createPads() {
-    const pads = [
-      this.add.rectangle().setFillStyle(this.hexToColor('#FDA341')).on('pointerdown', () => playHiHat()),
-      this.add.rectangle().setFillStyle(this.hexToColor('#F24E1E')).on('pointerdown', () => playKick()),
-      this.add.rectangle().setFillStyle(this.hexToColor('#4A90E2')).on('pointerdown', () => playSnare()),
-      this.add.rectangle().setFillStyle(this.hexToColor('#A0D8C5')).on('pointerdown', () => playCrashCymbal())
+    const pads: Pad[] = [
+      this.createPad('hihat'),
+      this.createPad('kick'),
+      this.createPad('snare'),
+      this.createPad('crash'),
     ];
 
-    pads.forEach(rectangle => rectangle
+    pads.forEach(({button, instrument}) => button
       .setInteractive()
       .setOrigin(0, 0)
       .on('pointerdown', () => {
-        rectangle.setAlpha(0.7);
+        button.setAlpha(0.7);
         if (this.controls.state === 'readyToRecord') {
           this.controls.state = 'recording';
           this.updateControlsText();
           startRecording();
         }
-      }).on('pointerup', () => rectangle.setAlpha(1))
-      .on('pointerout', () => rectangle.setAlpha(1))
+        play(instrument);
+      }).on('pointerup', () => button.setAlpha(1))
+      .on('pointerout', () => button.setAlpha(1))
     );
 
     const resizePads = () => {
       const width = window.innerWidth;
       const height = window.innerHeight;
       // Update the pads
-      pads[0].setSize(width / 2, height / 2).setPosition(0, 0);
-      pads[1].setSize(width / 2, height / 2).setPosition(width / 2, 0);
-      pads[2].setSize(width / 2, height / 2).setPosition(0, height / 2);
-      pads[3].setSize(width / 2, height / 2).setPosition(width / 2, height / 2);
+      pads[0].button.setSize(width / 2, height / 2).setPosition(0, 0);
+      pads[1].button.setSize(width / 2, height / 2).setPosition(width / 2, 0);
+      pads[2].button.setSize(width / 2, height / 2).setPosition(0, height / 2);
+      pads[3].button.setSize(width / 2, height / 2).setPosition(width / 2, height / 2);
     };
     window.addEventListener('resize', resizePads);
     resizePads();
+  }
+
+  private createPad(instrument: Instrument): Pad {
+    return {
+      instrument,
+      button: this.add.rectangle()
+        .setFillStyle(this.hexToColor(padColors[instrument]))
+        .setStrokeStyle(2, this.hexToColor('#FFF'), 0.8)
+    };
   }
 
   private createButton() {
@@ -191,8 +230,8 @@ export class KitScene extends Phaser.Scene {
       play: {text: playText}
     } = this.controls;
     [recordText, stopText, playText]
-      .forEach(text => text.setText(text.getData('initial')).setColor(colors.fonts.idle));
-    const color = colors.fonts[this.controls.state];
+      .forEach(text => text.setText(text.getData('initial')).setColor(fontColors.idle));
+    const color = fontColors[this.controls.state];
     switch (this.controls.state) {
     case 'idle':
       break;
