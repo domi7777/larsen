@@ -1,4 +1,4 @@
-
+import Phaser from 'phaser';
 import Phaser from 'phaser';
 import {playHiHat} from '../samples/hihat.ts';
 import {playSnare} from '../samples/snare.ts';
@@ -86,7 +86,7 @@ const playInstrument = (instrument: Instrument) => {
 }
 
 // pads
-type Instrument = 'hihat' | 'hihat-open' | 'ride' |  'crash'
+type Instrument = 'hihat' | 'hihat-open' | 'ride' | 'crash'
     | 'snare' | 'kick' | 'tom-low' | 'tom-high';
 
 type Pad = {
@@ -128,7 +128,7 @@ export class DrumsScene extends Phaser.Scene {
     play: Control,
   }
 
-  create () {
+  create() {
     this.createPads();
     this.createControlButtons();
   }
@@ -164,7 +164,7 @@ export class DrumsScene extends Phaser.Scene {
     );
 
     const resizePads = () => {
-      const width =  window.innerWidth / 4;
+      const width = window.innerWidth / 4;
       const height = window.innerHeight / 2;
       pads.forEach(({button}, index) => {
         const x = index % 4 * width;
@@ -187,7 +187,7 @@ export class DrumsScene extends Phaser.Scene {
 
   // controls below, TODO extract
   private createButton() {
-    const button =  this.add.rectangle()
+    const button = this.add.rectangle()
       .setFillStyle(hexToColor('#000'))
       .setStrokeStyle(2, hexToColor('#FFF'), 0.8)
       .setOrigin(0, 0);

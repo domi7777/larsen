@@ -13,7 +13,7 @@ let isGameInitialized = false;
 export const Game = () => {
   if (!isGameInitialized) {
     isGameInitialized = true;
-    const game =new Phaser.Game({
+    const game = new Phaser.Game({
       type: Phaser.AUTO,
       mode: Phaser.Scale.RESIZE,
       parent: 'phaser-container',
