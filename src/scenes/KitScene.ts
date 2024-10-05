@@ -5,6 +5,10 @@ import {playSnare} from '../samples/snare.ts';
 import {playKick} from '../samples/kick.ts';
 import {playCrashCymbal} from '../samples/crash.ts';
 import {HexaColor, hexToColor} from '../colors.ts';
+import {playOpenHiHat} from '../samples/hihat-open.ts';
+import {playRide} from '../samples/ride.ts';
+import {playTom2High} from '../samples/tom-high.ts';
+import {playTom1Low} from '../samples/tom-low.ts';
 
 // loop
 let isRecording = false;
@@ -57,22 +61,20 @@ function stopPlaying() {
   console.log('Loop stopped');
 }
 
+const instrumentToSample: Record<Instrument, () => void> = {
+  hihat: playHiHat,
+  kick: playKick,
+  snare: playSnare,
+  crash: playCrashCymbal,
+  'hihat-open': playOpenHiHat,
+  ride: playRide,
+  'tom-low': playTom1Low,
+  'tom-high': playTom2High,
+}
+
 const playInstrument = (instrument: Instrument) => {
   console.log(`Playing ${instrument}`);
-  switch (instrument) {
-  case 'hihat':
-    playHiHat();
-    break;
-  case 'snare':
-    playSnare();
-    break;
-  case 'kick':
-    playKick();
-    break;
-  case 'crash':
-    playCrashCymbal();
-    break;
-  }
+  instrumentToSample[instrument]();
   if (isRecording) {
     const time = Date.now() - startRecordingTime;
     loop.push({
@@ -84,7 +86,8 @@ const playInstrument = (instrument: Instrument) => {
 }
 
 // pads
-type Instrument = 'hihat' | 'snare' | 'kick' | 'crash';
+type Instrument = 'hihat' | 'hihat-open' | 'ride' |  'crash'
+    | 'snare' | 'kick' | 'tom-low' | 'tom-high';
 
 type Pad = {
     instrument: Instrument,
@@ -96,7 +99,11 @@ const padColors: Record<Instrument, HexaColor> = {
   kick: '#F24E1E',
   snare: '#4A90E2',
   crash: '#A0D8C5',
-}
+  'hihat-open': '#F9F871',
+  ride: '#F5C542',
+  'tom-low': '#FF7F50',
+  'tom-high': '#9B59B6',
+};
 
 // controls
 type ControlState = 'idle' | 'readyToRecord' | 'recording' | 'playing';
@@ -127,11 +134,18 @@ export class KitScene extends Phaser.Scene {
   }
 
   private createPads() {
+    // change the order of the pads if needed, top to bottom and left to right
     const pads: Pad[] = [
-      this.createPad('hihat'),
-      this.createPad('kick'),
-      this.createPad('snare'),
+      // top
       this.createPad('crash'),
+      this.createPad('ride'),
+      this.createPad('hihat-open'),
+      this.createPad('hihat'),
+      // bottom
+      this.createPad('snare'),
+      this.createPad('tom-low'),
+      this.createPad('tom-high'),
+      this.createPad('kick'),
     ];
 
     pads.forEach(({button, instrument}) => button
@@ -150,13 +164,13 @@ export class KitScene extends Phaser.Scene {
     );
 
     const resizePads = () => {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      // Update the pads
-      pads[0].button.setSize(width / 2, height / 2).setPosition(0, 0);
-      pads[1].button.setSize(width / 2, height / 2).setPosition(width / 2, 0);
-      pads[2].button.setSize(width / 2, height / 2).setPosition(0, height / 2);
-      pads[3].button.setSize(width / 2, height / 2).setPosition(width / 2, height / 2);
+      const width =  window.innerWidth / 4;
+      const height = window.innerHeight / 2;
+      pads.forEach(({button}, index) => {
+        const x = index % 4 * width;
+        const y = Math.floor(index / 4) * height;
+        button.setSize(width, height).setPosition(x, y);
+      })
     };
     window.addEventListener('resize', resizePads);
     resizePads();
