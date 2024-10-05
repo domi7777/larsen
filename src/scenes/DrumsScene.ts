@@ -120,7 +120,7 @@ const fontColors: Record<ControlState, HexaColor> = {
   playing: '#0F0',
 }
 
-export class KitScene extends Phaser.Scene {
+export class DrumsScene extends Phaser.Scene {
   private controls!: {
     state: ControlState,
     stop: Control,

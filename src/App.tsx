@@ -1,7 +1,7 @@
-import {Kit} from './Kit.tsx';
+import {Game} from './Game.tsx';
 
 function App() {
-  return <Kit/>;
+  return <Game/>;
 }
 
 export default App;

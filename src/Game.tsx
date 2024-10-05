@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import {KitScene} from './scenes/KitScene.ts';
+import {DrumsScene} from './scenes/DrumsScene.ts';
 
 function resizeGame(game: Phaser.Game) {
   const width = window.innerWidth;
@@ -10,7 +10,7 @@ function resizeGame(game: Phaser.Game) {
 
 let isGameInitialized = false;
 
-export const Kit = () => {
+export const Game = () => {
   if (!isGameInitialized) {
     isGameInitialized = true;
     const game =new Phaser.Game({
@@ -21,7 +21,7 @@ export const Kit = () => {
       height: window.innerHeight,
       backgroundColor: '#FFF',
       scene: [
-        KitScene
+        DrumsScene
       ],
       input: {
         activePointers: 4, // Allow four active pointers for multi-touch
