@@ -1,5 +1,4 @@
 import Phaser from 'phaser';
-import Phaser from 'phaser';
 import {playHiHat} from '../samples/hihat.ts';
 import {playSnare} from '../samples/snare.ts';
 import {playKick} from '../samples/kick.ts';
