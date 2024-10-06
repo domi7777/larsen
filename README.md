@@ -1,7 +1,7 @@
 # Larsen
 A simple music PWA: https://domi7777.github.io/larsen/
 
-Due to browser restrictions with ausio context,
+Due to browser restrictions with audio context,
 it works best when installed as a Progressive Web App (PWA)
 
 ## How to install
