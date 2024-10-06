@@ -227,11 +227,10 @@ export class DrumsScene extends Phaser.Scene {
     record.button.setInteractive()
       .on('pointerdown', () => {
         if (this.controls.state === 'idle' || this.controls.state === 'playing') {
+          stopPlaying();
           this.controls.state = 'readyToRecord';
-          record.text.setText('Hit a pad to start');
         } else if (this.controls.state === 'readyToRecord') {
           this.controls.state = 'idle';
-          record.text.setText(record.text.getData('initial'));
         } else if (this.controls.state === 'recording') {
           this.controls.state = 'idle';
           stopRecording();
