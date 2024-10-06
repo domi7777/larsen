@@ -148,11 +148,13 @@ export class DrumsScene extends Phaser.Scene {
     ];
 
     const resizePads = () => {
-      const width = window.innerWidth / 4;
-      const height = window.innerHeight / 2;
+      const colNumber = 4;
+      const rowNumber = 2;
+      const width = window.innerWidth / colNumber;
+      const height = window.innerHeight / rowNumber;
       pads.forEach(({button}, index) => {
-        const x = index % 4 * width;
-        const y = Math.floor(index / 4) * height;
+        const x = index % colNumber * width;
+        const y = Math.floor(index / colNumber) * height;
         button.setSize(width, height).setPosition(x, y);
       })
     };
