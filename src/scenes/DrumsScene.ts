@@ -147,21 +147,6 @@ export class DrumsScene extends Phaser.Scene {
       this.createPad('kick'),
     ];
 
-    pads.forEach(({button, instrument}) => button
-      .setInteractive()
-      .setOrigin(0, 0)
-      .on('pointerdown', () => {
-        button.setAlpha(0.7);
-        if (this.controls.state === 'readyToRecord') {
-          this.controls.state = 'recording';
-          this.updateControlsText();
-          startRecording();
-        }
-        playInstrument(instrument);
-      }).on('pointerup', () => button.setAlpha(1))
-      .on('pointerout', () => button.setAlpha(1))
-    );
-
     const resizePads = () => {
       const width = window.innerWidth / 4;
       const height = window.innerHeight / 2;
@@ -176,11 +161,24 @@ export class DrumsScene extends Phaser.Scene {
   }
 
   private createPad(instrument: Instrument): Pad {
+    const button = this.add.rectangle()
+      .setFillStyle(hexToColor(padColors[instrument]))
+      .setStrokeStyle(2, hexToColor('#FFF'), 0.8)
+      .setInteractive()
+      .setOrigin(0, 0);
+    button.on('pointerdown', () => {
+      button.setAlpha(0.7);
+      if (this.controls.state === 'readyToRecord') {
+        this.controls.state = 'recording';
+        this.updateControlsText();
+        startRecording();
+      }
+      playInstrument(instrument);
+    }).on('pointerup', () => button.setAlpha(1))
+      .on('pointerout', () => button.setAlpha(1))
     return {
       instrument,
-      button: this.add.rectangle()
-        .setFillStyle(hexToColor(padColors[instrument]))
-        .setStrokeStyle(2, hexToColor('#FFF'), 0.8)
+      button
     };
   }
 
