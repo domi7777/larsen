@@ -112,7 +112,7 @@ type Control = {
   text: Phaser.GameObjects.Text,
 };
 
-const fontColors: Record<ControlState, HexaColor> = {
+const controlColors: Record<ControlState, HexaColor> = {
   idle: '#FFF',
   readyToRecord: '#0FF',
   recording: '#FD0041',
@@ -283,8 +283,8 @@ export class DrumsScene extends Phaser.Scene {
       play: {text: playText}
     } = this.controls;
     [recordText, stopText, playText]
-      .forEach(text => text.setText(text.getData('initial')).setColor(fontColors.idle));
-    const color = fontColors[this.controls.state];
+      .forEach(text => text.setText(text.getData('initial')).setColor(controlColors.idle));
+    const color = controlColors[this.controls.state];
     switch (this.controls.state) {
     case 'idle':
       break;
