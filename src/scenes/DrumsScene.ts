@@ -254,10 +254,19 @@ export class DrumsScene extends Phaser.Scene {
         if (this.controls.state === 'recording') {
           stopRecording();
         }
-        this.controls.state = 'playing';
-        // TODO show text record loop first when no loop
-        startPlaying();
-        this.updateControlsText();
+        if (loop.length > 0) {
+          this.controls.state = 'playing';
+          startPlaying();
+          this.updateControlsText();
+        } else {
+          this.controls.state = 'idle';
+          this.updateControlsText();
+          console.log('No loop to play');
+          this.controls.play.text.setText('No loop to play, record first');
+          this.time.delayedCall(2000, () => {
+            this.updateControlsText();
+          });
+        }
       });
 
     const resizeControls = () => {
