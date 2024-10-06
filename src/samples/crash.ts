@@ -1,5 +1,3 @@
-// Create an Audio Context
-const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
 //
 // How It Works:
 //     White Noise: The crash cymbal sound is built from a long burst of white noise (1.5 seconds) to capture the "wash" of the cymbal.
@@ -11,7 +9,10 @@ const audioContext = new (window.AudioContext || (window as any).webkitAudioCont
 // Decay Time: You can adjust the decay time (currently 1.5 seconds) for a longer or shorter crash cymbal.
 //     Filter Frequencies: Adjusting the high-pass and low-pass filter frequencies will change how bright or dark the cymbal sounds.
 //     Oscillator Volume: The metallic shimmer is controlled by oscGain.gain. You can increase or decrease it to blend the overtone more or less with the noise.
+import {createAudioContext} from './sample-utils.ts';
+
 export function playCrashCymbal() {
+  const audioContext = createAudioContext();
   // --- 1. White Noise for the main crash sound ---
   const bufferSize = audioContext.sampleRate * 1.5; // 1.5 second buffer for long decay
   const noiseBuffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);

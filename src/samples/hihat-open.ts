@@ -1,7 +1,7 @@
-// Create an Audio Context
-const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+import {createAudioContext} from './sample-utils.ts';
 
 export function playOpenHiHat() {
+  const audioContext = createAudioContext();
   // --- 1. White Noise for the hi-hat ---
   const bufferSize = audioContext.sampleRate * 0.5; // 0.5 second buffer for longer open hi-hat
   const noiseBuffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);

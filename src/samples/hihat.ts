@@ -1,5 +1,3 @@
-// Create an Audio Context
-const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
 
 // Improvements:
 //     Shorter Noise Burst: The noise buffer duration is now much shorter (0.05 seconds), which results in a sharper, crisper hi-hat sound.
@@ -11,7 +9,10 @@ const audioContext = new (window.AudioContext || (window as any).webkitAudioCont
 //     Oscillator Volume: The oscillator (oscGain) is set at a low volume to subtly blend with the noise, creating a realistic metallic feel.
 //
 
+import {createAudioContext} from './sample-utils.ts';
+
 export function playHiHat() {
+  const audioContext = createAudioContext();
   // --- 1. White Noise (for metallic hiss) ---
   const bufferSize = audioContext.sampleRate * 0.05; // Very short burst for a hi-hat
   const noiseBuffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);

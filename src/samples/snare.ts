@@ -1,5 +1,3 @@
-// Create an Audio Context
-const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
 
 // Breakdown:
 //     White Noise:
@@ -14,7 +12,10 @@ const audioContext = new (window.AudioContext || (window as any).webkitAudioCont
 //     Envelope Control:
 //
 //     Both the noise and oscillator have quick decay envelopes to simulate the natural sound of a snare hit.
+import {createAudioContext} from './sample-utils.ts';
+
 export function playSnare() {
+  const audioContext = createAudioContext();
   // --- 1. White Noise (for the snare wires) ---
   const bufferSize = audioContext.sampleRate * 0.2; // Duration: 0.2 seconds
   const noiseBuffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);

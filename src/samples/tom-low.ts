@@ -1,7 +1,7 @@
-// Create an Audio Context
-const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+import {createAudioContext} from './sample-utils.ts';
 
 export function playTom1Low(hz = 99, durationInMs = 500) {
+  const audioContext = createAudioContext();
   // --- 1. Create an oscillator for the base tone ---
   const oscillator = audioContext.createOscillator();
   oscillator.type = 'sine'; // Use a sine wave for the base
