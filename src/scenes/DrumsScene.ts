@@ -192,7 +192,8 @@ export class DrumsScene extends Phaser.Scene {
       .setOrigin(0, 0);
     button.setInteractive()
       .on('pointerdown', () => button.setFillStyle(hexToColor('#666')))
-      .on('pointerup', () => button.setFillStyle(hexToColor('#000')));
+      .on('pointerup', () => button.setFillStyle(hexToColor('#000')))
+      .on('pointerout', () => button.setFillStyle(hexToColor('#000')));
     return button;
   }
 
