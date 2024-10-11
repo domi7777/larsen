@@ -212,15 +212,15 @@ export class DrumsScene extends Phaser.Scene {
       state: 'idle',
       stop: {
         button: this.createControlButton(),
-        text: this.createText('⏹')
+        text: this.createText('Stop')
       },
       record: {
         button: this.createControlButton(),
-        text: this.createText('⏺')
+        text: this.createText('Record')
       },
       play: {
         button: this.createControlButton(),
-        text: this.createText('▶')
+        text: this.createText('Play')
       },
     }
 
@@ -277,7 +277,7 @@ export class DrumsScene extends Phaser.Scene {
 
       [stop, record, play].forEach(({button, text}, index) => {
         button.setSize(buttonWidth, buttonHeight).setPosition(buttonWidth * index, -1);
-        text.setFontSize(buttonHeight / 2)
+        text.setFontSize(buttonHeight / 3)
           .setWordWrapWidth(button.width, true)
           .setSize(button.width, button.height)
           .setPosition(button.getCenter().x, button.getCenter().y);
@@ -303,10 +303,10 @@ export class DrumsScene extends Phaser.Scene {
       recordText.setText('Hit a pad to start').setColor(color);
       break;
     case 'recording':
-      recordText.setColor(color);
+      recordText.setText('Recording...').setColor(color);
       break;
     case 'playing':
-      playText.setColor(color);
+      playText.setText('Playing...').setColor(color);
       break;
     }
 
