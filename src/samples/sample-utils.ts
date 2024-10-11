@@ -8,3 +8,7 @@ export const createAudioContext = () => {
   }
   return audioContext!;
 }
+
+export const resetAudioContext = () => {
+  audioContext = null;
+}

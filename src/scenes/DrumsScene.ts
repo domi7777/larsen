@@ -9,6 +9,7 @@ import {playRide} from '../samples/ride.ts';
 import {playTom2High} from '../samples/tom-high.ts';
 import {playTom1Low} from '../samples/tom-low.ts';
 import {FontFamily} from '../fonts.ts';
+import {resetAudioContext} from '../samples/sample-utils.ts';
 
 // loop
 let isRecording = false;
@@ -74,7 +75,14 @@ const instrumentToSample: Record<Instrument, () => void> = {
 
 const playInstrument = (instrument: Instrument) => {
   console.log(`Playing ${instrument}`);
-  instrumentToSample[instrument]();
+  try {
+    instrumentToSample[instrument]();
+  } catch(e){
+    console.error(`Error playing ${instrument}`, e);
+    resetAudioContext();
+    instrumentToSample[instrument]();
+  }
+
   if (isRecording) {
     const time = Date.now() - startRecordingTime;
     loop.push({
