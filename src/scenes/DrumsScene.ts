@@ -194,7 +194,7 @@ export class DrumsScene extends Phaser.Scene {
   }
 
   // controls below, TODO extract
-  private createControlButton() {
+  private addControlButton() {
     const button = this.add.rectangle()
       .setFillStyle(hexToColor('#000'))
       .setStrokeStyle(2, hexToColor('#FFF'), 0.8)
@@ -222,15 +222,15 @@ export class DrumsScene extends Phaser.Scene {
     this.controls = {
       state: 'idle',
       stop: {
-        button: this.createControlButton(),
+        button: this.addControlButton(),
         text: this.addControlText('stop')
       },
       record: {
-        button: this.createControlButton(),
+        button: this.addControlButton(),
         text: this.addControlText('fiber_manual_record')
       },
       play: {
-        button: this.createControlButton(),
+        button: this.addControlButton(),
         text: this.addControlText('play_arrow')
       },
     }
