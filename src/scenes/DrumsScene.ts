@@ -8,6 +8,7 @@ import {playOpenHiHat} from '../samples/hihat-open.ts';
 import {playRide} from '../samples/ride.ts';
 import {playTom2High} from '../samples/tom-high.ts';
 import {playTom1Low} from '../samples/tom-low.ts';
+import {FontFamily} from '../fonts.ts';
 
 // loop
 let isRecording = false;
@@ -198,12 +199,14 @@ export class DrumsScene extends Phaser.Scene {
   }
 
   private createText(text: string) {
-    return this.add.text(0, 0, text)
+    return this.add.text(0, 0, text, {
+      fontFamily: FontFamily.Material,
+      fontSize: 20,
+      color: '#FFF',
+      align: 'center',
+      resolution: 2,
+    })
       .setOrigin(0.5, 0.5)
-      .setFontSize(20)
-      .setFontFamily('Arial')
-      .setAlign('center')
-      .setColor('#FFF')
       .setData('initial', text);
   }
 
@@ -212,15 +215,15 @@ export class DrumsScene extends Phaser.Scene {
       state: 'idle',
       stop: {
         button: this.createControlButton(),
-        text: this.createText('Stop')
+        text: this.createText('stop')
       },
       record: {
         button: this.createControlButton(),
-        text: this.createText('Record')
+        text: this.createText('fiber_manual_record')
       },
       play: {
         button: this.createControlButton(),
-        text: this.createText('Play')
+        text: this.createText('play_arrow')
       },
     }
 
@@ -262,7 +265,7 @@ export class DrumsScene extends Phaser.Scene {
           this.controls.state = 'idle';
           this.updateControlsText();
           console.log('No loop to play');
-          this.controls.play.text.setText('No loop to play, record first');
+          this.controls.play.text.setFontFamily(FontFamily.Arial).setText('No loop to play, record first');
           this.time.delayedCall(2000, () => {
             this.updateControlsText();
           });
@@ -277,7 +280,7 @@ export class DrumsScene extends Phaser.Scene {
 
       [stop, record, play].forEach(({button, text}, index) => {
         button.setSize(buttonWidth, buttonHeight).setPosition(buttonWidth * index, -1);
-        text.setFontSize(buttonHeight / 3)
+        text.setFontSize(buttonHeight / 2)
           .setWordWrapWidth(button.width, true)
           .setSize(button.width, button.height)
           .setPosition(button.getCenter().x, button.getCenter().y);
@@ -293,20 +296,23 @@ export class DrumsScene extends Phaser.Scene {
       stop: {text: stopText},
       play: {text: playText}
     } = this.controls;
-    [recordText, stopText, playText]
-      .forEach(text => text.setText(text.getData('initial')).setColor(controlColors.idle));
+    // reset fonts to initial icons
+    [recordText, stopText, playText].forEach(text => text
+      .setFontFamily(FontFamily.Material)
+      .setText(text.getData('initial'))
+      .setColor(controlColors.idle));
     const color = controlColors[this.controls.state];
     switch (this.controls.state) {
     case 'idle':
       break;
     case 'readyToRecord':
-      recordText.setText('Hit a pad to start').setColor(color);
+      recordText.setFontFamily(FontFamily.Arial).setText('Hit a pad to start').setColor(color);
       break;
     case 'recording':
-      recordText.setText('Recording...').setColor(color);
+      recordText.setFontFamily(FontFamily.Material).setColor(color);
       break;
     case 'playing':
-      playText.setText('Playing...').setColor(color);
+      playText.setFontFamily(FontFamily.Material).setColor(color);
       break;
     }
 
