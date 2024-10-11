@@ -206,7 +206,7 @@ export class DrumsScene extends Phaser.Scene {
     return button;
   }
 
-  private createText(text: string) {
+  private addControlText(text: string) {
     return this.add.text(0, 0, text, {
       fontFamily: FontFamily.Material,
       fontSize: 20,
@@ -223,15 +223,15 @@ export class DrumsScene extends Phaser.Scene {
       state: 'idle',
       stop: {
         button: this.createControlButton(),
-        text: this.createText('stop')
+        text: this.addControlText('stop')
       },
       record: {
         button: this.createControlButton(),
-        text: this.createText('fiber_manual_record')
+        text: this.addControlText('fiber_manual_record')
       },
       play: {
         button: this.createControlButton(),
-        text: this.createText('play_arrow')
+        text: this.addControlText('play_arrow')
       },
     }
 
