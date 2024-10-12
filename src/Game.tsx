@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import {DrumsScene} from './scenes/DrumsScene.ts';
 import {loadFonts} from './fonts.ts';
+import {ControlsScene} from './scenes/ControlsScene.ts';
 
 function resizeGame(game: Phaser.Game) {
   const width = window.innerWidth;
@@ -23,7 +24,8 @@ export const Game = () => {
         height: window.innerHeight,
         backgroundColor: '#FFF',
         scene: [
-          DrumsScene
+          ControlsScene,
+          DrumsScene,
         ],
         input: {
           activePointers: 4, // Allow four active pointers for multi-touch
@@ -32,6 +34,8 @@ export const Game = () => {
       window.addEventListener('resize', () => {
         resizeGame(game);
       });
+      game.scene.start('ControlsScene');
+      game.scene.start('DrumsScene');
     });
   }
   return <></>;

@@ -1,101 +1,8 @@
 import Phaser from 'phaser';
-import {playHiHat} from '../samples/hihat.ts';
-import {playSnare} from '../samples/snare.ts';
-import {playKick} from '../samples/kick.ts';
-import {playCrashCymbal} from '../samples/crash.ts';
 import {HexaColor, hexToColor} from '../colors.ts';
-import {playOpenHiHat} from '../samples/hihat-open.ts';
-import {playRide} from '../samples/ride.ts';
-import {playTom2High} from '../samples/tom-high.ts';
-import {playTom1Low} from '../samples/tom-low.ts';
-import {FontFamily} from '../fonts.ts';
-import {resetAudioContext} from '../samples/sample-utils.ts';
-
-// loop
-let isRecording = false;
-let startRecordingTime = 0;
-
-type LoopEntry = {
-  instrument: Instrument | null,
-  time: number,
-}
-let loop: LoopEntry[] = [];
-let currentLoopIndex = 0;
-let loopTimeout: number | null = null;
-
-function startRecording() {
-  isRecording = true;
-  startRecordingTime = Date.now();
-  loop = [];
-  console.log('Recording started');
-}
-
-function stopRecording() {
-  isRecording = false;
-  loop.push({
-    instrument: null,
-    time: Date.now() - startRecordingTime
-  });
-  console.log('Recording stopped');
-}
-
-function startPlaying() {
-  const playLoop = () => {
-    if (currentLoopIndex >= loop.length) {
-      currentLoopIndex = 0;
-    }
-    const {instrument, time} = loop[currentLoopIndex];
-    const previousTime = currentLoopIndex === 0 ? 0 : loop[currentLoopIndex - 1].time;
-    loopTimeout = setTimeout(() => {
-      console.log(`Playing ${instrument} after ${time}ms`);
-      instrument && playInstrument(instrument);
-      currentLoopIndex++;
-      playLoop();
-    }, time - previousTime);
-  }
-  console.log('Loop play starting');
-  playLoop();
-}
-
-function stopPlaying() {
-  loopTimeout && clearTimeout(loopTimeout);
-  console.log('Loop stopped');
-}
-
-const instrumentToSample: Record<Instrument, () => void> = {
-  hihat: playHiHat,
-  kick: playKick,
-  snare: playSnare,
-  crash: playCrashCymbal,
-  'hihat-open': playOpenHiHat,
-  ride: playRide,
-  'tom-low': playTom1Low,
-  'tom-high': playTom2High,
-}
-
-const playInstrument = (instrument: Instrument) => {
-  console.log(`Playing ${instrument}`);
-  try {
-    instrumentToSample[instrument]();
-  } catch(e){
-    console.error(`Error playing ${instrument}`, e);
-    resetAudioContext();
-    instrumentToSample[instrument]();
-  }
-
-  if (isRecording) {
-    const time = Date.now() - startRecordingTime;
-    loop.push({
-      instrument,
-      time
-    });
-    console.log(`Recording ${instrument} at time ${time}ms`);
-  }
-}
-
-// pads
-type Instrument = 'hihat' | 'hihat-open' | 'ride' | 'crash'
-    | 'snare' | 'kick' | 'tom-low' | 'tom-high';
+import {startRecording} from '../loops.ts';
+import {Instrument, playInstrument} from '../instruments.ts';
+import {ControlsScene} from './ControlsScene.ts';
 
 type Pad = {
     instrument: Instrument,
@@ -113,32 +20,14 @@ const padColors: Record<Instrument, HexaColor> = {
   'tom-high': '#9B59B6',
 };
 
-// controls
-type ControlState = 'idle' | 'readyToRecord' | 'recording' | 'playing';
-
-type Control = {
-  button: Phaser.GameObjects.Rectangle,
-  text: Phaser.GameObjects.Text,
-};
-
-const controlColors: Record<ControlState, HexaColor> = {
-  idle: '#FFF',
-  readyToRecord: '#0FF',
-  recording: '#FD0041',
-  playing: '#0F0',
-}
-
 export class DrumsScene extends Phaser.Scene {
-  private controls!: {
-    state: ControlState,
-    stop: Control,
-    record: Control,
-    play: Control,
+
+  constructor() {
+    super('DrumsScene');
   }
 
   create() {
     this.createPads();
-    this.createControlButtons();
   }
 
   private createPads() {
@@ -160,11 +49,11 @@ export class DrumsScene extends Phaser.Scene {
       const colNumber = 4;
       const rowNumber = 2;
       const width = window.innerWidth / colNumber;
-      const height = window.innerHeight / rowNumber;
+      const height = (window.innerHeight - ControlsScene.controlsSceneHeight) / rowNumber;
       pads.forEach(({button}, index) => {
         const x = index % colNumber * width;
         const y = Math.floor(index / colNumber) * height;
-        button.setSize(width, height).setPosition(x, y);
+        button.setSize(width, height).setPosition(x, ControlsScene.controlsSceneHeight + y);
       })
     };
     window.addEventListener('resize', resizePads);
@@ -179,9 +68,10 @@ export class DrumsScene extends Phaser.Scene {
       .setOrigin(0, 0);
     button.on('pointerdown', () => {
       button.setAlpha(0.7);
-      if (this.controls.state === 'readyToRecord') {
-        this.controls.state = 'recording';
-        this.updateControlsText();
+      const controlsScene = (this.scene.get('ControlsScene' as string) as ControlsScene);
+      if (controlsScene.controls.state === 'readyToRecord') {
+        controlsScene.controls.state = 'recording';
+        controlsScene.updateControlsText();
         startRecording();
       }
       playInstrument(instrument);
@@ -191,138 +81,5 @@ export class DrumsScene extends Phaser.Scene {
       instrument,
       button
     };
-  }
-
-  // controls below, TODO extract
-  private addControlButton() {
-    const button = this.add.rectangle()
-      .setFillStyle(hexToColor('#000'))
-      .setStrokeStyle(2, hexToColor('#FFF'), 0.8)
-      .setOrigin(0, 0);
-    button.setInteractive()
-      .on('pointerdown', () => button.setFillStyle(hexToColor('#666')))
-      .on('pointerup', () => button.setFillStyle(hexToColor('#000')))
-      .on('pointerout', () => button.setFillStyle(hexToColor('#000')));
-    return button;
-  }
-
-  private addControlText(text: string) {
-    return this.add.text(0, 0, text, {
-      fontFamily: FontFamily.Material,
-      fontSize: 20,
-      color: '#FFF',
-      align: 'center',
-      resolution: 2,
-    })
-      .setOrigin(0.5, 0.5)
-      .setData('initial', text);
-  }
-
-  private createControlButtons() {
-    this.controls = {
-      state: 'idle',
-      stop: {
-        button: this.addControlButton(),
-        text: this.addControlText('stop')
-      },
-      record: {
-        button: this.addControlButton(),
-        text: this.addControlText('fiber_manual_record')
-      },
-      play: {
-        button: this.addControlButton(),
-        text: this.addControlText('play_arrow')
-      },
-    }
-
-    const {record, stop, play} = this.controls;
-    record.button.setInteractive()
-      .on('pointerdown', () => {
-        if (this.controls.state === 'idle' || this.controls.state === 'playing') {
-          stopPlaying();
-          this.controls.state = 'readyToRecord';
-        } else if (this.controls.state === 'readyToRecord') {
-          this.controls.state = 'idle';
-        } else if (this.controls.state === 'recording') {
-          this.controls.state = 'idle';
-          stopRecording();
-        }
-        this.updateControlsText();
-      });
-    stop.button.setInteractive()
-      .on('pointerdown', () => {
-        if (this.controls.state === 'recording') {
-          stopRecording();
-        }
-        if (this.controls.state === 'playing') {
-          stopPlaying();
-        }
-        this.controls.state = 'idle';
-        this.updateControlsText();
-      });
-    play.button.setInteractive()
-      .on('pointerdown', () => {
-        if (this.controls.state === 'recording') {
-          stopRecording();
-        }
-        if (loop.length > 0) {
-          this.controls.state = 'playing';
-          startPlaying();
-          this.updateControlsText();
-        } else {
-          this.controls.state = 'idle';
-          this.updateControlsText();
-          console.log('No loop to play');
-          this.controls.play.text.setFontFamily(FontFamily.Arial).setText('No loop to play, record first');
-          this.time.delayedCall(2000, () => {
-            this.updateControlsText();
-          });
-        }
-      });
-
-    const resizeControls = () => {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      const buttonHeight = Math.max(height, width) / 15;
-      const buttonWidth = width / 3;
-
-      [stop, record, play].forEach(({button, text}, index) => {
-        button.setSize(buttonWidth, buttonHeight).setPosition(buttonWidth * index, -1);
-        text.setFontSize(buttonHeight / 2)
-          .setWordWrapWidth(button.width, true)
-          .setSize(button.width, button.height)
-          .setPosition(button.getCenter().x, button.getCenter().y);
-      });
-    };
-    window.addEventListener('resize', resizeControls);
-    resizeControls();
-  }
-
-  private updateControlsText() {
-    const {
-      record: {text: recordText},
-      stop: {text: stopText},
-      play: {text: playText}
-    } = this.controls;
-    // reset fonts to initial icons
-    [recordText, stopText, playText].forEach(text => text
-      .setFontFamily(FontFamily.Material)
-      .setText(text.getData('initial'))
-      .setColor(controlColors.idle));
-    const color = controlColors[this.controls.state];
-    switch (this.controls.state) {
-    case 'idle':
-      break;
-    case 'readyToRecord':
-      recordText.setFontFamily(FontFamily.Arial).setText('Hit a pad to start').setColor(color);
-      break;
-    case 'recording':
-      recordText.setFontFamily(FontFamily.Material).setColor(color);
-      break;
-    case 'playing':
-      playText.setFontFamily(FontFamily.Material).setColor(color);
-      break;
-    }
-
   }
 }
