@@ -21,10 +21,9 @@ export const instrumentToSample: Record<Instrument, () => void> = {
 }
 
 export const playInstrument = (instrument: Instrument) => {
-  console.log(`Playing ${instrument}`);
   try {
     instrumentToSample[instrument]();
-  } catch(e){
+  } catch(e) {
     console.error(`Error playing ${instrument}`, e);
     resetAudioContext();
     instrumentToSample[instrument]();

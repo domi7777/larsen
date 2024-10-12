@@ -46,7 +46,7 @@ export class ControlsScene extends Phaser.Scene {
     } = this.controls;
     // reset fonts to initial icons
     [recordText, stopText, playText].forEach(text => text
-      .setFontFamily(FontFamily.Material)
+      .setFontFamily(FontFamily.Icons)
       .setText(text.getData('initial'))
       .setColor(controlColors.idle));
     const color = controlColors[this.controls.state];
@@ -54,13 +54,13 @@ export class ControlsScene extends Phaser.Scene {
     case 'idle':
       break;
     case 'readyToRecord':
-      recordText.setFontFamily(FontFamily.Arial).setText('Hit a pad to start').setColor(color);
+      recordText.setFontFamily(FontFamily.Text).setText('Hit a pad to start').setColor(color);
       break;
     case 'recording':
-      recordText.setFontFamily(FontFamily.Material).setColor(color);
+      recordText.setFontFamily(FontFamily.Icons).setColor(color);
       break;
     case 'playing':
-      playText.setFontFamily(FontFamily.Material).setColor(color);
+      playText.setFontFamily(FontFamily.Icons).setColor(color);
       break;
     }
   }
@@ -79,7 +79,7 @@ export class ControlsScene extends Phaser.Scene {
 
   private addControlText(text: string) {
     return this.add.text(0, 0, text, {
-      fontFamily: FontFamily.Material,
+      fontFamily: FontFamily.Icons,
       fontSize: 20,
       color: '#FFF',
       align: 'center',
@@ -144,7 +144,7 @@ export class ControlsScene extends Phaser.Scene {
           this.controls.state = 'idle';
           this.updateControlsText();
           console.log('No loop to play');
-          this.controls.play.text.setFontFamily(FontFamily.Arial).setText('No loop to play, record first');
+          this.controls.play.text.setFontFamily(FontFamily.Text).setText('Record first!');
           this.time.delayedCall(2000, () => {
             this.updateControlsText();
           });
@@ -157,7 +157,7 @@ export class ControlsScene extends Phaser.Scene {
 
       [stop, record, play].forEach(({button, text}, index) => {
         button.setSize(buttonWidth, buttonHeight).setPosition(buttonWidth * index, -1);
-        text.setFontSize(buttonHeight / 2)
+        text.setFontSize(buttonHeight / 3)
           .setWordWrapWidth(button.width, true)
           .setSize(button.width, button.height)
           .setPosition(button.getCenter().x, button.getCenter().y);
