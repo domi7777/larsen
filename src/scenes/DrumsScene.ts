@@ -3,6 +3,7 @@ import {HexaColor, hexToColor} from '../colors.ts';
 import {startRecording} from '../loops.ts';
 import {Instrument, playInstrument} from '../instruments.ts';
 import {ControlsScene} from './ControlsScene.ts';
+import {isDarkMode} from '../settings/color-settings.ts';
 
 type Pad = {
     instrument: Instrument,
@@ -62,7 +63,7 @@ export class DrumsScene extends Phaser.Scene {
 
   private createPad(instrument: Instrument): Pad {
     const button = this.add.rectangle()
-      .setFillStyle(hexToColor(padColors[instrument]))
+      .setFillStyle(hexToColor(padColors[instrument], isDarkMode()))
       .setStrokeStyle(2, hexToColor('#FFF'), 0.8)
       .setInteractive()
       .setOrigin(0, 0);
