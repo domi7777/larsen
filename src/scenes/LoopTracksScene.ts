@@ -9,7 +9,6 @@ const trackColorsState: Record<string, HexaColor> = {
 type Track = {
     button: Phaser.GameObjects.Rectangle;
     selected: boolean,
-    scene?: Phaser.Scene,
 };
 
 export class LoopTracksScene extends Phaser.Scene {
@@ -25,10 +24,6 @@ export class LoopTracksScene extends Phaser.Scene {
     const width = window.innerWidth;
     const height = window.innerHeight;
     return Math.max(height, width) / 10;
-  }
-
-  static get buttonHeight() {
-    return window.innerHeight / LoopTracksScene.numTracks;
   }
 
   create() {
