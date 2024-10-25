@@ -1,9 +1,9 @@
 import Phaser from 'phaser';
 import {HexaColor, hexToColor} from '../colors.ts';
 
-const trackColorsState: Record<boolean, HexaColor> = {
-  true: '#DDD',
-  false: '#000',
+const trackColorsState: Record<string, HexaColor> = {
+  selected: '#DDD',
+  unselected: '#000',
 }
 
 type Track = {
@@ -13,7 +13,7 @@ type Track = {
 };
 
 export class LoopTracksScene extends Phaser.Scene {
-  private tracks: Track[]
+  private tracks!: Track[]
 
   constructor() {
     super('LoopTracksScene');
@@ -65,7 +65,7 @@ export class LoopTracksScene extends Phaser.Scene {
 
   private updateSelectedColor() {
     this.tracks.forEach(({button, selected}) => {
-      button.setFillStyle(hexToColor(trackColorsState[selected]));
+      button.setFillStyle(hexToColor(selected? trackColorsState.selected: trackColorsState.unselected));
     });
   }
 }
