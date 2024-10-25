@@ -88,6 +88,7 @@ export class EmptyScene extends Phaser.Scene {
         if (text) {
           const fontSize = Math.min(button.height, button.width) / 5;
           text.setFontSize(fontSize)
+            .setResolution(2)
             .setWordWrapWidth(button.width, true)
             .setSize(button.width, button.height)
             .setPosition(button.getCenter().x, button.getCenter().y);

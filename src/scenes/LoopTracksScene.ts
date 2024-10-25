@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import {HexaColor, hexToColor} from '../colors.ts';
+import {FontFamily} from '../fonts.ts';
 
 const trackColorsState: Record<string, HexaColor> = {
   selected: '#DDD',
@@ -7,8 +8,10 @@ const trackColorsState: Record<string, HexaColor> = {
 }
 
 type Track = {
-    button: Phaser.GameObjects.Rectangle;
-    selected: boolean,
+  button: Phaser.GameObjects.Rectangle;
+  buttonText: Phaser.GameObjects.Text;
+  selected: boolean,
+  control: Phaser.GameObjects.Rectangle | null;
 };
 
 export class LoopTracksScene extends Phaser.Scene {
@@ -18,7 +21,7 @@ export class LoopTracksScene extends Phaser.Scene {
     super('LoopTracksScene');
   }
 
-  static numTracks = 8;
+  static numTracks = 5;
 
   static get sceneWidthHeight() {
     const width = window.innerWidth;
@@ -44,6 +47,13 @@ export class LoopTracksScene extends Phaser.Scene {
           .setInteractive()
           .on(Phaser.Input.Events.POINTER_DOWN, () => this.selectTrack(index)),
         selected: false,
+        buttonText: this.add.text(0, 0, `${index + 1}`, {
+          fontFamily: FontFamily.Text,
+          fontSize: '24px',
+          color: '#FFF',
+        }).setOrigin(0.5, 0.5)
+          .setResolution(2),
+        control: null,
       };
     })
     window.addEventListener('resize', () => this.resizeTracks());
@@ -56,10 +66,15 @@ export class LoopTracksScene extends Phaser.Scene {
     const buttonWidth = isPortrait ? window.innerWidth / LoopTracksScene.numTracks : LoopTracksScene.sceneWidthHeight;
     const buttonHeight = isPortrait ? LoopTracksScene.sceneWidthHeight : window.innerHeight / LoopTracksScene.numTracks;
 
-    this.tracks.forEach(({ button }, index) => {
+    this.tracks.forEach(({button, buttonText}, index) => {
       const x = isPortrait ? buttonWidth * index : 0;
       const y = isPortrait ? -1 : buttonHeight * index;
       button.setSize(buttonWidth, buttonHeight).setPosition(x, y);
+      const textX = isPortrait ? button.getCenter().x : button.getCenter().x - buttonWidth / 4;
+      const textY = isPortrait ? button.getCenter().y - buttonHeight / 4 : button.getCenter().y;
+      buttonText
+        .setFontSize(Math.min(buttonHeight, buttonWidth) / 4)
+        .setPosition(textX, textY);
     });
 
     this.cameras.main.setViewport(0, 0, isPortrait ? window.innerWidth : buttonWidth, isPortrait ? buttonHeight : window.innerHeight);
@@ -81,8 +96,9 @@ export class LoopTracksScene extends Phaser.Scene {
   }
 
   private updateSelectedColor() {
-    this.tracks.forEach(({button, selected}) => {
+    this.tracks.forEach(({button, buttonText, selected}) => {
       button.setFillStyle(hexToColor(selected ? trackColorsState.selected : trackColorsState.unselected));
+      buttonText.setColor(selected ? '#000' : '#FFF');
     });
   }
 }
