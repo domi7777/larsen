@@ -19,7 +19,7 @@ export class LoopTracksScene extends Phaser.Scene {
     super('LoopTracksScene');
   }
 
-  static numTracks = 5;
+  static numTracks = 8;
 
   static get sceneWidthHeight() {
     const width = window.innerWidth;
@@ -57,21 +57,17 @@ export class LoopTracksScene extends Phaser.Scene {
   }
 
   private resizeTracks = () => {
-    if (window.innerWidth < window.innerHeight) {
-      const buttonHeight = LoopTracksScene.sceneWidthHeight;
-      const buttonWidth = window.innerWidth / LoopTracksScene.numTracks;
-      this.tracks.forEach(({button}, index) => {
-        button.setSize(buttonWidth, buttonHeight).setPosition(buttonWidth * index, -1);
-      });
-      this.cameras.main.setViewport(0, 0, window.innerWidth, buttonHeight);
-    } else {
-      const buttonWidth = LoopTracksScene.sceneWidthHeight;
-      const buttonHeight = window.innerHeight / LoopTracksScene.numTracks;
-      this.tracks.forEach(({button}, index) => {
-        button.setSize(buttonWidth, buttonHeight).setPosition(0, buttonHeight * index);
-      });
-      this.cameras.main.setViewport(0, 0, buttonWidth, window.innerHeight)
-    }
+    const isPortrait = window.innerWidth < window.innerHeight;
+    const buttonWidth = isPortrait ? window.innerWidth / LoopTracksScene.numTracks : LoopTracksScene.sceneWidthHeight;
+    const buttonHeight = isPortrait ? LoopTracksScene.sceneWidthHeight : window.innerHeight / LoopTracksScene.numTracks;
+
+    this.tracks.forEach(({ button }, index) => {
+      const x = isPortrait ? buttonWidth * index : 0;
+      const y = isPortrait ? -1 : buttonHeight * index;
+      button.setSize(buttonWidth, buttonHeight).setPosition(x, y);
+    });
+
+    this.cameras.main.setViewport(0, 0, isPortrait ? window.innerWidth : buttonWidth, isPortrait ? buttonHeight : window.innerHeight);
   }
 
   private selectTrack(index: number) {
