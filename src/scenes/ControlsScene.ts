@@ -36,6 +36,8 @@ export class ControlsScene extends Phaser.Scene {
 
   create() {
     this.createControlButtons();
+    // FIXME hide until re-implemented
+    this.scene.setVisible(false);
   }
 
   updateControlsText() {

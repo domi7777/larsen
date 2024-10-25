@@ -9,7 +9,7 @@ const trackColorsState: Record<string, HexaColor> = {
 type Track = {
     button: Phaser.GameObjects.Rectangle;
     selected: boolean,
-    scene: Phaser.Scene,
+    scene?: Phaser.Scene,
 };
 
 export class LoopTracksScene extends Phaser.Scene {
@@ -48,7 +48,6 @@ export class LoopTracksScene extends Phaser.Scene {
           .setInteractive()
           .on(Phaser.Input.Events.POINTER_DOWN, () => this.selectTrack(index)),
         selected: false,
-        scene: this.scene.get('EmptyScene' as any),
       };
     })
     this.selectTrack(0);
@@ -60,6 +59,12 @@ export class LoopTracksScene extends Phaser.Scene {
       this.tracks.forEach(track => track.selected = false);
       track.selected = true;
       this.updateSelectedColor();
+      const trackSceneKey = `track_scene_${index}`;
+      if (this.scene.get(trackSceneKey)) {
+        this.scene.get(trackSceneKey).scene.bringToTop();
+      } else {
+        this.game.scene.start('EmptyScene' as any, {index});
+      }
     }
   }
 

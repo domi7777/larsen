@@ -39,10 +39,10 @@ export const Game = () => {
       window.addEventListener('resize', () => {
         resizeGame(game);
       });
-      game.scene.start('ControlsScene');
-      game.scene.start('DrumsScene');
-      // game.scene.start('LoopTracksScene');
-      // game.scene.start('EmptyScene');
+      // game.scene.start('ControlsScene');
+      // game.scene.start('DrumsScene');
+      game.scene.start('LoopTracksScene');
+      game.scene.start('EmptyScene');
     });
   }
   return <></>;
