@@ -20,8 +20,11 @@ export class LoopTracksScene extends Phaser.Scene {
   }
 
   static numTracks = 5;
-  static get sceneWidth() {
-    return window.innerWidth / 10;
+
+  static get sceneWidthHeight() {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    return Math.max(height, width) / 10;
   }
 
   static get buttonHeight() {
@@ -32,8 +35,8 @@ export class LoopTracksScene extends Phaser.Scene {
     this.cameras.main
       .setOrigin(0, 0)
       .setPosition(0, 0)
-      .setViewport(0, 0, LoopTracksScene.sceneWidth, window.innerHeight)
-      .setBackgroundColor('#963');
+      .setViewport(0, 0, LoopTracksScene.sceneWidthHeight, window.innerHeight)
+      .setBackgroundColor('#963');// ugly color that should never be seen
     this.createTracks();
   }
 
@@ -42,15 +45,33 @@ export class LoopTracksScene extends Phaser.Scene {
       return {
         button: this.add.rectangle()
           .setOrigin(0, 0)
-          .setPosition(0, index * LoopTracksScene.buttonHeight)
-          .setSize(LoopTracksScene.sceneWidth, LoopTracksScene.buttonHeight)
           .setStrokeStyle(2, hexToColor('#FFF'), 0.8)
           .setInteractive()
           .on(Phaser.Input.Events.POINTER_DOWN, () => this.selectTrack(index)),
         selected: false,
       };
     })
+    window.addEventListener('resize', () => this.resizeTracks());
+    this.resizeTracks();
     this.selectTrack(0);
+  }
+
+  private resizeTracks = () => {
+    if (window.innerWidth < window.innerHeight) {
+      const buttonHeight = LoopTracksScene.sceneWidthHeight;
+      const buttonWidth = window.innerWidth / LoopTracksScene.numTracks;
+      this.tracks.forEach(({button}, index) => {
+        button.setSize(buttonWidth, buttonHeight).setPosition(buttonWidth * index, -1);
+      });
+      this.cameras.main.setViewport(0, 0, window.innerWidth, buttonHeight);
+    } else {
+      const buttonWidth = LoopTracksScene.sceneWidthHeight;
+      const buttonHeight = window.innerHeight / LoopTracksScene.numTracks;
+      this.tracks.forEach(({button}, index) => {
+        button.setSize(buttonWidth, buttonHeight).setPosition(0, buttonHeight * index);
+      });
+      this.cameras.main.setViewport(0, 0, buttonWidth, window.innerHeight)
+    }
   }
 
   private selectTrack(index: number) {
@@ -70,7 +91,7 @@ export class LoopTracksScene extends Phaser.Scene {
 
   private updateSelectedColor() {
     this.tracks.forEach(({button, selected}) => {
-      button.setFillStyle(hexToColor(selected? trackColorsState.selected: trackColorsState.unselected));
+      button.setFillStyle(hexToColor(selected ? trackColorsState.selected : trackColorsState.unselected));
     });
   }
 }

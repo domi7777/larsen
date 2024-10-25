@@ -4,6 +4,7 @@ import {startRecording} from '../loops.ts';
 import {Instrument, playInstrument} from '../instruments.ts';
 import {ControlsScene} from './ControlsScene.ts';
 import {LoopTracksScene} from './LoopTracksScene.ts';
+import {rotateArray} from '../utils/math.ts';
 
 type Pad = {
     instrument: Instrument,
@@ -52,16 +53,24 @@ export class DrumsScene extends Phaser.Scene {
     ];
 
     const resizePads = () => {
-      const colNumber = 4;
-      const rowNumber = 2;
-      const width = (window.innerWidth - LoopTracksScene.sceneWidth) / colNumber;
-      const height = window.innerHeight / rowNumber;
-      pads.forEach(({button}, index) => {
-        const x = index % colNumber * width;
+      const isPortrait = window.innerWidth < window.innerHeight;
+      const colNumber = isPortrait ? 2 : 4;
+      const rowNumber = isPortrait ? 4 : 2;
+      const width = isPortrait ? window.innerWidth / colNumber : (window.innerWidth - LoopTracksScene.sceneWidthHeight) / colNumber;
+      const height = isPortrait ? (window.innerHeight - LoopTracksScene.sceneWidthHeight) / rowNumber : window.innerHeight / rowNumber;
+
+      const currentPads = isPortrait ?  rotateArray(pads, rowNumber, colNumber): pads;
+
+      currentPads.forEach(({ button }, index) => {
+        const x = (index % colNumber) * width;
         const y = Math.floor(index / colNumber) * height;
-        button.setSize(width, height).setPosition(LoopTracksScene.sceneWidth +  x, y);
-      })
+        const offsetX = isPortrait ? 0 : LoopTracksScene.sceneWidthHeight;
+        const offsetY = isPortrait ? LoopTracksScene.sceneWidthHeight : 0;
+        button.setSize(width, height).setPosition(offsetX + x, offsetY + y);
+      });
     };
+
+    // Attach the event listener and initial call
     window.addEventListener('resize', resizePads);
     resizePads();
   }
