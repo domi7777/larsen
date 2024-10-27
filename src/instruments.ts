@@ -7,7 +7,6 @@ import {playRide} from './samples/ride.ts';
 import {playTom1Low} from './samples/tom-low.ts';
 import {playTom2High} from './samples/tom-high.ts';
 import {resetAudioContext} from './samples/sample-utils.ts';
-import {isRecording, loop, startRecordingTime} from './loops.ts';
 
 export const instrumentToSample: Record<Instrument, () => void> = {
   hihat: playHiHat,
@@ -27,15 +26,6 @@ export const playInstrument = (instrument: Instrument) => {
     console.error(`Error playing ${instrument}`, e);
     resetAudioContext();
     instrumentToSample[instrument]();
-  }
-
-  if (isRecording) {
-    const time = Date.now() - startRecordingTime;
-    loop.push({
-      instrument,
-      time
-    });
-    console.log(`Recording ${instrument} at time ${time}ms`);
   }
 }
 

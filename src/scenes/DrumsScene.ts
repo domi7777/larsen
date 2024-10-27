@@ -1,9 +1,8 @@
 import Phaser from 'phaser';
 import {HexaColor, hexToColor} from '../colors.ts';
-import {startRecording} from '../loops.ts';
 import {Instrument, playInstrument} from '../instruments.ts';
-import {ControlsScene} from './ControlsScene.ts';
-import {isDarkMode} from '../settings/color-settings.ts';
+import {LoopTracksScene} from './LoopTracksScene.ts';
+import {rotateArray} from '../utils/math.ts';
 
 type Pad = {
     instrument: Instrument,
@@ -21,14 +20,20 @@ const padColors: Record<Instrument, HexaColor> = {
   'tom-high': '#9B59B6',
 };
 
+type DrumsType= 'drums' | 'other';
+
 export class DrumsScene extends Phaser.Scene {
 
-  constructor() {
-    super('DrumsScene');
+  constructor(private type: DrumsType = 'drums') {
+    super();
   }
 
-  create() {
+  create({ type}: { type: DrumsType }) {
+    if (type) {
+      this.type = type;
+    }
     this.createPads();
+    this.scene.get(LoopTracksScene.key).events.emit('track-selected');
   }
 
   private createPads() {
@@ -47,35 +52,38 @@ export class DrumsScene extends Phaser.Scene {
     ];
 
     const resizePads = () => {
-      const colNumber = 4;
-      const rowNumber = 2;
-      const width = window.innerWidth / colNumber;
-      const height = (window.innerHeight - ControlsScene.controlsSceneHeight) / rowNumber;
-      pads.forEach(({button}, index) => {
-        const x = index % colNumber * width;
+      const isPortrait = window.innerWidth < window.innerHeight;
+      const colNumber = isPortrait ? 2 : 4;
+      const rowNumber = isPortrait ? 4 : 2;
+      const width = isPortrait ? window.innerWidth / colNumber : (window.innerWidth - LoopTracksScene.sceneWidthHeight) / colNumber;
+      const height = isPortrait ? (window.innerHeight - LoopTracksScene.sceneWidthHeight) / rowNumber : window.innerHeight / rowNumber;
+
+      const currentPads = isPortrait ?  rotateArray(pads, rowNumber, colNumber): pads;
+
+      currentPads.forEach(({ button }, index) => {
+        const x = (index % colNumber) * width;
         const y = Math.floor(index / colNumber) * height;
-        button.setSize(width, height).setPosition(x, ControlsScene.controlsSceneHeight + y);
-      })
+        const offsetX = isPortrait ? 0 : LoopTracksScene.sceneWidthHeight;
+        const offsetY = isPortrait ? LoopTracksScene.sceneWidthHeight : 0;
+        button.setSize(width, height).setPosition(offsetX + x, offsetY + y);
+      });
     };
+
+    // Attach the event listener and initial call
     window.addEventListener('resize', resizePads);
     resizePads();
   }
 
   private createPad(instrument: Instrument): Pad {
     const button = this.add.rectangle()
-      .setFillStyle(hexToColor(padColors[instrument], isDarkMode()))
+      .setFillStyle(hexToColor(padColors[instrument], this.type === 'drums'))
       .setStrokeStyle(2, hexToColor('#FFF'), 0.8)
       .setInteractive()
       .setOrigin(0, 0);
     button.on('pointerdown', () => {
       button.setAlpha(0.7);
-      const controlsScene = (this.scene.get('ControlsScene' as string) as ControlsScene);
-      if (controlsScene.controls.state === 'readyToRecord') {
-        controlsScene.controls.state = 'recording';
-        controlsScene.updateControlsText();
-        startRecording();
-      }
       playInstrument(instrument);
+      this.scene.get(LoopTracksScene.key).events.emit('instrument-played', {instrument, scene: this});
     }).on('pointerup', () => button.setAlpha(1))
       .on('pointerout', () => button.setAlpha(1))
     return {
