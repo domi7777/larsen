@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 
 import {LoopTracksScene} from './LoopTracksScene.ts';
-import {hexToColor} from '../colors.ts';
+import {hexToColor} from '../utils/colors.ts';
 import {FontFamily} from '../fonts.ts';
 import {DrumsScene} from './DrumsScene.ts';
 

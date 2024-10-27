@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import {HexaColor, hexToColor} from '../colors.ts';
+import {HexaColor, hexToColor} from '../utils/colors.ts';
 import {FontFamily} from '../fonts.ts';
 import {EmptyScene} from './EmptyScene.ts';
 import {Loop} from '../Loop.ts';
