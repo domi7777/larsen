@@ -8,7 +8,7 @@ import {playTom1Low} from './drums/tom-low.ts';
 import {playTom2High} from './drums/tom-high.ts';
 import {resetAudioContext} from './sample-utils.ts';
 
-export const instrumentToSample: Record<Instrument, () => void> = {
+const sampleToAudioFn: Record<Sample, () => void> = {
   hihat: playHiHat,
   kick: playKick,
   snare: playSnare,
@@ -19,15 +19,15 @@ export const instrumentToSample: Record<Instrument, () => void> = {
   'tom-high': playTom2High,
 }
 
-export const playInstrument = (instrument: Instrument) => {
+export const playSample = (sample: Sample) => {
   try {
-    instrumentToSample[instrument]();
+    sampleToAudioFn[sample]();
   } catch(e) {
-    console.error(`Error playing ${instrument}`, e);
+    console.error(`Error playing ${sample}`, e);
     resetAudioContext();
-    instrumentToSample[instrument]();
+    sampleToAudioFn[sample]();
   }
 }
 
-export type Instrument = 'hihat' | 'hihat-open' | 'ride' | 'crash'
+export type Sample = 'hihat' | 'hihat-open' | 'ride' | 'crash'
     | 'snare' | 'kick' | 'tom-low' | 'tom-high';

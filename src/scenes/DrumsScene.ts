@@ -1,15 +1,15 @@
 import Phaser from 'phaser';
 import {HexaColor, hexToColor} from '../utils/colors.ts';
-import {Instrument, playInstrument} from '../samples/instruments.ts';
+import {playSample, Sample} from '../samples/instruments.ts';
 import {LoopTracksScene} from './LoopTracksScene.ts';
 import {rotateArray} from '../utils/math.ts';
 
 type Pad = {
-    instrument: Instrument,
+    instrument: Sample,
     button: Phaser.GameObjects.Rectangle,
 }
 
-const padColors: Record<Instrument, HexaColor> = {
+const padColors: Record<Sample, HexaColor> = {
   hihat: '#FDA341',
   kick: '#F24E1E',
   snare: '#4A90E2',
@@ -74,7 +74,7 @@ export class DrumsScene extends Phaser.Scene {
     resizePads();
   }
 
-  private createPad(instrument: Instrument): Pad {
+  private createPad(instrument: Sample): Pad {
     const button = this.add.rectangle()
       .setFillStyle(hexToColor(padColors[instrument], this.type === 'drums'))
       .setStrokeStyle(2, hexToColor('#FFF'), 0.8)
@@ -82,7 +82,7 @@ export class DrumsScene extends Phaser.Scene {
       .setOrigin(0, 0);
     button.on('pointerdown', () => {
       button.setAlpha(0.7);
-      playInstrument(instrument);
+      playSample(instrument);
       this.scene.get(LoopTracksScene.key).events.emit('instrument-played', {instrument, scene: this});
     }).on('pointerup', () => button.setAlpha(1))
       .on('pointerout', () => button.setAlpha(1))

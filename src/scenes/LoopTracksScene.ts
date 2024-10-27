@@ -3,7 +3,7 @@ import {HexaColor, hexToColor} from '../utils/colors.ts';
 import {FontFamily} from '../utils/fonts.ts';
 import {EmptyScene} from './EmptyScene.ts';
 import {Loop} from '../Loop.ts';
-import {Instrument} from '../samples/instruments.ts';
+import {Sample} from '../samples/instruments.ts';
 
 const trackColorsState: Record<string, HexaColor> = {
   selected: '#DDD',
@@ -58,7 +58,7 @@ export class LoopTracksScene extends Phaser.Scene {
     this.events.on('track-selected', () => {
       this.updateControlsState();
     });
-    this.events.on('instrument-played', ({instrument}: {instrument: Instrument}) => {
+    this.events.on('instrument-played', ({instrument}: {instrument: Sample}) => {
       this.tracks.find(track => track.selected)?.loop?.addInstrument(instrument);
     });
   }

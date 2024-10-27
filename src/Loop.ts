@@ -1,7 +1,7 @@
-import {Instrument, playInstrument} from './samples/instruments.ts';
+import {playSample, Sample} from './samples/instruments.ts';
 
 type LoopEntry = {
-  instrument: Instrument | null,
+  instrument: Sample | null,
   time: number,
 }
 
@@ -32,7 +32,7 @@ export class Loop {
     }
   }
 
-  addInstrument(instrument: Instrument) {
+  addInstrument(instrument: Sample) {
     if (this.isRecording()) {
       this.loop.push({
         instrument,
@@ -101,7 +101,7 @@ export class Loop {
       const previousTime = this.currentLoopIndex === 0 ? 0 : this.loop[this.currentLoopIndex - 1].time;
       this.loopTimeout = setTimeout(() => {
         this.log(`Playing ${instrument} after ${time}ms`);
-        instrument && playInstrument(instrument);
+        instrument && playSample(instrument);
         this.currentLoopIndex++;
         playLoop();
       }, time - previousTime);
