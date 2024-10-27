@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import {loadFonts} from './fonts.ts';
+import {loadFonts} from './utils/fonts.ts';
 import {LoopTracksScene} from './scenes/LoopTracksScene.ts';
 import {isDarkMode} from './settings/color-settings.ts';
 import {EmptyScene} from './scenes/EmptyScene.ts';

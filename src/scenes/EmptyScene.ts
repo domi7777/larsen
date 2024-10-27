@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 
 import {LoopTracksScene} from './LoopTracksScene.ts';
 import {hexToColor} from '../utils/colors.ts';
-import {FontFamily} from '../fonts.ts';
+import {FontFamily} from '../utils/fonts.ts';
 import {DrumsScene} from './DrumsScene.ts';
 
 export class EmptyScene extends Phaser.Scene {
