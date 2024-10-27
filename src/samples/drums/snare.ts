@@ -1,4 +1,3 @@
-
 // Breakdown:
 //     White Noise:
 //
@@ -12,7 +11,7 @@
 //     Envelope Control:
 //
 //     Both the noise and oscillator have quick decay envelopes to simulate the natural sound of a snare hit.
-import {createAudioContext} from './sample-utils.ts';
+import {createAudioContext} from '../sample-utils.ts';
 
 export function playSnare() {
   const audioContext = createAudioContext();

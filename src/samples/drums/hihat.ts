@@ -9,7 +9,7 @@
 //     Oscillator Volume: The oscillator (oscGain) is set at a low volume to subtly blend with the noise, creating a realistic metallic feel.
 //
 
-import {createAudioContext} from './sample-utils.ts';
+import {createAudioContext} from '../sample-utils.ts';
 
 export function playHiHat() {
   const audioContext = createAudioContext();

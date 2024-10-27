@@ -8,7 +8,7 @@
 // Pitch: Adjust the initial frequency (150 Hz) or the final frequency (60 Hz) to create different kinds of kicks (e.g., higher for more punch, lower for deeper bass).
 // Decay: The duration of the gain envelope can be adjusted to make the kick longer or shorter.
 
-import {createAudioContext} from './sample-utils.ts';
+import {createAudioContext} from '../sample-utils.ts';
 
 export function playKick() {
   const audioContext = createAudioContext();

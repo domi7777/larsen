@@ -1,4 +1,4 @@
-import {createAudioContext} from './sample-utils.ts';
+import {createAudioContext} from '../sample-utils.ts';
 
 export function playOpenHiHat() {
   const audioContext = createAudioContext();

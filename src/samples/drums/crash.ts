@@ -9,7 +9,7 @@
 // Decay Time: You can adjust the decay time (currently 1.5 seconds) for a longer or shorter crash cymbal.
 //     Filter Frequencies: Adjusting the high-pass and low-pass filter frequencies will change how bright or dark the cymbal sounds.
 //     Oscillator Volume: The metallic shimmer is controlled by oscGain.gain. You can increase or decrease it to blend the overtone more or less with the noise.
-import {createAudioContext} from './sample-utils.ts';
+import {createAudioContext} from '../sample-utils.ts';
 
 export function playCrashCymbal() {
   const audioContext = createAudioContext();

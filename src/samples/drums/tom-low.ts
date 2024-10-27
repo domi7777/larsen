@@ -1,4 +1,4 @@
-import {createAudioContext} from './sample-utils.ts';
+import {createAudioContext} from '../sample-utils.ts';
 
 export function playTom1Low(hz = 99, durationInMs = 500) {
   const audioContext = createAudioContext();
