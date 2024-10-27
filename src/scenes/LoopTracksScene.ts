@@ -139,7 +139,13 @@ export class LoopTracksScene extends Phaser.Scene {
   private selectTrack(index: number) {
     const track = this.tracks[index];
     if (!track.selected) {
-      this.tracks.forEach(track => track.selected = false);
+      const previousTrack = this.tracks.find(track => track.selected);
+      if (previousTrack) {
+        previousTrack.selected = false;
+        if (previousTrack.loop.isRecording()) {
+          previousTrack.loop.handleClick();
+        }
+      }
       track.selected = true;
       this.updateControlsState();
       const trackScene = this.getTrackScene(index);
