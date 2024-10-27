@@ -94,7 +94,7 @@ export class Loop {
     playLoop();
   }
 
-  stopPlaying() {
+  private stopPlaying() {
     this.loopTimeout && clearTimeout(this.loopTimeout);
     this.log('Loop stopped');
   }
@@ -115,7 +115,7 @@ export class Loop {
     return this.state === 'readyToRecord';
   }
 
-  log(msg: string, args?: unknown[]) {
+  private log(msg: string, args?: unknown[]) {
     console.log(`Loop ${(this.trackIndex + 1)}: ${msg}`, args);
   }
 
