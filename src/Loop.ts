@@ -1,4 +1,4 @@
-import {Instrument, playInstrument} from './instruments.ts';
+import {Instrument, playInstrument} from './samples/instruments.ts';
 
 type LoopEntry = {
   instrument: Instrument | null,

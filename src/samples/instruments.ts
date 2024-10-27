@@ -1,12 +1,12 @@
-import {playHiHat} from './samples/hihat.ts';
-import {playKick} from './samples/kick.ts';
-import {playSnare} from './samples/snare.ts';
-import {playCrashCymbal} from './samples/crash.ts';
-import {playOpenHiHat} from './samples/hihat-open.ts';
-import {playRide} from './samples/ride.ts';
-import {playTom1Low} from './samples/tom-low.ts';
-import {playTom2High} from './samples/tom-high.ts';
-import {resetAudioContext} from './samples/sample-utils.ts';
+import {playHiHat} from './hihat.ts';
+import {playKick} from './kick.ts';
+import {playSnare} from './snare.ts';
+import {playCrashCymbal} from './crash.ts';
+import {playOpenHiHat} from './hihat-open.ts';
+import {playRide} from './ride.ts';
+import {playTom1Low} from './tom-low.ts';
+import {playTom2High} from './tom-high.ts';
+import {resetAudioContext} from './sample-utils.ts';
 
 export const instrumentToSample: Record<Instrument, () => void> = {
   hihat: playHiHat,
