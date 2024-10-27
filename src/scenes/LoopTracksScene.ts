@@ -3,7 +3,7 @@ import {HexaColor, hexToColor} from '../utils/colors.ts';
 import {FontFamily} from '../utils/fonts.ts';
 import {EmptyScene} from './EmptyScene.ts';
 import {Loop} from '../Loop.ts';
-import {Sample} from '../samples/instruments.ts';
+import {Sample} from '../samples/play-sample.ts';
 
 const trackColorsState: Record<string, HexaColor> = {
   selected: '#DDD',

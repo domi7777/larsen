@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import {HexaColor, hexToColor} from '../utils/colors.ts';
-import {playSample, Sample} from '../samples/instruments.ts';
+import {playSample, Sample} from '../samples/play-sample.ts';
 import {LoopTracksScene} from './LoopTracksScene.ts';
 import {rotateArray} from '../utils/math.ts';
 
