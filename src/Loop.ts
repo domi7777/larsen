@@ -32,6 +32,32 @@ export class Loop {
     }
   }
 
+  addInstrument(instrument: Instrument) {
+    if (this.isRecording()) {
+      this.loop.push({
+        instrument,
+        time: Date.now() - this.startRecordingTime
+      });
+      this.log(`Recording ${instrument} at time ${Date.now() - this.startRecordingTime}ms`);
+    }
+  }
+
+  isPlaying() {
+    return this.state === 'playing';
+  }
+
+  isReadyToPlay() {
+    return this.state === 'readyToPlay';
+  }
+
+  isRecording() {
+    return this.state === 'recording';
+  }
+
+  isReadyToRecord() {
+    return this.state === 'readyToRecord';
+  }
+
   private nextState() {
     switch (this.state) {
     case 'readyToRecord':
@@ -53,16 +79,6 @@ export class Loop {
     this.startRecordingTime = Date.now();
     this.loop = [];
     this.log('Recording started');
-  }
-
-  addInstrument(instrument: Instrument) {
-    if (this.isRecording()) {
-      this.loop.push({
-        instrument,
-        time: Date.now() - this.startRecordingTime
-      });
-      this.log(`Recording ${instrument} at time ${Date.now() - this.startRecordingTime}ms`);
-    }
   }
 
   private stopRecording() {
@@ -97,22 +113,6 @@ export class Loop {
   private stopPlaying() {
     this.loopTimeout && clearTimeout(this.loopTimeout);
     this.log('Loop stopped');
-  }
-
-  isPlaying() {
-    return this.state === 'playing';
-  }
-
-  isReadyToPlay() {
-    return this.state === 'readyToPlay';
-  }
-
-  isRecording() {
-    return this.state === 'recording';
-  }
-
-  isReadyToRecord() {
-    return this.state === 'readyToRecord';
   }
 
   private log(msg: string, args?: unknown[]) {
