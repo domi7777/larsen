@@ -6,12 +6,13 @@ import {FontFamily} from '../fonts.ts';
 import {DrumsScene} from './DrumsScene.ts';
 
 export class EmptyScene extends Phaser.Scene {
+  static key = 'EmptyScene';
   private readonly rowNumber = 5;
   private readonly colNumber = 5;
   private instrumentButtons!: Phaser.GameObjects.Rectangle[][];
 
   constructor() {
-    super('EmptyScene');
+    super(EmptyScene.key);
   }
 
   create({index: trackIndex}: { index: number }) {
@@ -35,16 +36,16 @@ export class EmptyScene extends Phaser.Scene {
     activeButtons.forEach(button => button
       .setFillStyle(hexToColor('#FFF'), 0.5)
       .setInteractive()
-      .on(Phaser.Input.Events.POINTER_DOWN, () => button.setFillStyle(hexToColor('#FFF'), 0.8))
-      .on(Phaser.Input.Events.POINTER_UP, () => button.setFillStyle(hexToColor('#FFF'), 0.5))
+      .on(Phaser.Input.Events.POINTER_DOWN, () => {
+        this.scene.setVisible(false);
+      })
     );
     const trackSceneKey = `track_scene_${trackIndex}`;
+
     drumsButton.on(Phaser.Input.Events.POINTER_UP, () => {
-      this.scene.setVisible(false);
       this.scene.add(trackSceneKey, DrumsScene, true, {type: 'drums'});
     });
     otherDrumsButton.on(Phaser.Input.Events.POINTER_UP, () => {
-      this.scene.setVisible(false);
       this.scene.add(trackSceneKey, DrumsScene, true, {type: 'other'});
     });
 

@@ -1,8 +1,6 @@
 import Phaser from 'phaser';
 import {HexaColor, hexToColor} from '../colors.ts';
-import {startRecording} from '../loops.ts';
 import {Instrument, playInstrument} from '../instruments.ts';
-import {ControlsScene} from './ControlsScene.ts';
 import {LoopTracksScene} from './LoopTracksScene.ts';
 import {rotateArray} from '../utils/math.ts';
 
@@ -35,6 +33,7 @@ export class DrumsScene extends Phaser.Scene {
       this.type = type;
     }
     this.createPads();
+    this.scene.get(LoopTracksScene.key).events.emit('track-selected');
   }
 
   private createPads() {
@@ -83,13 +82,8 @@ export class DrumsScene extends Phaser.Scene {
       .setOrigin(0, 0);
     button.on('pointerdown', () => {
       button.setAlpha(0.7);
-      const controlsScene = (this.scene.get('ControlsScene' as string) as ControlsScene);
-      if (controlsScene.controls.state === 'readyToRecord') {
-        controlsScene.controls.state = 'recording';
-        controlsScene.updateControlsText();
-        startRecording();
-      }
       playInstrument(instrument);
+      this.scene.get(LoopTracksScene.key).events.emit('instrument-played', {instrument, scene: this});
     }).on('pointerup', () => button.setAlpha(1))
       .on('pointerout', () => button.setAlpha(1))
     return {
