@@ -129,7 +129,7 @@ export class LoopTracksScene extends Phaser.Scene {
       const iconX = isPortrait ? button.getCenter().x : button.getCenter().x + buttonWidth / 4;
       const iconY = isPortrait ? button.getCenter().y + buttonHeight / 4 : button.getCenter().y;
       controlIcon
-        .setFontSize(minWidthHeight / 2)
+        .setFontSize(minWidthHeight / 1.7)
         .setPosition(iconX, iconY);
     });
 
