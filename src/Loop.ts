@@ -64,6 +64,7 @@ export class Loop {
       this.state = 'recording';
       break;
     case 'recording':
+      this.stopRecording();
       this.state = 'playing';
       break;
     case 'readyToPlay':
@@ -90,9 +91,6 @@ export class Loop {
   }
 
   private startPlaying() {
-    if (this.isRecording()) {
-      this.stopRecording();
-    }
     const playLoop = () => {
       if (this.currentLoopIndex >= this.loop.length) {
         this.currentLoopIndex = 0;
