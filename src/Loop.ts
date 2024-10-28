@@ -110,6 +110,7 @@ export class Loop {
 
   private stopPlaying() {
     this.loopTimeout && clearTimeout(this.loopTimeout);
+    this.currentLoopIndex = 0;
     this.log('Loop stopped');
   }
 
