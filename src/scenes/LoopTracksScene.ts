@@ -34,10 +34,12 @@ type Track = {
 
 export class LoopTracksScene extends Phaser.Scene {
   static key = 'LoopTracksScene';
-  private tracks!: Track[]
+  private static tracks: Track[]
+  private static instance: LoopTracksScene;
 
   constructor() {
     super(LoopTracksScene.key);
+    LoopTracksScene.instance = this;
   }
 
   static numTracks = 5;
@@ -46,6 +48,17 @@ export class LoopTracksScene extends Phaser.Scene {
     const width = window.innerWidth;
     const height = window.innerHeight;
     return Math.max(height, width) / 10;
+  }
+
+  static deleteCurrentTrack() {
+    const track = LoopTracksScene.tracks.find(track => track.selected);
+    if (track) {
+      track.loop.destroy();
+      track.loop = new Loop(LoopTracksScene.tracks.indexOf(track));
+      LoopTracksScene.instance.updateControlsState();
+    } else {
+      console.error('No track selected');
+    }
   }
 
   create() {
@@ -59,12 +72,12 @@ export class LoopTracksScene extends Phaser.Scene {
       this.updateControlsState();
     });
     this.events.on('instrument-played', ({instrument}: {instrument: Sample}) => {
-      this.tracks.find(track => track.selected)?.loop?.addInstrument(instrument);
+      LoopTracksScene.tracks.find(track => track.selected)?.loop?.addInstrument(instrument);
     });
   }
 
   private createTracks() {
-    this.tracks = new Array(LoopTracksScene.numTracks).fill(null).map((_, index) => {
+    LoopTracksScene.tracks = new Array(LoopTracksScene.numTracks).fill(null).map((_, index) => {
       return {
         loop: new Loop(index),
         button: this.add.rectangle()
@@ -98,7 +111,7 @@ export class LoopTracksScene extends Phaser.Scene {
   }
 
   private handleControlClicked(index: number) {
-    const track = this.tracks[index];
+    const track = LoopTracksScene.tracks[index];
     track.loop.handleClick();
     this.updateControlsState();
   }
@@ -108,7 +121,7 @@ export class LoopTracksScene extends Phaser.Scene {
     const buttonWidth = isPortrait ? window.innerWidth / LoopTracksScene.numTracks : LoopTracksScene.sceneWidthHeight;
     const buttonHeight = isPortrait ? LoopTracksScene.sceneWidthHeight : window.innerHeight / LoopTracksScene.numTracks;
 
-    this.tracks.forEach(({button, buttonText, buttonSelectedCircle, controlIcon}, index) => {
+    LoopTracksScene.tracks.forEach(({button, buttonText, buttonSelectedCircle, controlIcon}, index) => {
       const x = isPortrait ? buttonWidth * index : 0;
       const y = isPortrait ? -1 : buttonHeight * index;
       button.setSize(buttonWidth, buttonHeight).setPosition(x, y);
@@ -137,9 +150,9 @@ export class LoopTracksScene extends Phaser.Scene {
   }
 
   private selectTrack(index: number) {
-    const track = this.tracks[index];
+    const track = LoopTracksScene.tracks[index];
     if (!track.selected) {
-      const previousTrack = this.tracks.find(track => track.selected);
+      const previousTrack = LoopTracksScene.tracks.find(track => track.selected);
       if (previousTrack) {
         previousTrack.selected = false;
         if (previousTrack.loop.isRecording()) {
@@ -166,7 +179,7 @@ export class LoopTracksScene extends Phaser.Scene {
   }
 
   private updateControlsState() {
-    this.tracks.forEach((track, index) => {
+    LoopTracksScene.tracks.forEach((track, index) => {
       track.button.setFillStyle(hexToColor(trackColorsState.unselected));
       track.buttonText.setColor(track.selected ? '#000' : '#FFF')
       track.buttonSelectedCircle.setFillStyle(hexToColor(track.selected ? '#FFF' : '#000'));

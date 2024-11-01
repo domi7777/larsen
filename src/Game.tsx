@@ -3,6 +3,7 @@ import {loadFonts} from './utils/fonts.ts';
 import {LoopTracksScene} from './scenes/LoopTracksScene.ts';
 import {isDarkMode} from './settings/color-settings.ts';
 import {EmptyScene} from './scenes/EmptyScene.ts';
+import {TweakPane} from './settings/TweakPane.ts';
 
 function resizeGame(game: Phaser.Game) {
   const width = window.innerWidth;
@@ -32,10 +33,13 @@ export const Game = () => {
           activePointers: 4, // Allow four active pointers for multi-touch
         },
       });
+      const tweakPane = new TweakPane(game);
       window.addEventListener('resize', () => {
         resizeGame(game);
+        tweakPane.resize();
       });
       game.scene.start(LoopTracksScene.key);
+      resizeGame(game);
     });
   }
   return <></>;

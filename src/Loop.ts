@@ -9,6 +9,7 @@ type LoopState = 'readyToRecord' | 'recording' | 'readyToPlay' | 'playing';
 
 export class Loop {
   constructor(private trackIndex: number) {
+    this.log('Loop created');
   }
 
   private state : LoopState = 'readyToRecord';
@@ -56,6 +57,14 @@ export class Loop {
 
   isReadyToRecord() {
     return this.state === 'readyToRecord';
+  }
+
+  destroy() {
+    if (this.isPlaying()) {
+      this.stopPlaying();
+    }
+    this.loop = [];
+    this.log('Loop destroyed');
   }
 
   private nextState() {
