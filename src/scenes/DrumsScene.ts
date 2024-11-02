@@ -83,7 +83,10 @@ export class DrumsScene extends Phaser.Scene {
       .setStrokeStyle(2, hexToColor('#FFF'), 0.8)
       .setInteractive()
       .setOrigin(0, 0);
-    button.on('pointerdown', () => {
+    button.on('pointerdown', (e: Phaser.Input.Pointer) => {
+      if (e.downElement?.tagName?.toLowerCase() !== 'canvas') {
+        return;
+      }
       button.setFillStyle(hitColor);
       playSample(instrument);
       this.scene.get(LoopTracksScene.key).events.emit('instrument-played', {instrument, scene: this});
