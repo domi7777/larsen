@@ -75,17 +75,20 @@ export class DrumsScene extends Phaser.Scene {
   }
 
   private createPad(instrument: Sample): Pad {
+    const padColor = padColors[instrument];
+    const inactiveColor = hexToColor(padColor, this.type === 'drums');
+    const hitColor = Phaser.Display.Color.HexStringToColor(padColor).brighten(4).color;
     const button = this.add.rectangle()
-      .setFillStyle(hexToColor(padColors[instrument], this.type === 'drums'))
+      .setFillStyle(inactiveColor)
       .setStrokeStyle(2, hexToColor('#FFF'), 0.8)
       .setInteractive()
       .setOrigin(0, 0);
     button.on('pointerdown', () => {
-      button.setAlpha(0.7);
+      button.setFillStyle(hitColor);
       playSample(instrument);
       this.scene.get(LoopTracksScene.key).events.emit('instrument-played', {instrument, scene: this});
-    }).on('pointerup', () => button.setAlpha(1))
-      .on('pointerout', () => button.setAlpha(1))
+    }).on('pointerup', () => button.setFillStyle(inactiveColor))
+      .on('pointerout', () => button.setFillStyle(inactiveColor));
     return {
       instrument,
       button
