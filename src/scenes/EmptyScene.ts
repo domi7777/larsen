@@ -70,6 +70,7 @@ export class EmptyScene extends Phaser.Scene {
           this.add.rectangle()
             .setOrigin(0, 0)
             .setStrokeStyle(2, hexToColor('#FFF'), 0.1)
+            .setInteractive()
         );
       }
     }
