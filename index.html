@@ -6,21 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <script src="https://www.charlie-roberts.com/gibberish/dist/gibberish.js" ></script>
     <script type="text/javascript">
-        try {
-            console.log('loading Gibberish...');
-
-            window.onload = function () {
-                Gibberish.workletPath = './worklet.js';
-                console.log('loading Gibberish 2...');
-                Gibberish.init().then(() => {
-                    console.log('Gibberish is ready!')
-                    Gibberish.export(window)
-                }).catch((e) => console.error('oops', e));
-
-            }
-        } catch (e) {
-            console.error(e)
-        }
 
     </script>
     <title>Larsen app</title>
@@ -31,6 +16,7 @@
             width: 100%;
             max-width: 100%;
             height: 100%;
+            background-color: #000;
         }
 
         #phaser-container {
@@ -98,7 +84,7 @@
             --tp-monitor-foreground-color: hsla(0, 0%, 100%, 0.3);
         }
     </style>
-  <script type="module" crossorigin src="./assets/index-b2nY6JDP.js"></script>
+  <script type="module" crossorigin src="./assets/index-ofH3mFnk.js"></script>
   <link rel="modulepreload" crossorigin href="./assets/react-H14vcryl.js">
   <link rel="modulepreload" crossorigin href="./assets/phaser-pQREW5IE.js">
 <link rel="manifest" href="./manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="./registerSW.js"></script></head>
