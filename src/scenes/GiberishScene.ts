@@ -59,6 +59,8 @@ const testNote = () => {
 
 export class GibberishScene extends Phaser.Scene {
 
+  isGibberishLoaded = false;
+
   constructor() {
     super();
   }
@@ -110,7 +112,18 @@ export class GibberishScene extends Phaser.Scene {
       if (e.downElement?.tagName?.toLowerCase() !== 'canvas') {
         return;
       }
-      testNote();
+      if (!this.isGibberishLoaded) {
+        this.isGibberishLoaded = true;
+        Gibberish.workletPath = './worklet.js';
+        console.log('loading Gibberish 2...');
+        Gibberish.init().then(() => {
+          console.log('Gibberish is ready!')
+          Gibberish.export(window)
+          testNote();
+        }).catch((e: unknown) => console.error('oops', e));
+      } else {
+        testNote();
+      }
       button.setFillStyle(hitColor);
       // TODO send a call to the loop scene to play the instrument ? or an object
       // this.scene.get(LoopTracksScene.key).events.emit('instrument-played', {instrument, scene: this});
