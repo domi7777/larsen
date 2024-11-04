@@ -7,9 +7,11 @@ type Pad = {
   instrument: number,
   button: Phaser.GameObjects.Rectangle,
 }
+
 export abstract class PadsScene extends Phaser.Scene {
 
   private pads: Pad[] = [];
+
   protected constructor(private cols: number, private rows: number) {
     super();
   }
@@ -21,7 +23,7 @@ export abstract class PadsScene extends Phaser.Scene {
     this.scene.get(LoopTracksScene.key).events.emit('track-selected');
   }
 
-  protected createPads(){
+  protected createPads() {
     const numberOfPads = this.cols * this.rows;
     this.pads = new Array(numberOfPads).fill(0).map((_, index) => {
       return this.createPad(index, numberOfPads);
@@ -34,9 +36,9 @@ export abstract class PadsScene extends Phaser.Scene {
       const width = isPortrait ? window.innerWidth / colNumber : (window.innerWidth - LoopTracksScene.sceneWidthHeight) / colNumber;
       const height = isPortrait ? (window.innerHeight - LoopTracksScene.sceneWidthHeight) / rowNumber : window.innerHeight / rowNumber;
 
-      const currentPads = isPortrait ?  rotateArray(this.pads, rowNumber, colNumber): this.pads;
+      const currentPads = isPortrait ? rotateArray(this.pads, rowNumber, colNumber) : this.pads;
 
-      currentPads.forEach(({ button }, index) => {
+      currentPads.forEach(({button}, index) => {
         const x = (index % colNumber) * width;
         const y = Math.floor(index / colNumber) * height;
         const offsetX = isPortrait ? 0 : LoopTracksScene.sceneWidthHeight;
@@ -59,19 +61,32 @@ export abstract class PadsScene extends Phaser.Scene {
       .setStrokeStyle(2, hexToColor('#FFF'), 0.8)
       .setInteractive()
       .setOrigin(0, 0);
-    button.on('pointerdown', (e: Phaser.Input.Pointer) => {
-      if (e.downElement?.tagName?.toLowerCase() !== 'canvas') {
-        return;
+    let isActivated = false;
+    const handlePadPress = () => {
+      if (!isActivated) {
+        this.playSound(index);
+        button.setFillStyle(hitColor);
+        this.scene.get(LoopTracksScene.key).events.emit('instrument-played', {
+          instrument: () => this.playSound(index),
+          scene: this
+        });
+        isActivated = true;
       }
-      this.playSound(index);
-      button.setFillStyle(hitColor);
-      // TODO send a call to the loop scene to play the instrument ? or an object
-      this.scene.get(LoopTracksScene.key).events.emit('instrument-played', {
-        instrument: () => this.playSound(index),
-        scene: this
-      });
-    }).on('pointerup', () => button.setFillStyle(inactiveColor))
-      .on('pointerout', () => button.setFillStyle(inactiveColor));
+    };
+    const handlePadRelease = () => {
+      button.setFillStyle(inactiveColor);
+      isActivated = false;
+    }
+    button.on('pointerdown', (e: Phaser.Input.Pointer) => {
+      if (e.downElement?.tagName?.toLowerCase() === 'canvas') {
+        handlePadPress();
+      }
+    }).on('pointermove', (e: Phaser.Input.Pointer) => {
+      if (e.isDown) {
+        handlePadPress();
+      }
+    }).on('pointerup', () => handlePadRelease())
+      .on('pointerout', () => handlePadRelease());
     return {
       instrument: index,
       button
