@@ -30,7 +30,7 @@ export const Game = () => {
           EmptyScene,
         ],
         input: {
-          activePointers: 4, // Allow four active pointers for multi-touch
+          activePointers: 8, // how many pointers can be active at once
         },
       });
       const tweakPane = new TweakPane(game);
