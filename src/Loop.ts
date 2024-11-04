@@ -1,7 +1,7 @@
 import {playSample, Sample} from './samples/play-sample.ts';
 
 type LoopEntry = {
-  instrument: Sample | null,
+  instrument: Sample | Function | null,
   time: number,
 }
 
@@ -12,7 +12,7 @@ export class Loop {
     this.log('Loop created');
   }
 
-  private state : LoopState = 'readyToRecord';
+  private state: LoopState = 'readyToRecord';
   private loop: LoopEntry[] = [];
   private startRecordingTime = 0;
   private currentLoopIndex = 0;
@@ -33,7 +33,7 @@ export class Loop {
     }
   }
 
-  addInstrument(instrument: Sample) {
+  addInstrument(instrument: Sample | Function) {
     if (this.isRecording()) {
       this.loop.push({
         instrument,
@@ -108,7 +108,14 @@ export class Loop {
       const previousTime = this.currentLoopIndex === 0 ? 0 : this.loop[this.currentLoopIndex - 1].time;
       this.loopTimeout = setTimeout(() => {
         this.log(`Playing ${instrument} after ${time}ms`);
-        instrument && playSample(instrument);
+        if (instrument) {
+          if (instrument instanceof Function) {
+            instrument();
+          } else {
+            playSample(instrument);
+          }
+        }
+
         this.currentLoopIndex++;
         playLoop();
       }, time - previousTime);

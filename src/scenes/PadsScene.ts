@@ -66,7 +66,10 @@ export abstract class PadsScene extends Phaser.Scene {
       this.playSound(index);
       button.setFillStyle(hitColor);
       // TODO send a call to the loop scene to play the instrument ? or an object
-      // this.scene.get(LoopTracksScene.key).events.emit('instrument-played', {instrument, scene: this});
+      this.scene.get(LoopTracksScene.key).events.emit('instrument-played', {
+        instrument: () => this.playSound(index),
+        scene: this
+      });
     }).on('pointerup', () => button.setFillStyle(inactiveColor))
       .on('pointerout', () => button.setFillStyle(inactiveColor));
     return {
