@@ -5,6 +5,7 @@ import {hexToColor} from '../utils/colors.ts';
 import {FontFamily} from '../utils/fonts.ts';
 import {DrumsScene} from './DrumsScene.ts';
 import {GibberishScene} from './GiberishScene.ts';
+import {SimpleSynthScene} from './SimpleSynthScene.ts';
 
 export class EmptyScene extends Phaser.Scene {
   static key = 'EmptyScene';
@@ -24,6 +25,9 @@ export class EmptyScene extends Phaser.Scene {
 
     this.createMatrix();
 
+    const simpleSynthButton = this.instrumentButtons[2][1];
+    simpleSynthButton.setData('text', this.addText(simpleSynthButton, 'Simple Synth'));
+
     const drumsButton = this.instrumentButtons[1][2];
     drumsButton.setData('text', this.addText(drumsButton, 'Drums'));
 
@@ -37,6 +41,7 @@ export class EmptyScene extends Phaser.Scene {
       drumsButton,
       otherDrumsButton,
       gibberishButton,
+      simpleSynthButton
     ];
     activeButtons.forEach(button => button
       .setFillStyle(hexToColor('#FFF'), 0.5)
@@ -55,6 +60,9 @@ export class EmptyScene extends Phaser.Scene {
     });
     gibberishButton.on(Phaser.Input.Events.POINTER_UP, () => {
       this.scene.add(trackSceneKey, GibberishScene, true, {numberOfPads: 8});
+    });
+    simpleSynthButton.on(Phaser.Input.Events.POINTER_UP, () => {
+      this.scene.add(trackSceneKey, SimpleSynthScene, true);
     });
 
     window.addEventListener('resize', () => this.resizeScene());
