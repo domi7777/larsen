@@ -26,6 +26,6 @@ export class SimpleSynthScene extends PadsScene {
     oscillator.connect(gainNode);
     gainNode.connect(audioContext.destination);
     oscillator.start();
-    oscillator.stop(audioContext.currentTime + 0.5);
+    oscillator.stop(audioContext.currentTime + 1.5);
   }
 }
