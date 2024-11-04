@@ -52,8 +52,8 @@ export abstract class PadsScene extends Phaser.Scene {
 
   protected createPad(index: number, numberOfPads: number): Pad {
     const padColor = Phaser.Display.Color.HSLToColor((numberOfPads - index) / (numberOfPads * 1.5), 1, 0.5)
-    const inactiveColor = padColor.darken(40).color;
-    const hitColor = padColor.brighten(4).color;
+    const inactiveColor = padColor.darken(60).color;
+    const hitColor = padColor.brighten(40).color;
     const button = this.add.rectangle()
       .setFillStyle(inactiveColor)
       .setStrokeStyle(2, hexToColor('#FFF'), 0.8)
