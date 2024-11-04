@@ -3,6 +3,15 @@ export const FontFamily = {
   Text: 'Courier',
 }
 
+export const FontSize = {
+  medium: '50px',
+  big: '90px'
+}
+
+export const FontColor = {
+  white: '#FFF',
+}
+
 export const loadFonts = async() =>  {
   const newFontFace = new FontFace(FontFamily.Icons, 'url(./fonts/material.woff2)');
   document.fonts.add(newFontFace);

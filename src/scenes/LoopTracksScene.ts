@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import {HexaColor, hexToColor} from '../utils/colors.ts';
-import {FontFamily} from '../utils/fonts.ts';
+import {FontColor, FontFamily, FontSize} from '../utils/fonts.ts';
 import {EmptyScene} from './EmptyScene.ts';
 import {Loop} from '../Loop.ts';
 import {Sample} from '../samples/play-sample.ts';
@@ -71,7 +71,7 @@ export class LoopTracksScene extends Phaser.Scene {
     this.events.on('track-selected', () => {
       this.updateControlsState();
     });
-    this.events.on('instrument-played', ({instrument}: {instrument: Sample | Function}) => {
+    this.events.on('instrument-played', ({instrument}: { instrument: Sample | Function }) => {
       LoopTracksScene.tracks.find(track => track.selected)?.loop?.addInstrument(instrument);
     });
   }
@@ -89,14 +89,14 @@ export class LoopTracksScene extends Phaser.Scene {
         buttonSelectedCircle: this.add.ellipse(0, 0, 0, 0, hexToColor('#FFF')),
         buttonText: this.add.text(0, 0, `${index + 1}`, {
           fontFamily: FontFamily.Text,
-          fontSize: '24px',
-          color: '#FFF',
+          fontSize: FontSize.medium,
+          color: FontColor.white,
         }).setOrigin(0.5, 0.5)
           .setResolution(2),
         controlIcon: this.add.text(0, 0, '', {
           fontFamily: FontFamily.Icons,
-          fontSize: '24px',
-          color: '#FFF',
+          fontSize: FontSize.medium,
+          color: FontColor.white
         }).setOrigin(0.5, 0.5)
           .setResolution(2)
           .setInteractive()
@@ -121,7 +121,13 @@ export class LoopTracksScene extends Phaser.Scene {
     const buttonWidth = isPortrait ? window.innerWidth / LoopTracksScene.numTracks : LoopTracksScene.sceneWidthHeight;
     const buttonHeight = isPortrait ? LoopTracksScene.sceneWidthHeight : window.innerHeight / LoopTracksScene.numTracks;
 
-    LoopTracksScene.tracks.forEach(({button, buttonText, buttonSelectedCircle, controlIcon}, index) => {
+    LoopTracksScene.tracks.forEach((
+      {
+        button,
+        buttonText,
+        buttonSelectedCircle,
+        controlIcon,
+      }, index) => {
       const x = isPortrait ? buttonWidth * index : 0;
       const y = isPortrait ? -1 : buttonHeight * index;
       button.setSize(buttonWidth, buttonHeight).setPosition(x, y);
@@ -133,17 +139,24 @@ export class LoopTracksScene extends Phaser.Scene {
         .setResolution(3)
         .setSize(buttonWidth, buttonHeight)
         .setFontSize(minWidthHeight / 4)
-        .setPosition(textX, textY);
+        .setPosition(textX, textY)
 
       buttonSelectedCircle
         .setSize(minWidthHeight / 3, minWidthHeight / 3)
-        .setPosition(textX, textY);
+        .setPosition(textX, textY)
 
-      const iconX = isPortrait ? button.getCenter().x : button.getCenter().x + buttonWidth / 4;
-      const iconY = isPortrait ? button.getCenter().y + buttonHeight / 4 : button.getCenter().y;
       controlIcon
-        .setFontSize(minWidthHeight / 1.7)
-        .setPosition(iconX, iconY);
+        .setOrigin(isPortrait ? 0.5 : 1, isPortrait ? 1 : 0.5)
+        .setPosition(
+          isPortrait ? button.getCenter().x : button.getRightCenter().x,
+          isPortrait ? button.getBottomCenter().y : button.getCenter().y
+        );
+      if (controlIcon.text === controlIcons.record) {
+        controlIcon.setPosition(
+          isPortrait ? controlIcon.x : controlIcon.x + 5,
+          controlIcon.y + 10
+        )
+      }
     });
 
     this.cameras.main.setViewport(0, 0, isPortrait ? window.innerWidth : buttonWidth, isPortrait ? buttonHeight : window.innerHeight);
@@ -181,13 +194,33 @@ export class LoopTracksScene extends Phaser.Scene {
   private updateControlsState() {
     LoopTracksScene.tracks.forEach((track, index) => {
       track.button.setFillStyle(hexToColor(trackColorsState.unselected));
-      track.buttonText.setColor(track.selected ? '#000' : '#FFF')
-      track.buttonSelectedCircle.setFillStyle(hexToColor(track.selected ? '#FFF' : '#000'));
+      track.buttonText
+        .setVisible(true)
+        .setColor(track.selected ? '#000' : '#FFF');
+      track.buttonSelectedCircle
+        .setVisible(true)
+        .setFillStyle(hexToColor(track.selected ? '#FFF' : '#000'));
 
       if (this.getTrackScene(index)) {
+        const isPortrait = window.innerWidth < window.innerHeight;
+        track.controlIcon
+          .setOrigin(isPortrait ? 0.5 : 1, isPortrait ? 1 : 0.5)
+          .setPosition(
+            isPortrait ? track.button.getCenter().x : track.button.getRightCenter().x,
+            isPortrait ? track.button.getBottomCenter().y : track.button.getCenter().y
+          )
+          .setFontSize(FontSize.medium);
+
         if (track.selected && (track.loop.isRecording() || track.loop.isReadyToRecord())) {
           track.controlIcon.setText(controlIcons.record)
-            .setColor(track.loop.isRecording() ? controlColors.recording : controlColors.idle);
+            .setColor(track.loop.isRecording() ? controlColors.recording : controlColors.idle)
+            .setFontSize(FontSize.big)
+            .setPosition(
+              isPortrait ? track.controlIcon.x: track.controlIcon.x + 5,
+              track.controlIcon.y + 10
+            )
+          track.buttonSelectedCircle.setVisible(false);
+          track.buttonText.setVisible(false);
         } else if (track.loop.isPlaying() || track.loop.isReadyToPlay()) {
           track.controlIcon.setText(controlIcons.play)
             .setColor(track.loop.isPlaying() ? controlColors.playing : controlColors.idle);
