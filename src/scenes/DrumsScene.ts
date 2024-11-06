@@ -88,8 +88,9 @@ export class DrumsScene extends Phaser.Scene {
         return;
       }
       button.setFillStyle(hitColor);
-      playSample(instrument);
-      this.scene.get(LoopTracksScene.key).events.emit('instrument-played', {instrument, scene: this});
+      const callback = () => playSample(instrument);
+      callback();
+      this.scene.get(LoopTracksScene.key).events.emit('instrument-played', {callback, scene: this});
     }).on('pointerup', () => button.setFillStyle(inactiveColor))
       .on('pointerout', () => button.setFillStyle(inactiveColor));
     return {

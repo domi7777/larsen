@@ -1,7 +1,5 @@
-import {playSample, Sample} from './samples/play-sample.ts';
-
-type LoopEntry = {
-  instrument: Sample | Function | null,
+type LoopEvent = {
+  callback: Function | null,
   time: number,
 }
 
@@ -13,7 +11,7 @@ export class Loop {
   }
 
   private state: LoopState = 'readyToRecord';
-  private loop: LoopEntry[] = [];
+  private events: LoopEvent[] = [];
   private startRecordingTime = 0;
   private currentLoopIndex = 0;
   private loopTimeout: number | null = null;
@@ -34,13 +32,13 @@ export class Loop {
     }
   }
 
-  addLoopEvent(instrument: Sample | Function) {
+  addLoopEvent(callback: Function) {
     if (this.isRecording()) {
-      this.loop.push({
-        instrument,
+      this.events.push({
+        callback,
         time: Date.now() - this.startRecordingTime
       });
-      this.log(`Recording ${instrument} at time ${Date.now() - this.startRecordingTime}ms`);
+      this.log(`Recording ${callback} at time ${Date.now() - this.startRecordingTime}ms`);
     }
   }
 
@@ -64,7 +62,7 @@ export class Loop {
     if (this.isPlaying()) {
       this.stopPlaying();
     }
-    this.loop = [];
+    this.events = [];
     if (this === Loop.masterLoop) {
       Loop.masterLoop = null;
     }
@@ -91,13 +89,13 @@ export class Loop {
 
   private startRecording() {
     this.startRecordingTime = Date.now();
-    this.loop = [];
+    this.events = [];
     this.log('Recording started');
   }
 
   private stopRecording() {
-    this.loop.push({
-      instrument: null,
+    this.events.push({
+      callback: null,
       time: Date.now() - this.startRecordingTime
     });
     this.log('Recording stopped');
@@ -105,19 +103,15 @@ export class Loop {
 
   private startPlaying() {
     const playLoop = () => {
-      if (this.currentLoopIndex >= this.loop.length) {
+      if (this.currentLoopIndex >= this.events.length) {
         this.currentLoopIndex = 0;
       }
-      const {instrument, time} = this.loop[this.currentLoopIndex];
-      const previousTime = this.currentLoopIndex === 0 ? 0 : this.loop[this.currentLoopIndex - 1].time;
+      const {callback, time} = this.events[this.currentLoopIndex];
+      const previousTime = this.currentLoopIndex === 0 ? 0 : this.events[this.currentLoopIndex - 1].time;
       this.loopTimeout = setTimeout(() => {
-        this.log(`Playing ${instrument} after ${time}ms`);
-        if (instrument) {
-          if (instrument instanceof Function) {
-            instrument();
-          } else {
-            playSample(instrument);
-          }
+        this.log(`Playing ${callback} after ${time}ms`);
+        if (callback) {
+          callback();
         }
 
         this.currentLoopIndex++;
