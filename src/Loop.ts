@@ -75,8 +75,7 @@ export class Loop {
       this.state = 'recording';
       break;
     case 'recording':
-      this.stopRecording();
-      this.state = 'playing';
+      this.state = this.stopRecording();
       break;
     case 'readyToPlay':
       this.state = 'playing';
@@ -93,12 +92,17 @@ export class Loop {
     this.log('Recording started');
   }
 
-  private stopRecording() {
+  private stopRecording(): LoopState {
+    if (this.events.length === 0) {
+      this.log('No events recorded');
+      return 'readyToRecord';
+    }
     this.events.push({
       callback: null,
       time: Date.now() - this.startRecordingTime
     });
-    this.log('Recording stopped');
+    this.log('Recording stopped, start playing');
+    return 'playing';
   }
 
   private startPlaying() {
