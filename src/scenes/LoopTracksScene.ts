@@ -72,7 +72,7 @@ export class LoopTracksScene extends Phaser.Scene {
       this.updateControlsState();
     });
     this.events.on('instrument-played', ({instrument}: { instrument: Sample | Function }) => {
-      LoopTracksScene.tracks.find(track => track.selected)?.loop?.addInstrument(instrument);
+      LoopTracksScene.tracks.find(track => track.selected)?.loop?.addLoopEvent(instrument);
     });
   }
 

@@ -17,6 +17,7 @@ export class Loop {
   private startRecordingTime = 0;
   private currentLoopIndex = 0;
   private loopTimeout: number | null = null;
+  private static masterLoop: Loop | null = null;
 
   handleClick() {
     this.nextState();
@@ -33,7 +34,7 @@ export class Loop {
     }
   }
 
-  addInstrument(instrument: Sample | Function) {
+  addLoopEvent(instrument: Sample | Function) {
     if (this.isRecording()) {
       this.loop.push({
         instrument,
@@ -64,6 +65,9 @@ export class Loop {
       this.stopPlaying();
     }
     this.loop = [];
+    if (this === Loop.masterLoop) {
+      Loop.masterLoop = null;
+    }
     this.log('Loop destroyed');
   }
 
