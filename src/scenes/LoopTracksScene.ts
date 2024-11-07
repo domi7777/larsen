@@ -53,6 +53,7 @@ export class LoopTracksScene extends Phaser.Scene {
     const track = LoopTracksScene.tracks.find(track => track.selected);
     if (track) {
       track.loop.destroy();
+      track.loopProgressArc.clear();
       track.loop = new Loop(LoopTracksScene.tracks.indexOf(track));
       LoopTracksScene.instance.updateControlsState();
     } else {
