@@ -179,6 +179,9 @@ export class LoopTracksScene extends Phaser.Scene {
       } else {
         this.game.scene.start(EmptyScene.key, {index});
       }
+    } else {
+      track.loop.handleClick();
+      this.updateControlsState();
     }
   }
 
