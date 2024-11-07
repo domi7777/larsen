@@ -190,12 +190,6 @@ export class LoopTracksScene extends Phaser.Scene {
           isPortrait ? button.getCenter().x : button.getRightCenter().x,
           isPortrait ? button.getBottomCenter().y : button.getCenter().y
         );
-      if (controlIcon.text === controlIcons.record) {
-        controlIcon.setPosition(
-          isPortrait ? controlIcon.x : controlIcon.x + 5,
-          controlIcon.y + 10
-        )
-      }
     });
 
     this.cameras.main.setViewport(0, 0, isPortrait ? window.innerWidth : buttonWidth, isPortrait ? buttonHeight : window.innerHeight);
@@ -229,32 +223,15 @@ export class LoopTracksScene extends Phaser.Scene {
     LoopTracksScene.tracks.forEach((track, index) => {
       track.button.setFillStyle(hexToColor(trackColorsState.unselected));
       track.buttonText
-        .setVisible(true)
         .setColor(track.selected ? '#000' : '#FFF');
       track.buttonSelectedCircle
         .setVisible(true)
         .setFillStyle(hexToColor(track.selected ? '#FFF' : '#000'));
 
       if (this.getTrackScene(index)) {
-        const isPortrait = window.innerWidth < window.innerHeight;
-        track.controlIcon
-          .setOrigin(isPortrait ? 0.5 : 1, isPortrait ? 1 : 0.5)
-          .setPosition(
-            isPortrait ? track.button.getCenter().x : track.button.getRightCenter().x,
-            isPortrait ? track.button.getBottomCenter().y : track.button.getCenter().y
-          )
-          .setFontSize(FontSize.medium);
-
         if (track.selected && (track.loop.isRecording() || track.loop.isReadyToRecord())) {
           track.controlIcon.setText(controlIcons.record)
             .setColor(track.loop.isRecording() ? controlColors.recording : controlColors.idle)
-            .setFontSize(FontSize.big)
-            .setPosition(
-              isPortrait ? track.controlIcon.x : track.controlIcon.x + 5,
-              track.controlIcon.y + 10
-            )
-          track.buttonSelectedCircle.setVisible(false);
-          track.buttonText.setVisible(false);
         } else if (track.loop.isPlaying() || track.loop.isReadyToPlay()) {
           track.controlIcon.setText(controlIcons.play)
             .setColor(track.loop.isPlaying() ? controlColors.playing : controlColors.idle);
