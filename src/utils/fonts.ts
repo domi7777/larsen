@@ -4,6 +4,8 @@ export const FontFamily = {
 }
 
 export const FontSize = {
+  tiny: '15px',
+  small: '30px',
   medium: '50px',
   big: '90px'
 }

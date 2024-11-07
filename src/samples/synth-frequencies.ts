@@ -14,22 +14,23 @@ function createNoteTable() {
     noteFreq[i] = {};
   }
 
-  noteFreq[0]['A'] = 27.500000000000000;
-  noteFreq[0]['A#'] = 29.135235094880619;
-  noteFreq[0]['B'] = 30.867706328507756;
+  // noteFreq[0]['A'] = 27.500000000000000;
+  // noteFreq[0]['A#'] = 29.135235094880619;
+  // noteFreq[0]['B'] = 30.867706328507756;
+  //
+  // noteFreq[1]['C'] = 32.703195662574829;
+  // noteFreq[1]['C#'] = 34.647828872109012;
+  // noteFreq[1]['D'] = 36.708095989675945;
+  // noteFreq[1]['D#'] = 38.890872965260113;
+  // noteFreq[1]['E'] = 41.203444614108741;
+  // noteFreq[1]['F'] = 43.653528929125485;
+  // noteFreq[1]['F#'] = 46.249302838954299;
+  // noteFreq[1]['G'] = 48.999429497718661;
+  // noteFreq[1]['G#'] = 51.913087197493142;
 
-  noteFreq[1]['C'] = 32.703195662574829;
-  noteFreq[1]['C#'] = 34.647828872109012;
-  noteFreq[1]['D'] = 36.708095989675945;
-  noteFreq[1]['D#'] = 38.890872965260113;
-  noteFreq[1]['E'] = 41.203444614108741;
-  noteFreq[1]['F'] = 43.653528929125485;
-  noteFreq[1]['F#'] = 46.249302838954299;
-  noteFreq[1]['G'] = 48.999429497718661;
-  noteFreq[1]['G#'] = 51.913087197493142;
-  noteFreq[1]['A'] = 55.000000000000000;
-  noteFreq[1]['A#'] = 58.270470189761239;
-  noteFreq[1]['B'] = 61.735412657015513;
+  // noteFreq[1]['A'] = 55.000000000000000;
+  // noteFreq[1]['A#'] = 58.270470189761239;
+  // noteFreq[1]['B'] = 61.735412657015513;
   // …
 
   noteFreq[2]['C'] = 65.406391325149658;
@@ -110,11 +111,14 @@ function createNoteTable() {
   noteFreq[7]['A#'] = 3729.310092144719331;
   noteFreq[7]['B'] = 3951.066410048992894;
 
-  noteFreq[8]['C'] = 4186.009044809578154;
+  // noteFreq[8]['C'] = 4186.009044809578154;
+
   return noteFreq;
 }
 
 export const notesFrequencies = createNoteTable();
 export const allFrequencies = notesFrequencies
-  .flatMap(note => Object.values(note))
-  .sort((a, b) => a - b);
+  .flatMap(note => Object.entries(note))
+  .map(([key, freq]) => ({ key, freq }))
+  .filter(({ freq }) => !!freq)
+  .sort((a, b) => a.freq - b.freq);

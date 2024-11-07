@@ -2,10 +2,12 @@ import Phaser from 'phaser';
 import {LoopTracksScene} from './LoopTracksScene.ts';
 import {rotateArray} from '../utils/math.ts';
 import {hexToColor} from '../utils/colors.ts';
+import {FontColor, FontFamily, FontSize} from '../utils/fonts.ts';
 
 type Pad = {
   instrument: number,
   button: Phaser.GameObjects.Rectangle,
+  text?: Phaser.GameObjects.Text,
 }
 
 export abstract class PadsScene extends Phaser.Scene {
@@ -17,6 +19,7 @@ export abstract class PadsScene extends Phaser.Scene {
   }
 
   abstract playSound(index: number): void;
+  abstract getPadText?(index: number): void;
 
   create() {
     this.createPads();
@@ -38,12 +41,15 @@ export abstract class PadsScene extends Phaser.Scene {
 
       const currentPads = isPortrait ? rotateArray(this.pads, rowNumber, colNumber) : this.pads;
 
-      currentPads.forEach(({button}, index) => {
+      currentPads.forEach(({button, text}, index) => {
         const x = (index % colNumber) * width;
         const y = Math.floor(index / colNumber) * height;
         const offsetX = isPortrait ? 0 : LoopTracksScene.sceneWidthHeight;
         const offsetY = isPortrait ? LoopTracksScene.sceneWidthHeight : 0;
         button.setSize(width, height).setPosition(offsetX + x, offsetY + y);
+        if (text) {
+          text.setPosition(button.getCenter().x, button.getCenter().y).setFontSize(FontSize.tiny).setResolution(2);
+        }
       });
     };
 
@@ -53,7 +59,8 @@ export abstract class PadsScene extends Phaser.Scene {
   }
 
   protected createPad(index: number, numberOfPads: number): Pad {
-    const padColor = Phaser.Display.Color.HSLToColor((numberOfPads - index) / (numberOfPads * 1.5), 1, 0.5)
+    const padColor = Phaser.Display.Color.HSLToColor((numberOfPads - index) / (numberOfPads * 1.5), 1, 0.5);
+    const padText = this.getPadText?.(index);
     const inactiveColor = padColor.darken(60).color;
     const hitColor = padColor.brighten(40).color;
     const button = this.add.rectangle()
@@ -61,6 +68,19 @@ export abstract class PadsScene extends Phaser.Scene {
       .setStrokeStyle(2, hexToColor('#FFF'), 0.8)
       .setInteractive()
       .setOrigin(0, 0);
+    let buttonText: Pad['text'] = undefined;
+    if (padText) {
+      buttonText = this.add.text(0, 0, padText, {
+        fontFamily: FontFamily.Text,
+        fontSize: FontSize.tiny,
+        color: FontColor.white,
+      })
+        .setAlpha(0.5)
+        .setOrigin(0.5, 0.5)
+        .setResolution(2)
+        .setPosition(button.getCenter().x, button.getCenter().y)
+        .setDepth(1);
+    }
     let isActivated = false;
     const handlePadPress = () => {
       if (!isActivated) {
@@ -89,7 +109,8 @@ export abstract class PadsScene extends Phaser.Scene {
       .on('pointerout', () => handlePadRelease());
     return {
       instrument: index,
-      button
+      button,
+      text: buttonText,
     };
   }
 
