@@ -29,6 +29,7 @@ type Track = {
   selected: boolean,
   loop: Loop;
   controlIcon: Phaser.GameObjects.Text;
+  loopProgressArc: Phaser.GameObjects.Graphics;
 };
 
 export class LoopTracksScene extends Phaser.Scene {
@@ -75,6 +76,14 @@ export class LoopTracksScene extends Phaser.Scene {
     });
   }
 
+  update() {
+    for (const track of LoopTracksScene.tracks) {
+      if (track.loop.isPlaying()) {
+        this.updateProgressArc(track);
+      }
+    }
+  }
+
   private createTracks() {
     LoopTracksScene.tracks = new Array(LoopTracksScene.numTracks).fill(null).map((_, index) => {
       return {
@@ -101,7 +110,8 @@ export class LoopTracksScene extends Phaser.Scene {
           .setInteractive()
           .on(Phaser.Input.Events.POINTER_DOWN, () => {
             this.handleControlClicked(index);
-          })
+          }),
+        loopProgressArc: this.add.graphics()
       };
     })
     window.addEventListener('resize', () => this.resizeTracks());
@@ -232,5 +242,28 @@ export class LoopTracksScene extends Phaser.Scene {
         }
       }
     });
+  }
+
+  updateProgressArc(track: Track) {
+    const loopLength = track.loop.getLoopLength();
+    if (!loopLength) {
+      throw new Error('Loop length is not defined');
+    }
+
+    const elapsed = Date.now() - track.loop.getStartPlayingTime();
+    const progress = elapsed / loopLength; // 0 to 1 based on loop progress
+
+    // Clear previous arc and redraw
+    track.loopProgressArc.clear();
+    track.loopProgressArc.lineStyle(4, 0x00FF00, 1); // green color with 4px thickness
+
+    // Calculate the angle for the arc based on progress
+    const startAngle = Phaser.Math.DegToRad(-90); // start from the top
+    const endAngle = startAngle + Phaser.Math.DegToRad(360 * progress);
+
+    // Draw the arc around the button
+    track.loopProgressArc.beginPath();
+    track.loopProgressArc.arc(track.buttonText.x, track.buttonText.y,  track.buttonSelectedCircle.width/2, startAngle, endAngle, false); // radius slightly larger than button
+    track.loopProgressArc.strokePath();
   }
 }
