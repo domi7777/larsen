@@ -50,7 +50,7 @@ export class EmptyScene extends Phaser.Scene {
         this.scene.setVisible(false);
       })
     );
-    const trackSceneKey = `track_scene_${trackIndex}`;
+    const trackSceneKey = LoopTracksScene.getTrackSceneKey(trackIndex);
 
     drumsButton.on(Phaser.Input.Events.POINTER_UP, () => {
       this.scene.add(trackSceneKey, DrumsScene, true, {type: 'drums'});

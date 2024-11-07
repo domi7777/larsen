@@ -52,13 +52,22 @@ export class LoopTracksScene extends Phaser.Scene {
   static deleteCurrentTrack() {
     const track = LoopTracksScene.tracks.find(track => track.selected);
     if (track) {
+      const trackIndex = LoopTracksScene.tracks.indexOf(track);
       track.loop.destroy();
       track.loopProgressArc.clear();
-      track.loop = new Loop(LoopTracksScene.tracks.indexOf(track));
-      LoopTracksScene.instance.updateControlsState();
-    } else {
-      console.error('No track selected');
+      track.loop = new Loop(trackIndex);
+      this.instance.updateControlsState();
+      return trackIndex;
     }
+    throw new Error('No track selected');
+  }
+
+  static deleteCurrentInstrumentScene() {
+    const trackIndex = LoopTracksScene.deleteCurrentTrack();
+    const sceneKey = LoopTracksScene.getTrackSceneKey(trackIndex);
+    this.instance.game.scene.remove(sceneKey);
+    this.instance.game.scene.start(EmptyScene.key, {index: trackIndex});
+    this.instance.updateControlsState();
   }
 
   public static getTrackSceneKey(index: number) {
@@ -240,6 +249,9 @@ export class LoopTracksScene extends Phaser.Scene {
           track.controlIcon.setText('')
             .setColor(controlColors.idle);
         }
+      } else {
+        track.controlIcon.setText('')
+          .setColor(controlColors.idle);
       }
     });
   }

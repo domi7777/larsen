@@ -14,9 +14,11 @@ export class TweakPane {
       expanded: false,
       container,
     });
-    pane.addButton({title: 'Delete current loop'}).on('click', (e) => {
+    pane.addButton({title: 'Delete current loop'}).on('click', () => {
       LoopTracksScene.deleteCurrentTrack();
-      e.native.preventDefault();
+    });
+    pane.addButton({title: 'Delete instrument & loop'}).on('click', () => {
+      LoopTracksScene.deleteCurrentInstrumentScene();
     });
 
     // test panels
