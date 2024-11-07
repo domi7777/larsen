@@ -4,8 +4,8 @@ import {LoopTracksScene} from './LoopTracksScene.ts';
 import {rotateArray} from '../utils/math.ts';
 
 type Pad = {
-    instrument: number,
-    button: Phaser.GameObjects.Rectangle,
+  instrument: number,
+  button: Phaser.GameObjects.Rectangle,
 }
 
 declare const Freeverb: any, Bus2: any, Gibberish: any, Synth: any, Add: any, Sine: any, Sequencer: any;
@@ -24,33 +24,33 @@ const testNote = () => {
   const beat = 22050
 
   // global reverb object
-  const verb = Freeverb({ input:Bus2(), roomSize:.975, damping:.5 }).connect()
+  const verb = Freeverb({input: Bus2(), roomSize: .975, damping: .5}).connect()
 
   /*** bassline ***/
   const bass = Synth({
-    gain:.15,
-    attack:44,
+    gain: .15,
+    attack: 44,
     decay: 5512,
-    Q:.8, // CAREFUL!!!
-    filterType:2,
-    saturation:2,
-    filterMult:3.25,
-    antialias:true,
-    cutoff: Add( 1, Sine({ frequency:.1, gain:.75 }) )
+    Q: .8, // CAREFUL!!!
+    filterType: 2,
+    saturation: 2,
+    filterMult: 3.25,
+    antialias: true,
+    cutoff: Add(1, Sine({frequency: .1, gain: .75}))
   })
-    .connect( Gibberish.output )
-    .connect( verb.input, .5 )
+    .connect(Gibberish.output)
+    .connect(verb.input, .5)
 
-  const bassNotes = [55,110,165,220]
-  bassSeq = Sequencer.make( [55,110,165,220], [beat/4], bass, 'note' ).start()
+  const bassNotes = [55, 110, 165, 220]
+  bassSeq = Sequencer.make([55, 110, 165, 220], [beat / 4], bass, 'note').start()
   noteSeq = Sequencer.make(
     [
-      bassNotes.map( v=>v*1.25 ),
-      bassNotes.map( v=>v*1.25*.8 ),
-      bassNotes.map( v=>v*1.25*.8*.8 ),
-      bassNotes.map( v=>v*1.25*.8*.8*1.25 ),
+      bassNotes.map(v => v * 1.25),
+      bassNotes.map(v => v * 1.25 * .8),
+      bassNotes.map(v => v * 1.25 * .8 * .8),
+      bassNotes.map(v => v * 1.25 * .8 * .8 * 1.25),
     ],
-    [beat*16],
+    [beat * 16],
     bassSeq,
     'values'
   );
@@ -65,7 +65,7 @@ export class GibberishScene extends Phaser.Scene {
     super();
   }
 
-  create({ numberOfPads = 8 }: { numberOfPads: number}) {
+  create({numberOfPads = 8}: { numberOfPads: number }) {
     this.createPads(numberOfPads);
     this.scene.get(LoopTracksScene.key).events.emit('track-selected');
   }
@@ -83,9 +83,9 @@ export class GibberishScene extends Phaser.Scene {
       const width = isPortrait ? window.innerWidth / colNumber : (window.innerWidth - LoopTracksScene.sceneWidthHeight) / colNumber;
       const height = isPortrait ? (window.innerHeight - LoopTracksScene.sceneWidthHeight) / rowNumber : window.innerHeight / rowNumber;
 
-      const currentPads = isPortrait ?  rotateArray(pads, rowNumber, colNumber): pads;
+      const currentPads = isPortrait ? rotateArray(pads, rowNumber, colNumber) : pads;
 
-      currentPads.forEach(({ button }, index) => {
+      currentPads.forEach(({button}, index) => {
         const x = (index % colNumber) * width;
         const y = Math.floor(index / colNumber) * height;
         const offsetX = isPortrait ? 0 : LoopTracksScene.sceneWidthHeight;

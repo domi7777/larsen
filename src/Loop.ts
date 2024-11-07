@@ -8,10 +8,7 @@ type LoopEvent = {
 type LoopState = 'readyToRecord' | 'recording' | 'readyToPlay' | 'playing';
 
 export class Loop {
-  constructor(private trackIndex: number) {
-    this.log('Loop created');
-  }
-
+  private static masterLoop: Loop | null = null;
   private state: LoopState = 'readyToRecord';
   private events: LoopEvent[] = [];
   private eventEmitter = new Phaser.Events.EventEmitter();
@@ -19,7 +16,10 @@ export class Loop {
   private startPlayingTime = 0;
   private currentLoopIndex = 0;
   private loopTimeout: number | null = null;
-  private static masterLoop: Loop | null = null;
+
+  constructor(private trackIndex: number) {
+    this.log('Loop created');
+  }
 
   getStartPlayingTime() {
     return this.startPlayingTime;
@@ -141,7 +141,7 @@ export class Loop {
     } else {
       console.log(this.events);
       const masterLoopLength = Loop.masterLoop?.getLoopLength();
-      if (!masterLoopLength){
+      if (!masterLoopLength) {
         throw new Error('masterLoopLength is not set');
       }
       // check how many times the master loop fits in this loop so that it is always in sync

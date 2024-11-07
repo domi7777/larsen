@@ -1,4 +1,3 @@
-
 // Improvements:
 //     Shorter Noise Burst: The noise buffer duration is now much shorter (0.05 seconds), which results in a sharper, crisper hi-hat sound.
 //     High-Pass Filter Tweaks: The cutoff frequency is set to 8000 Hz to eliminate more of the low-end and leave the high frequencies that give the hi-hat its metallic sound.

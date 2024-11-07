@@ -12,7 +12,7 @@ export const FontColor = {
   white: '#FFF',
 }
 
-export const loadFonts = async() =>  {
+export const loadFonts = async () => {
   const newFontFace = new FontFace(FontFamily.Icons, 'url(./fonts/material.woff2)');
   document.fonts.add(newFontFace);
   return newFontFace.load().catch(error => console.error(error));

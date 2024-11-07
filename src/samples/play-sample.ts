@@ -22,7 +22,7 @@ const sampleToAudioFn: Record<Sample, () => void> = {
 export const playSample = (sample: Sample) => {
   try {
     sampleToAudioFn[sample]();
-  } catch(e) {
+  } catch (e) {
     console.error(`Error playing ${sample}`, e);
     resetAudioContext();
     sampleToAudioFn[sample]();
@@ -30,4 +30,4 @@ export const playSample = (sample: Sample) => {
 }
 
 export type Sample = 'hihat' | 'hihat-open' | 'ride' | 'crash'
-    | 'snare' | 'kick' | 'tom-low' | 'tom-high';
+  | 'snare' | 'kick' | 'tom-low' | 'tom-high';

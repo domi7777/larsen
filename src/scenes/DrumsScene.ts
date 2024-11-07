@@ -5,8 +5,8 @@ import {LoopTracksScene} from './LoopTracksScene.ts';
 import {rotateArray} from '../utils/math.ts';
 
 type Pad = {
-    instrument: Sample,
-    button: Phaser.GameObjects.Rectangle,
+  instrument: Sample,
+  button: Phaser.GameObjects.Rectangle,
 }
 
 const padColors: Record<Sample, HexaColor> = {
@@ -20,7 +20,7 @@ const padColors: Record<Sample, HexaColor> = {
   'tom-high': '#9B59B6',
 };
 
-type DrumsType= 'drums' | 'other';
+type DrumsType = 'drums' | 'other';
 
 export class DrumsScene extends Phaser.Scene {
 
@@ -28,7 +28,7 @@ export class DrumsScene extends Phaser.Scene {
     super();
   }
 
-  create({ type}: { type: DrumsType }) {
+  create({type}: { type: DrumsType }) {
     if (type) {
       this.type = type;
     }
@@ -58,9 +58,9 @@ export class DrumsScene extends Phaser.Scene {
       const width = isPortrait ? window.innerWidth / colNumber : (window.innerWidth - LoopTracksScene.sceneWidthHeight) / colNumber;
       const height = isPortrait ? (window.innerHeight - LoopTracksScene.sceneWidthHeight) / rowNumber : window.innerHeight / rowNumber;
 
-      const currentPads = isPortrait ?  rotateArray(pads, rowNumber, colNumber): pads;
+      const currentPads = isPortrait ? rotateArray(pads, rowNumber, colNumber) : pads;
 
-      currentPads.forEach(({ button }, index) => {
+      currentPads.forEach(({button}, index) => {
         const x = (index % colNumber) * width;
         const y = Math.floor(index / colNumber) * height;
         const offsetX = isPortrait ? 0 : LoopTracksScene.sceneWidthHeight;

@@ -10,7 +10,7 @@ export type NoteFreq = {
 
 function createNoteTable() {
   const noteFreq: Partial<NoteFreq>[] = [];
-  for (let i=0; i< 9; i++) {
+  for (let i = 0; i < 9; i++) {
     noteFreq[i] = {};
   }
 
