@@ -59,7 +59,7 @@ export abstract class PadsScene extends Phaser.Scene {
   }
 
   protected createPad(index: number, numberOfPads: number): Pad {
-    const padColor = Phaser.Display.Color.HSLToColor((numberOfPads - index) / (numberOfPads * 1.5), 1, 0.5);
+    const padColor = this.getPadColor(numberOfPads, index);
     const padText = this.getPadText?.(index);
     const inactiveColor = padColor.darken(60).color;
     const hitColor = padColor.brighten(40).color;
@@ -114,4 +114,7 @@ export abstract class PadsScene extends Phaser.Scene {
     };
   }
 
+  protected getPadColor(numberOfPads: number, index: number): Phaser.Display.Color {
+    return Phaser.Display.Color.HSLToColor((numberOfPads - index) / (numberOfPads * 1.5), 1, 0.5);
+  }
 }

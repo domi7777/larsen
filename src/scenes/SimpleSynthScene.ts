@@ -1,6 +1,7 @@
 import {PadsScene} from './PadsScene.ts';
 import {allFrequencies} from '../samples/synth-frequencies.ts';
 import {createAudioContext} from '../samples/sample-utils.ts';
+import Phaser from 'phaser';
 
 export class SimpleSynthScene extends PadsScene {
 
@@ -15,6 +16,15 @@ export class SimpleSynthScene extends PadsScene {
   getPadText(index: number) {
     const note = allFrequencies[index];
     return note?.key;
+  }
+
+  getPadColor(numberOfPads: number, index: number): Phaser.Display.Color {
+    const color = super.getPadColor(numberOfPads, index);
+    const key = allFrequencies[index]?.key;
+    if (key?.includes('#')) {
+      return color.darken(15);
+    }
+    return color;
   }
 
   playSound(index: number): void {
