@@ -41,9 +41,13 @@ export class DrumsScene extends PadsScene<Config> {
     super.create(config);
   }
 
-  protected getPadColor(_numberOfPads: number, index: number): Phaser.Display.Color {
+  protected getPadColor(_numberOfPads: number, index: number) {
     const padColor = hexToColor(padColors[this.instruments[index]], this.config?.type === 'drums');
     return Phaser.Display.Color.IntegerToColor(padColor)
+  }
+
+  protected getPadText(index: number) {
+    return this.instruments[index];
   }
 
   playSound(index: number): void {
