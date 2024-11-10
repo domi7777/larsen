@@ -39,11 +39,11 @@ export class TweakPane {
           this.pane.remove(binding)
         });
       if (settings) {
-        const index = 0; // elements are added from the top
-        this.sceneControls.deleteLoop = this.pane.addButton({title: 'Delete current loop', index})
-          .on('click', () => LoopTracksScene.deleteCurrentTrack());
+        const index = 0; // elements are added from the top, so the first ones added here will be at the bottom
         this.sceneControls.deleteInstrument = this.pane.addButton({title: 'Delete instrument & loop', index})
           .on('click', () => LoopTracksScene.deleteCurrentInstrumentScene());
+        this.sceneControls.deleteLoop = this.pane.addButton({title: 'Delete current loop', index})
+          .on('click', () => LoopTracksScene.deleteCurrentTrack());
         this.sceneControls.volume = this.pane.addBinding(settings, 'volume', {
           min: 0,
           max: 100,
