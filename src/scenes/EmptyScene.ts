@@ -7,6 +7,7 @@ import {DrumsScene} from './DrumsScene.ts';
 import {GibberishScene} from './GiberishScene.ts';
 import {SimpleSynthScene} from './SimpleSynthScene.ts';
 import {EVENTS} from '../events.ts';
+import {DaftSynthScene} from './DaftSynthScene.ts';
 
 export class EmptyScene extends Phaser.Scene {
   static key = 'EmptyScene';
@@ -34,15 +35,15 @@ export class EmptyScene extends Phaser.Scene {
     const drumsButton = this.instrumentButtons[1][2];
     drumsButton.setData('text', this.addText(drumsButton, 'Drums'));
 
-    const otherDrumsButton = this.instrumentButtons[3][2];
-    otherDrumsButton.setData('text', this.addText(otherDrumsButton, 'Other Drums'));
+    const daftSynthButton = this.instrumentButtons[3][2];
+    daftSynthButton.setData('text', this.addText(daftSynthButton, 'Daft synth'));
 
     const gibberishButton = this.instrumentButtons[2][3];
     gibberishButton.setData('text', this.addText(gibberishButton, 'Gibberish'));
 
     const activeButtons = [
       drumsButton,
-      otherDrumsButton,
+      daftSynthButton,
       gibberishButton,
       simpleSynthButton
     ];
@@ -58,8 +59,8 @@ export class EmptyScene extends Phaser.Scene {
     drumsButton.on(Phaser.Input.Events.POINTER_UP, () => {
       this.scene.add(trackSceneKey, DrumsScene, true, {type: 'drums'});
     });
-    otherDrumsButton.on(Phaser.Input.Events.POINTER_UP, () => {
-      this.scene.add(trackSceneKey, DrumsScene, true, {type: 'other'});
+    daftSynthButton.on(Phaser.Input.Events.POINTER_UP, () => {
+      this.scene.add(trackSceneKey, DaftSynthScene, true);
     });
     gibberishButton.on(Phaser.Input.Events.POINTER_UP, () => {
       this.scene.add(trackSceneKey, GibberishScene, true, {numberOfPads: 8});
