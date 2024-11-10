@@ -3,6 +3,7 @@ import {hexToColor} from '../utils/colors.ts';
 import {LoopTracksScene} from './LoopTracksScene.ts';
 import {rotateArray} from '../utils/math.ts';
 import {logger} from '../utils/logger.ts';
+import {EVENTS} from '../events.ts';
 
 type Pad = {
   instrument: number,
@@ -68,7 +69,7 @@ export class GibberishScene extends Phaser.Scene {
 
   create({numberOfPads = 8}: { numberOfPads: number }) {
     this.createPads(numberOfPads);
-    this.scene.get(LoopTracksScene.key).events.emit('track-selected');
+    this.game.events.emit(EVENTS.sceneChange)
   }
 
   private createPads(numberOfPads: number) {

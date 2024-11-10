@@ -83,7 +83,7 @@ export class LoopTracksScene extends Phaser.Scene {
       .setViewport(0, 0, LoopTracksScene.sceneWidthHeight, window.innerHeight)
       .setBackgroundColor('#963');// ugly color that should never be seen
     this.createTracks();
-    this.events.on('track-selected', () => {
+    this.game.events.on(EVENTS.sceneChange, () => {
       this.updateControlsState();
     });
     this.game.events.on(EVENTS.instrumentPlayed, ({callback}: { callback: Function }) => {

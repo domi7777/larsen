@@ -27,7 +27,6 @@ export abstract class PadsScene extends Phaser.Scene {
 
   create() {
     this.createPads();
-    this.scene.get(LoopTracksScene.key).events.emit('track-selected');
     this.game.events.emit(EVENTS.sceneChange, this.settings);
   }
 

@@ -38,7 +38,6 @@ export class DrumsScene extends Phaser.Scene {
       this.type = type;
     }
     this.createPads();
-    this.scene.get(LoopTracksScene.key).events.emit('track-selected');
     this.game.events.emit(EVENTS.sceneChange, this.settings);
   }
 
