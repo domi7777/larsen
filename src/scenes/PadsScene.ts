@@ -11,9 +11,10 @@ type Pad = {
   text?: Phaser.GameObjects.Text,
 }
 
-export abstract class PadsScene extends Phaser.Scene {
+export abstract class PadsScene<C = unknown> extends Phaser.Scene {
 
   private pads: Pad[] = [];
+  protected config?: C;
   readonly settings = {
     volume: 75
   }
@@ -23,9 +24,10 @@ export abstract class PadsScene extends Phaser.Scene {
   }
 
   abstract playSound(index: number): void;
-  abstract getPadText?(index: number): void;
 
-  create() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  create(config?: C) {
+    this.config = config;
     this.createPads();
     this.game.events.emit(EVENTS.sceneChange, this.settings);
   }
@@ -65,7 +67,7 @@ export abstract class PadsScene extends Phaser.Scene {
   protected createPad(index: number, numberOfPads: number): Pad {
     const padColor = this.getPadColor(numberOfPads, index);
     const padText = this.getPadText?.(index);
-    const inactiveColor = padColor.darken(60).color;
+    const inactiveColor = padColor.color;
     const hitColor = padColor.brighten(40).color;
     const button = this.add.rectangle()
       .setFillStyle(inactiveColor)
@@ -120,5 +122,10 @@ export abstract class PadsScene extends Phaser.Scene {
 
   protected getPadColor(numberOfPads: number, index: number): Phaser.Display.Color {
     return Phaser.Display.Color.HSLToColor((numberOfPads - index) / (numberOfPads * 1.5), 1, 0.5);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected getPadText(_index: number): string | undefined {
+    return undefined;
   }
 }
