@@ -1,3 +1,4 @@
 export const EVENTS = {
-  sceneChange : 'scene-change'
+  sceneChange : 'scene-change',
+  instrumentPlayed: 'instrument-played'
 }

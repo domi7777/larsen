@@ -91,7 +91,7 @@ export abstract class PadsScene extends Phaser.Scene {
       if (!isActivated) {
         this.playSound(index);
         button.setFillStyle(hitColor);
-        this.scene.get(LoopTracksScene.key).events.emit('instrument-played', {
+        this.scene.get(LoopTracksScene.key).events.emit(EVENTS.instrumentPlayed, {
           callback: () => this.playSound(index),
           scene: this
         });
