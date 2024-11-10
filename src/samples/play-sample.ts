@@ -9,7 +9,7 @@ import {playTom2High} from './drums/tom-high.ts';
 import {resetAudioContext} from './sample-utils.ts';
 import {logger} from '../utils/logger.ts';
 
-const sampleToAudioFn: Record<Sample, () => void> = {
+const sampleToAudioFn: Record<Sample, (volume: number) => void> = {
   hihat: playHiHat,
   kick: playKick,
   snare: playSnare,
@@ -20,13 +20,13 @@ const sampleToAudioFn: Record<Sample, () => void> = {
   'tom-high': playTom2High,
 }
 
-export const playSample = (sample: Sample) => {
+export const playSample = (sample: Sample, volume: number) => {
   try {
-    sampleToAudioFn[sample]();
+    sampleToAudioFn[sample](volume);
   } catch (e) {
     logger.error(`Error playing ${sample}`, e);
     resetAudioContext();
-    sampleToAudioFn[sample]();
+    sampleToAudioFn[sample](volume);
   }
 }
 

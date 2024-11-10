@@ -1,6 +1,6 @@
 import {createAudioContext} from '../sample-utils.ts';
 
-export function playOpenHiHat() {
+export function playOpenHiHat(volume = 60) {
   const audioContext = createAudioContext();
   // --- 1. White Noise for the hi-hat ---
   const bufferSize = audioContext.sampleRate * 0.5; // 0.5 second buffer for longer open hi-hat
@@ -26,7 +26,7 @@ export function playOpenHiHat() {
 
   // --- 4. Gain envelope for the sound decay ---
   const gainNode = audioContext.createGain();
-  gainNode.gain.setValueAtTime(0.6, audioContext.currentTime); // Start at a moderate volume
+  gainNode.gain.setValueAtTime(volume / 100, audioContext.currentTime); // Start at a moderate volume
   gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.5); // Decay for a sustained open hi-hat sound
 
   // Connect the nodes together: noise -> highPass -> lowPass -> gain -> output

@@ -10,7 +10,7 @@
 
 import {createAudioContext} from '../sample-utils.ts';
 
-export function playKick() {
+export function playKick(volume = 100) {
   const audioContext = createAudioContext();
 
   // Create an oscillator for the low "thump"
@@ -25,7 +25,7 @@ export function playKick() {
   osc.frequency.exponentialRampToValueAtTime(70, audioContext.currentTime + 0.05); // Drop to 60Hz
 
   // Gain envelope: Start loud and quickly decay
-  gainNode.gain.setValueAtTime(1, audioContext.currentTime); // Start loud
+  gainNode.gain.setValueAtTime(volume / 100, audioContext.currentTime); // Start loud
   gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 1); // Decay to quiet over 1.5 seconds
 
   // Connect oscillator to gain, then to the audio context destination

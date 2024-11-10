@@ -1,6 +1,6 @@
 import {createAudioContext} from '../sample-utils.ts';
 
-export function playTom1Low(hz = 99, durationInMs = 500) {
+export function playTom1Low(hz = 99, durationInMs = 500, volume = 100) {
   const audioContext = createAudioContext();
   // --- 1. Create an oscillator for the base tone ---
   const oscillator = audioContext.createOscillator();
@@ -9,7 +9,7 @@ export function playTom1Low(hz = 99, durationInMs = 500) {
 
   // --- 2. Create a gain node for controlling volume ---
   const gainNode = audioContext.createGain();
-  gainNode.gain.setValueAtTime(1, audioContext.currentTime); // Increase initial gain for louder sound
+  gainNode.gain.setValueAtTime(volume / 100, audioContext.currentTime); // Increase initial gain for louder sound
   gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.5); // Quick decay
 
   // --- 3. Add a slight detuning effect to make the tom sound richer ---

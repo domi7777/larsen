@@ -10,7 +10,7 @@
 
 import {createAudioContext} from '../sample-utils.ts';
 
-export function playHiHat() {
+export function playHiHat(volume = 100) {
   const audioContext = createAudioContext();
   // --- 1. White Noise (for metallic hiss) ---
   const bufferSize = audioContext.sampleRate * 0.05; // Very short burst for a hi-hat
@@ -32,7 +32,7 @@ export function playHiHat() {
 
   // Envelope to quickly fade out the noise
   const noiseGain = audioContext.createGain();
-  noiseGain.gain.setValueAtTime(1, audioContext.currentTime);
+  noiseGain.gain.setValueAtTime(volume / 100, audioContext.currentTime);
   noiseGain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.05); // Fast decay for hi-hat sound
 
   noise.connect(highPassFilter);

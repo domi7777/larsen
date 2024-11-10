@@ -2,12 +2,15 @@ import Phaser from 'phaser';
 import {Pane} from 'tweakpane';
 import {LoopTracksScene} from '../scenes/LoopTracksScene.ts';
 import {logger} from '../utils/logger.ts';
+import {BindingApi} from '@tweakpane/core';
 
 export class TweakPane {
 
   private static logsParams= {
     logs: '',
   }
+  private pane: Pane;
+  private volumeControl?: BindingApi;
 
   public static log(message: string) {
     TweakPane.logsParams.logs += '\n' + message;
@@ -18,15 +21,29 @@ export class TweakPane {
     if (!container) {
       throw new Error('No settings container found');
     }
-    const pane = new Pane({
+    this.pane = new Pane({
       title: 'settings', // font-family: Icons; see index.html
       expanded: false,
       container,
     });
-    pane.addButton({title: 'Delete current loop'}).on('click', () => {
+    game.events.on('scene-change', (settings?: { volume: number }) => {
+      if (this.volumeControl) {
+        this.pane.remove(this.volumeControl);
+      }
+      if (settings) {
+        this.volumeControl = this.pane.addBinding(settings, 'volume', {
+          min: 0,
+          max: 100,
+          step: 1,
+          index: 0 // add on top of pane
+        });
+      }
+    })
+
+    this.pane.addButton({title: 'Delete current loop'}).on('click', () => {
       LoopTracksScene.deleteCurrentTrack();
     });
-    pane.addButton({title: 'Delete instrument & loop'}).on('click', () => {
+    this.pane.addButton({title: 'Delete instrument & loop'}).on('click', () => {
       LoopTracksScene.deleteCurrentInstrumentScene();
     });
     // error logging
@@ -34,11 +51,11 @@ export class TweakPane {
       logger.error('\n' + message + ' ' + source + ' ' + lineno + ' ' + colno + ' ' + error);
     }
 
-    pane.addButton({title: 'Show logs'}).on('click', () => {
+    this.pane.addButton({title: 'Show logs'}).on('click', () => {
       logsPanel.hidden = !logsPanel.hidden;
     });
 
-    const logsPanel = pane.addBinding(TweakPane.logsParams, 'logs', {
+    const logsPanel = this.pane.addBinding(TweakPane.logsParams, 'logs', {
       label: '',
       readonly: true,
       multiline: true,
@@ -46,16 +63,6 @@ export class TweakPane {
       hidden: true,
     });
 
-    // test panels
-    // const PARAMS = {
-    //   factor: 123,
-    //   title: 'hello',
-    //   color: '#ff0055',
-    // };
-    //
-    // pane.addBinding(PARAMS, 'factor');
-    // pane.addBinding(PARAMS, 'title');
-    // pane.addBinding(PARAMS, 'color');
     this.resize();
   }
 

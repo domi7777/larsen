@@ -24,6 +24,10 @@ type DrumsType = 'drums' | 'other';
 
 export class DrumsScene extends Phaser.Scene {
 
+  readonly settings = {
+    volume: 100
+  }
+
   constructor(private type: DrumsType = 'drums') {
     super();
   }
@@ -34,6 +38,7 @@ export class DrumsScene extends Phaser.Scene {
     }
     this.createPads();
     this.scene.get(LoopTracksScene.key).events.emit('track-selected');
+    this.game.events.emit('scene-change', this.settings);
   }
 
   private createPads() {
@@ -88,7 +93,7 @@ export class DrumsScene extends Phaser.Scene {
         return;
       }
       button.setFillStyle(hitColor);
-      const callback = () => playSample(instrument);
+      const callback = () => playSample(instrument, this.settings.volume);
       callback();
       this.scene.get(LoopTracksScene.key).events.emit('instrument-played', {callback, scene: this});
     }).on('pointerup', () => button.setFillStyle(inactiveColor))

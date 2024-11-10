@@ -11,7 +11,7 @@
 //     Oscillator Volume: The metallic shimmer is controlled by oscGain.gain. You can increase or decrease it to blend the overtone more or less with the noise.
 import {createAudioContext} from '../sample-utils.ts';
 
-export function playCrashCymbal() {
+export function playCrashCymbal(volume = 100) {
   const audioContext = createAudioContext();
   // --- 1. White Noise for the main crash sound ---
   const bufferSize = audioContext.sampleRate * 1.5; // 1.5 second buffer for long decay
@@ -37,7 +37,7 @@ export function playCrashCymbal() {
 
   // --- 4. Gain envelope to control the crash sound decay ---
   const gainNode = audioContext.createGain();
-  gainNode.gain.setValueAtTime(1, audioContext.currentTime); // Start loud
+  gainNode.gain.setValueAtTime(volume / 100, audioContext.currentTime); // Start loud
   gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 1.5); // Long decay (1.5 seconds)
 
   // Connect the nodes together: noise -> highPass -> lowPass -> gain -> output

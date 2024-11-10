@@ -13,6 +13,9 @@ type Pad = {
 export abstract class PadsScene extends Phaser.Scene {
 
   private pads: Pad[] = [];
+  readonly settings = {
+    volume: 75
+  }
 
   protected constructor(private cols: number, private rows: number) {
     super();
@@ -24,6 +27,7 @@ export abstract class PadsScene extends Phaser.Scene {
   create() {
     this.createPads();
     this.scene.get(LoopTracksScene.key).events.emit('track-selected');
+    this.game.events.emit('scene-change', this.settings);
   }
 
   protected createPads() {

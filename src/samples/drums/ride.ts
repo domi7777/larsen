@@ -1,6 +1,6 @@
 import {createAudioContext} from '../sample-utils.ts';
 
-export function playRide() {
+export function playRide(volume = 80) {
   const audioContext = createAudioContext();
   // --- 1. White Noise for the metallic sound ---
   const bufferSize = audioContext.sampleRate * 1.2; // Slightly longer buffer for sustained ride sound
@@ -26,7 +26,7 @@ export function playRide() {
 
   // --- 4. Gain envelope for the sound decay ---
   const gainNode = audioContext.createGain();
-  gainNode.gain.setValueAtTime(0.8, audioContext.currentTime); // Start at a higher volume for prominence
+  gainNode.gain.setValueAtTime(volume / 100, audioContext.currentTime); // Start at a higher volume for prominence
   gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 1.2); // Longer decay for a sustained ride sound
 
   // Connect the nodes: noise -> highPass -> lowPass -> gain -> output

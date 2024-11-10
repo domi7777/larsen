@@ -32,7 +32,7 @@ export class SimpleSynthScene extends PadsScene {
     const note = allFrequencies[index].freq;
     logger.log('Playing note', note);
     // play the sound
-    return playPianoTone(note);
+    return playPianoTone(note, this.settings.volume);
 
     // const audioContext = createAudioContext();
     // const oscillator = audioContext.createOscillator();
@@ -48,7 +48,7 @@ export class SimpleSynthScene extends PadsScene {
   }
 }
 
-const playPianoTone = (frequency: number) => {
+const playPianoTone = (frequency: number, volume: number) => {
   const audioContext = createAudioContext();
   // Create an oscillator for the main tone
   const oscillator = audioContext.createOscillator();
@@ -69,7 +69,7 @@ const playPianoTone = (frequency: number) => {
   const decayTime = 1.5;    // Longer decay to simulate the piano fade out
 
   gainNode.gain.setValueAtTime(0, audioContext.currentTime);  // Start at zero
-  gainNode.gain.linearRampToValueAtTime(0.7, audioContext.currentTime + attackTime); // Attack
+  gainNode.gain.linearRampToValueAtTime(volume / 100, audioContext.currentTime + attackTime); // Attack
   gainNode.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + decayTime); // Decay
 
   // Start the oscillator and stop it after the decay

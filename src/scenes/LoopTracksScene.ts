@@ -3,6 +3,7 @@ import {HexaColor, hexToColor} from '../utils/colors.ts';
 import {FontColor, FontFamily, FontSize} from '../utils/fonts.ts';
 import {EmptyScene} from './EmptyScene.ts';
 import {Loop} from '../Loop.ts';
+import {PadsScene} from './PadsScene.ts';
 
 const trackColorsState: Record<string, HexaColor> = {
   selected: '#DDD',
@@ -220,6 +221,8 @@ export class LoopTracksScene extends Phaser.Scene {
       const trackScene = this.getTrackScene(index);
       if (trackScene) {
         trackScene.scene.bringToTop();
+        const settings = (trackScene as PadsScene).settings;
+        this.game.events.emit('scene-change', settings);
       } else {
         this.game.scene.start(EmptyScene.key, {index});
       }

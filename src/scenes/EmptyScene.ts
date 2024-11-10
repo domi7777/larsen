@@ -19,6 +19,8 @@ export class EmptyScene extends Phaser.Scene {
 
   create({index: trackIndex}: { index: number }) {
     this.scene.bringToTop();
+    this.game.events.emit('scene-change');
+
     this.cameras.main
       .setOrigin(0, 0)
       .setBackgroundColor('#147');

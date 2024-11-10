@@ -13,7 +13,7 @@
 //     Both the noise and oscillator have quick decay envelopes to simulate the natural sound of a snare hit.
 import {createAudioContext} from '../sample-utils.ts';
 
-export function playSnare() {
+export function playSnare(volume = 100) {
   const audioContext = createAudioContext();
   // --- 1. White Noise (for the snare wires) ---
   const bufferSize = audioContext.sampleRate * 0.2; // Duration: 0.2 seconds
@@ -34,7 +34,7 @@ export function playSnare() {
 
   // Envelope for the noise
   const noiseGain = audioContext.createGain();
-  noiseGain.gain.setValueAtTime(1, audioContext.currentTime);
+  noiseGain.gain.setValueAtTime(volume / 100, audioContext.currentTime);
   noiseGain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2); // Quick decay
 
   noise.connect(noiseFilter);
