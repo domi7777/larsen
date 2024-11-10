@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import {Pane} from 'tweakpane';
+import {ButtonApi, Pane} from 'tweakpane';
 import {LoopTracksScene} from '../scenes/LoopTracksScene.ts';
 import {logger} from '../utils/logger.ts';
 import {BindingApi} from '@tweakpane/core';
@@ -10,7 +10,11 @@ export class TweakPane {
     logs: '',
   }
   private pane: Pane;
-  private volumeControl?: BindingApi;
+  private sceneControls: {
+    deleteInstrument?: ButtonApi;
+    deleteLoop?: ButtonApi;
+    volume?: BindingApi,
+  } = {};
 
   public static log(message: string) {
     TweakPane.logsParams.logs += '\n' + message;
@@ -27,25 +31,27 @@ export class TweakPane {
       container,
     });
     game.events.on('scene-change', (settings?: { volume: number }) => {
-      if (this.volumeControl) {
-        this.pane.remove(this.volumeControl);
-      }
+      Object.values(this.sceneControls)
+        .filter(Boolean)
+        .forEach((binding) => {
+          binding.dispose();
+          this.pane.remove(binding)
+        });
       if (settings) {
-        this.volumeControl = this.pane.addBinding(settings, 'volume', {
+        const index = 0; // elements are added from the top
+        this.sceneControls.deleteLoop = this.pane.addButton({title: 'Delete current loop', index})
+          .on('click', () => LoopTracksScene.deleteCurrentTrack());
+        this.sceneControls.deleteInstrument = this.pane.addButton({title: 'Delete instrument & loop', index})
+          .on('click', () => LoopTracksScene.deleteCurrentInstrumentScene());
+        this.sceneControls.volume = this.pane.addBinding(settings, 'volume', {
           min: 0,
           max: 100,
           step: 1,
-          index: 0 // add on top of pane
+          index
         });
       }
     })
 
-    this.pane.addButton({title: 'Delete current loop'}).on('click', () => {
-      LoopTracksScene.deleteCurrentTrack();
-    });
-    this.pane.addButton({title: 'Delete instrument & loop'}).on('click', () => {
-      LoopTracksScene.deleteCurrentInstrumentScene();
-    });
     // error logging
     window.onerror = function (message, source, lineno, colno, error) {
       logger.error('\n' + message + ' ' + source + ' ' + lineno + ' ' + colno + ' ' + error);
