@@ -7,6 +7,7 @@ import {playRide} from './drums/ride.ts';
 import {playTom1Low} from './drums/tom-low.ts';
 import {playTom2High} from './drums/tom-high.ts';
 import {resetAudioContext} from './sample-utils.ts';
+import {logger} from '../utils/logger.ts';
 
 const sampleToAudioFn: Record<Sample, () => void> = {
   hihat: playHiHat,
@@ -23,7 +24,7 @@ export const playSample = (sample: Sample) => {
   try {
     sampleToAudioFn[sample]();
   } catch (e) {
-    console.error(`Error playing ${sample}`, e);
+    logger.error(`Error playing ${sample}`, e);
     resetAudioContext();
     sampleToAudioFn[sample]();
   }

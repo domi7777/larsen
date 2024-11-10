@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import {hexToColor} from '../utils/colors.ts';
 import {LoopTracksScene} from './LoopTracksScene.ts';
 import {rotateArray} from '../utils/math.ts';
+import {logger} from '../utils/logger.ts';
 
 type Pad = {
   instrument: number,
@@ -15,11 +16,11 @@ let bassSeq: any = null;
 
 const testNote = () => {
   if (noteSeq) {
-    console.log('stopping note...', noteSeq);
+    logger.log('stopping note...', noteSeq);
     noteSeq.stop();
     bassSeq.stop();
   }
-  console.log('testing note...');
+  logger.log('testing note...');
 
   const beat = 22050
 
@@ -115,12 +116,12 @@ export class GibberishScene extends Phaser.Scene {
       if (!this.isGibberishLoaded) {
         this.isGibberishLoaded = true;
         Gibberish.workletPath = './worklet.js';
-        console.log('loading Gibberish 2...');
+        logger.log('loading Gibberish 2...');
         Gibberish.init().then(() => {
-          console.log('Gibberish is ready!')
+          logger.log('Gibberish is ready!')
           Gibberish.export(window)
           testNote();
-        }).catch((e: unknown) => console.error('oops', e));
+        }).catch((e: unknown) => logger.error('oops', e));
       } else {
         testNote();
       }

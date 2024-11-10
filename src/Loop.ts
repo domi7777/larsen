@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import {logger} from './utils/logger.ts';
 
 type LoopEvent = {
   callback: Function | 'endOfLoop',
@@ -139,7 +140,7 @@ export class Loop {
         callback
       }));
     } else {
-      console.log(this.events);
+      logger.log('events: '+ this.events.length, this.events);
       const masterLoopLength = Loop.masterLoop?.getLoopLength();
       if (!masterLoopLength) {
         throw new Error('masterLoopLength is not set');
@@ -201,9 +202,13 @@ export class Loop {
     return this === Loop.masterLoop;
   }
 
-  private log(msg: string, color: string = '#FFF') {
-    const message = `%cLoop ${(this.trackIndex + 1)}: ${msg}`;
-    console.log(message, `color: ${color}`);
+  private log(msg: string, color?: string) {
+    const message = `Loop ${(this.trackIndex + 1)}: ${msg}`;
+    if (color) {
+      logger.log(`%c${message}`, `color: ${color}`);
+    } else {
+      logger.log(message);
+    }
   }
 
 }

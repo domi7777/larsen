@@ -1,8 +1,17 @@
 import Phaser from 'phaser';
 import {Pane} from 'tweakpane';
 import {LoopTracksScene} from '../scenes/LoopTracksScene.ts';
+import {logger} from '../utils/logger.ts';
 
 export class TweakPane {
+
+  private static logsParams= {
+    logs: '',
+  }
+
+  public static log(message: string) {
+    TweakPane.logsParams.logs += '\n' + message;
+  }
 
   constructor(private game: Phaser.Game) {
     const container = document.getElementById('settings');
@@ -10,7 +19,7 @@ export class TweakPane {
       throw new Error('No settings container found');
     }
     const pane = new Pane({
-      title: 'Settings',
+      title: 'settings', // font-family: Icons; see index.html
       expanded: false,
       container,
     });
@@ -19,6 +28,22 @@ export class TweakPane {
     });
     pane.addButton({title: 'Delete instrument & loop'}).on('click', () => {
       LoopTracksScene.deleteCurrentInstrumentScene();
+    });
+    // error logging
+    window.onerror = function (message, source, lineno, colno, error) {
+      logger.error('\n' + message + ' ' + source + ' ' + lineno + ' ' + colno + ' ' + error);
+    }
+
+    pane.addButton({title: 'Show logs'}).on('click', () => {
+      logsPanel.hidden = !logsPanel.hidden;
+    });
+
+    const logsPanel = pane.addBinding(TweakPane.logsParams, 'logs', {
+      label: '',
+      readonly: true,
+      multiline: true,
+      rows: 10,
+      hidden: true,
     });
 
     // test panels

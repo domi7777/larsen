@@ -2,6 +2,7 @@ import {PadsScene} from './PadsScene.ts';
 import {allFrequencies} from '../samples/synth-frequencies.ts';
 import {createAudioContext} from '../samples/sample-utils.ts';
 import Phaser from 'phaser';
+import {logger} from '../utils/logger.ts';
 
 export class SimpleSynthScene extends PadsScene {
 
@@ -29,7 +30,7 @@ export class SimpleSynthScene extends PadsScene {
 
   playSound(index: number): void {
     const note = allFrequencies[index].freq;
-    console.log('Playing note', note);
+    logger.log('Playing note', note);
     // play the sound
     return playPianoTone(note);
 
