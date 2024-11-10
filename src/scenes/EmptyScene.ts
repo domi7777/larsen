@@ -6,6 +6,7 @@ import {FontFamily} from '../utils/fonts.ts';
 import {DrumsScene} from './DrumsScene.ts';
 import {GibberishScene} from './GiberishScene.ts';
 import {SimpleSynthScene} from './SimpleSynthScene.ts';
+import {EVENTS} from '../events.ts';
 
 export class EmptyScene extends Phaser.Scene {
   static key = 'EmptyScene';
@@ -19,7 +20,7 @@ export class EmptyScene extends Phaser.Scene {
 
   create({index: trackIndex}: { index: number }) {
     this.scene.bringToTop();
-    this.game.events.emit('scene-change');
+    this.game.events.emit(EVENTS.sceneChange);
 
     this.cameras.main
       .setOrigin(0, 0)

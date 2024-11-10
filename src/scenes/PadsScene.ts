@@ -3,6 +3,7 @@ import {LoopTracksScene} from './LoopTracksScene.ts';
 import {rotateArray} from '../utils/math.ts';
 import {hexToColor} from '../utils/colors.ts';
 import {FontColor, FontFamily, FontSize} from '../utils/fonts.ts';
+import {EVENTS} from '../events.ts';
 
 type Pad = {
   instrument: number,
@@ -27,7 +28,7 @@ export abstract class PadsScene extends Phaser.Scene {
   create() {
     this.createPads();
     this.scene.get(LoopTracksScene.key).events.emit('track-selected');
-    this.game.events.emit('scene-change', this.settings);
+    this.game.events.emit(EVENTS.sceneChange, this.settings);
   }
 
   protected createPads() {

@@ -3,6 +3,7 @@ import {HexaColor, hexToColor} from '../utils/colors.ts';
 import {playSample, Sample} from '../samples/play-sample.ts';
 import {LoopTracksScene} from './LoopTracksScene.ts';
 import {rotateArray} from '../utils/math.ts';
+import {EVENTS} from '../events.ts';
 
 type Pad = {
   instrument: Sample,
@@ -38,7 +39,7 @@ export class DrumsScene extends Phaser.Scene {
     }
     this.createPads();
     this.scene.get(LoopTracksScene.key).events.emit('track-selected');
-    this.game.events.emit('scene-change', this.settings);
+    this.game.events.emit(EVENTS.sceneChange, this.settings);
   }
 
   private createPads() {

@@ -3,6 +3,7 @@ import {ButtonApi, Pane} from 'tweakpane';
 import {LoopTracksScene} from '../scenes/LoopTracksScene.ts';
 import {logger} from '../utils/logger.ts';
 import {BindingApi} from '@tweakpane/core';
+import {EVENTS} from '../events.ts';
 
 export class TweakPane {
 
@@ -30,7 +31,7 @@ export class TweakPane {
       expanded: false,
       container,
     });
-    game.events.on('scene-change', (settings?: { volume: number }) => {
+    game.events.on(EVENTS.sceneChange, (settings?: { volume: number }) => {
       Object.values(this.sceneControls)
         .filter(Boolean)
         .forEach((binding) => {
