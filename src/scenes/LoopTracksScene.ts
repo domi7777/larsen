@@ -242,7 +242,9 @@ export class LoopTracksScene extends Phaser.Scene {
         .setVisible(true)
         .setFillStyle(hexToColor(track.selected ? '#FFF' : '#000'));
 
-      if (this.getTrackScene(index)) {
+      const trackScene = this.getTrackScene(index);
+      const hasLoopControls = trackScene && trackScene instanceof PadsScene;
+      if (hasLoopControls) {
         if (track.selected && (track.loop.isRecording() || track.loop.isReadyToRecord())) {
           track.controlIcon.setText(controlIcons.record)
             .setColor(track.loop.isRecording() ? controlColors.recording : controlColors.idle)
