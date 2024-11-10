@@ -86,7 +86,7 @@ export class LoopTracksScene extends Phaser.Scene {
     this.events.on('track-selected', () => {
       this.updateControlsState();
     });
-    this.events.on(EVENTS.instrumentPlayed, ({callback}: { callback: Function }) => {
+    this.game.events.on(EVENTS.instrumentPlayed, ({callback}: { callback: Function }) => {
       LoopTracksScene.tracks.find(track => track.selected)?.loop?.addLoopEvent(callback);
     });
   }
