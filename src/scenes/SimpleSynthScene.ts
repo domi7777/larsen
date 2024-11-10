@@ -23,9 +23,9 @@ export class SimpleSynthScene extends PadsScene {
     const color = super.getPadColor(numberOfPads, index);
     const key = allFrequencies[index]?.key;
     if (key?.includes('#')) {
-      return color.darken(150);
+      return color.darken(70);
     }
-    return color.darken(60);
+    return color.darken(50);
   }
 
   playSound(index: number): void {
