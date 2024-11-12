@@ -4,6 +4,7 @@ import {LoopTracksScene} from '../scenes/LoopTracksScene.ts';
 import {logger} from '../utils/logger.ts';
 import {BindingApi} from '@tweakpane/core';
 import {EVENTS} from '../events.ts';
+import {PadsSceneSettings} from '../scenes/PadsScene.ts';
 
 export class TweakPane {
 
@@ -15,6 +16,7 @@ export class TweakPane {
     deleteInstrument?: ButtonApi;
     deleteLoop?: ButtonApi;
     volume?: BindingApi,
+    noteDuration?: BindingApi
   } = {};
 
   public static log(message: string) {
@@ -31,7 +33,7 @@ export class TweakPane {
       expanded: false,
       container,
     });
-    game.events.on(EVENTS.sceneChange, (settings?: { volume: number }) => {
+    game.events.on(EVENTS.sceneChange, (settings?: PadsSceneSettings) => {
       Object.values(this.sceneControls)
         .filter(Boolean)
         .forEach((binding) => {
@@ -50,6 +52,15 @@ export class TweakPane {
           step: 1,
           index
         });
+        if (settings.noteDuration) {
+          this.sceneControls.noteDuration = this.pane.addBinding(settings, 'noteDuration', {
+            label: 'Note duration',
+            min: 0.1,
+            max: 5,
+            step: 0.1,
+            index
+          });
+        }
       }
     })
 

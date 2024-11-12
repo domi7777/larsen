@@ -3,8 +3,14 @@ import {createAudioContext} from '../samples/sample-utils.ts';
 import {logger} from '../utils/logger.ts';
 import {SimpleSynthScene} from './SimpleSynthScene.ts';
 import Phaser from 'phaser';
+import {PadsSceneSettings} from './PadsScene.ts';
 
 export class DaftSynthScene extends SimpleSynthScene {
+
+  constructor() {
+    super();
+    this.settings.noteDuration = 2;
+  }
 
   getPadColor(numberOfPads: number, index: number): Phaser.Display.Color {
     const padColor = super.getPadColor(numberOfPads, index);
@@ -14,11 +20,14 @@ export class DaftSynthScene extends SimpleSynthScene {
   playSound(index: number): void {
     const note = allFrequencies[index].freq;
     logger.log('Playing note', note);
-    return playDaftPunkSynth(note, this.settings.volume);
+    return playDaftPunkSynth({
+      frequency: note,
+      ...this.settings
+    });
   }
 }
 
-function playDaftPunkSynth(frequency: number, volume = 50) {
+function playDaftPunkSynth({frequency, volume = 50, noteDuration = 1}: { frequency: number } & PadsSceneSettings) {
   // Create Audio Context
   const audioContext = createAudioContext();
 
@@ -30,6 +39,7 @@ function playDaftPunkSynth(frequency: number, volume = 50) {
   // Gain node for volume control
   const gainNode = audioContext.createGain();
   gainNode.gain.value = volume / 100;
+  gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + noteDuration); // decay
 
   // Low-pass filter to shape the sound (for a more "vintage" vibe)
   const filter = audioContext.createBiquadFilter();

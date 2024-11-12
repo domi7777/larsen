@@ -11,12 +11,16 @@ type Pad = {
   text?: Phaser.GameObjects.Text,
 }
 
-export abstract class PadsScene<C = unknown> extends Phaser.Scene {
+export type PadsSceneSettings = {
+  volume: number;
+  noteDuration?: number;
+}
+
 export abstract class PadsScene extends Phaser.Scene {
 
   private pads: Pad[] = [];
-  readonly settings = {
-    volume: 75
+  readonly settings: PadsSceneSettings = {
+    volume: 50
   }
 
   protected constructor(private cols: number, private rows: number) {

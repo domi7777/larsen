@@ -1,4 +1,4 @@
-import {PadsScene} from './PadsScene.ts';
+import {PadsScene, PadsSceneSettings} from './PadsScene.ts';
 import {allFrequencies} from '../samples/synth-frequencies.ts';
 import {createAudioContext} from '../samples/sample-utils.ts';
 import Phaser from 'phaser';
@@ -8,6 +8,7 @@ export class SimpleSynthScene extends PadsScene {
 
   constructor() {
     super(6, 12);
+    this.settings.noteDuration = 1.5;
   }
 
   getPadText(index: number) {
@@ -28,23 +29,14 @@ export class SimpleSynthScene extends PadsScene {
     const note = allFrequencies[index].freq;
     logger.log('Playing note', note);
     // play the sound
-    return playPianoTone(note, this.settings.volume);
-
-    // const audioContext = createAudioContext();
-    // const oscillator = audioContext.createOscillator();
-    // oscillator.type = 'sine';
-    // oscillator.frequency.setValueAtTime(note, audioContext.currentTime);
-    // const gainNode = audioContext.createGain();
-    // gainNode.gain.setValueAtTime(0.7, audioContext.currentTime); // Start loud
-    // gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 1.0); // decay
-    // oscillator.connect(gainNode);
-    // gainNode.connect(audioContext.destination);
-    // oscillator.start();
-    // oscillator.stop(audioContext.currentTime + 1.5);
+    return playPianoTone({
+      frequency: note,
+      ...this.settings
+    });
   }
 }
 
-const playPianoTone = (frequency: number, volume: number) => {
+const playPianoTone = ({ frequency, volume = 50, noteDuration = 1.5 }: { frequency: number } & PadsSceneSettings) => {
   const audioContext = createAudioContext();
   // Create an oscillator for the main tone
   const oscillator = audioContext.createOscillator();
@@ -62,13 +54,12 @@ const playPianoTone = (frequency: number, volume: number) => {
 
   // Define an envelope to mimic the piano attack and decay
   const attackTime = 0.02;  // Quick attack for a percussive sound
-  const decayTime = 1.5;    // Longer decay to simulate the piano fade out
 
   gainNode.gain.setValueAtTime(0, audioContext.currentTime);  // Start at zero
   gainNode.gain.linearRampToValueAtTime(volume / 100, audioContext.currentTime + attackTime); // Attack
-  gainNode.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + decayTime); // Decay
+  gainNode.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + noteDuration); // Decay
 
   // Start the oscillator and stop it after the decay
   oscillator.start(audioContext.currentTime);
-  oscillator.stop(audioContext.currentTime + decayTime);
+  oscillator.stop(audioContext.currentTime + noteDuration * 2);
 }
