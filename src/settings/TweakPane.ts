@@ -41,26 +41,7 @@ export class TweakPane {
           this.pane.remove(binding)
         });
       if (settings) {
-        const index = 0; // elements are added from the top, so the first ones added here will be at the bottom
-        this.sceneControls.deleteInstrument = this.pane.addButton({title: 'Delete instrument & loop', index})
-          .on('click', () => LoopTracksScene.deleteCurrentInstrumentScene());
-        this.sceneControls.deleteLoop = this.pane.addButton({title: 'Delete current loop', index})
-          .on('click', () => LoopTracksScene.deleteCurrentTrack());
-        this.sceneControls.volume = this.pane.addBinding(settings, 'volume', {
-          min: 0,
-          max: 100,
-          step: 1,
-          index
-        });
-        if (settings.noteDuration) {
-          this.sceneControls.noteDuration = this.pane.addBinding(settings, 'noteDuration', {
-            label: 'Note duration',
-            min: 0.1,
-            max: 5,
-            step: 0.1,
-            index
-          });
-        }
+        this.addSettings(settings);
       }
     })
 
@@ -82,6 +63,29 @@ export class TweakPane {
     });
 
     this.resize();
+  }
+
+  private addSettings(settings: PadsSceneSettings) {
+    const index = 0; // elements are added from the top, so the first ones added here will be at the bottom
+    this.sceneControls.deleteInstrument = this.pane.addButton({title: 'Delete instrument & loop', index})
+      .on('click', () => LoopTracksScene.deleteCurrentInstrumentScene());
+    this.sceneControls.deleteLoop = this.pane.addButton({title: 'Delete current loop', index})
+      .on('click', () => LoopTracksScene.deleteCurrentTrack());
+    this.sceneControls.volume = this.pane.addBinding(settings, 'volume', {
+      min: 0,
+      max: 100,
+      step: 1,
+      index
+    });
+    if (settings.noteDuration) {
+      this.sceneControls.noteDuration = this.pane.addBinding(settings, 'noteDuration', {
+        label: 'Note duration',
+        min: 0.1,
+        max: 5,
+        step: 0.1,
+        index
+      });
+    }
   }
 
   resize() {
