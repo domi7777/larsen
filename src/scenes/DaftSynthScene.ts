@@ -22,9 +22,9 @@ export class DaftSynthScene extends SimpleSynthScene {
   }
 }
 
-function playDaftPunkSynth(frequency: number, volume: number) {
+function playDaftPunkSynth(frequency: number, volume = 50) {
   // Create Audio Context
-  const audioContext =createAudioContext();
+  const audioContext = createAudioContext();
 
   // Main oscillator for the core sound
   const oscillator = audioContext.createOscillator();
@@ -60,10 +60,10 @@ function playDaftPunkSynth(frequency: number, volume: number) {
   lfoGain.connect(filter.frequency);
 
   // Connect nodes in the audio graph
-  oscillator.connect(gainNode);
-  gainNode.connect(filter);
+  oscillator.connect(filter);
   filter.connect(distortion);
-  distortion.connect(audioContext.destination);
+  distortion.connect(gainNode);
+  gainNode.connect(audioContext.destination);
 
   // Start oscillators
   oscillator.start();
@@ -74,15 +74,15 @@ function playDaftPunkSynth(frequency: number, volume: number) {
   lfo.stop(audioContext.currentTime + 1);
 
   // Helper function to create distortion curve
-  function makeDistortionCurve(amount: number) {
-    const k = typeof amount === 'number' ? amount : 50;
-    const n_samples = 44100;
-    const curve = new Float32Array(n_samples);
-    const deg = Math.PI / 180;
-    for (let i = 0; i < n_samples; ++i) {
-      const x = (i * 2) / n_samples - 1;
-      curve[i] = ((3 + k) * x * 20 * deg) / (Math.PI + k * Math.abs(x));
-    }
-    return curve;
+}
+function makeDistortionCurve(amount: number | unknown) {
+  const k = typeof amount === 'number' ? amount : 50;
+  const n_samples = 44100;
+  const curve = new Float32Array(n_samples);
+  const deg = Math.PI / 180;
+  for (let i = 0; i < n_samples; ++i) {
+    const x = (i * 2) / n_samples - 1;
+    curve[i] = ((3 + k) * x * 20 * deg) / (Math.PI + k * Math.abs(x));
   }
+  return curve;
 }
