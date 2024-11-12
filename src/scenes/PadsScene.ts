@@ -12,9 +12,9 @@ type Pad = {
 }
 
 export abstract class PadsScene<C = unknown> extends Phaser.Scene {
+export abstract class PadsScene extends Phaser.Scene {
 
   private pads: Pad[] = [];
-  protected config?: C;
   readonly settings = {
     volume: 75
   }
@@ -24,9 +24,8 @@ export abstract class PadsScene<C = unknown> extends Phaser.Scene {
   }
 
   abstract playSound(index: number): void;
-   
-  create(config?: C) {
-    this.config = config;
+
+  create() {
     this.createPads();
     this.game.events.emit(EVENTS.sceneChange, this.settings);
   }

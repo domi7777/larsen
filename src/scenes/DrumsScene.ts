@@ -14,13 +14,7 @@ const padColors: Record<Sample, HexaColor> = {
   'tom-high': '#9B59B6',
 };
 
-type DrumsType = 'drums' | 'other';
-
-type Config = {
-  type: DrumsType;
-}
-
-export class DrumsScene extends PadsScene<Config> {
+export class DrumsScene extends PadsScene {
 
   private instruments: Sample[] = [
     'crash',
@@ -37,12 +31,8 @@ export class DrumsScene extends PadsScene<Config> {
     super(2, 4);
   }
 
-  create(config?: { type: DrumsType }) {
-    super.create(config);
-  }
-
   protected getPadColor(_numberOfPads: number, index: number) {
-    const padColor = hexToColor(padColors[this.instruments[index]], this.config?.type === 'drums');
+    const padColor = hexToColor(padColors[this.instruments[index]]);
     return Phaser.Display.Color.IntegerToColor(padColor)
   }
 

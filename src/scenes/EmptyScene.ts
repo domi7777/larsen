@@ -57,13 +57,13 @@ export class EmptyScene extends Phaser.Scene {
     const trackSceneKey = LoopTracksScene.getTrackSceneKey(trackIndex);
 
     drumsButton.on(Phaser.Input.Events.POINTER_UP, () => {
-      this.scene.add(trackSceneKey, DrumsScene, true, {type: 'drums'});
+      this.scene.add(trackSceneKey, DrumsScene, true);
     });
     daftSynthButton.on(Phaser.Input.Events.POINTER_UP, () => {
       this.scene.add(trackSceneKey, DaftSynthScene, true);
     });
     gibberishButton.on(Phaser.Input.Events.POINTER_UP, () => {
-      this.scene.add(trackSceneKey, GibberishScene, true, {numberOfPads: 8});
+      this.scene.add(trackSceneKey, GibberishScene, true);
     });
     simpleSynthButton.on(Phaser.Input.Events.POINTER_UP, () => {
       this.scene.add(trackSceneKey, SimpleSynthScene, true);

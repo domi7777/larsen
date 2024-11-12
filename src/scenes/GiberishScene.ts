@@ -67,8 +67,8 @@ export class GibberishScene extends Phaser.Scene {
     super();
   }
 
-  create({numberOfPads = 8}: { numberOfPads: number }) {
-    this.createPads(numberOfPads);
+  create() {
+    this.createPads(8);
     this.game.events.emit(EVENTS.sceneChange)
   }
 
@@ -79,6 +79,7 @@ export class GibberishScene extends Phaser.Scene {
     });
 
     const resizePads = () => {
+      // FIXME duplicates what's in PadsScene. Moreover they all play the same music
       const isPortrait = window.innerWidth < window.innerHeight;
       const colNumber = isPortrait ? 2 : 4;// FIXME should depend on numberOfPads
       const rowNumber = isPortrait ? 4 : 2;
