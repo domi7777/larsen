@@ -24,8 +24,7 @@ export abstract class PadsScene<C = unknown> extends Phaser.Scene {
   }
 
   abstract playSound(index: number): void;
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   create(config?: C) {
     this.config = config;
     this.createPads();
