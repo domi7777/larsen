@@ -75,12 +75,7 @@ export class TweakPane {
       .on('click', () => LoopTracksScene.deleteCurrentInstrumentScene());
     this.sceneControls.deleteLoop = this.pane.addButton({title: 'Delete current loop', index})
       .on('click', () => LoopTracksScene.deleteCurrentTrack());
-    this.sceneControls.volume = this.pane.addBinding(settings, 'volume', {
-      min: 0,
-      max: 100,
-      step: 1,
-      index
-    });
+    // PadsSceneSettings
     if (settings.noteDuration) {
       this.sceneControls.noteDuration = this.pane.addBinding(settings, 'noteDuration', {
         label: 'Note duration',
@@ -90,6 +85,12 @@ export class TweakPane {
         index
       });
     }
+    this.sceneControls.volume = this.pane.addBinding(settings, 'volume', {
+      min: 0,
+      max: 100,
+      step: 1,
+      index
+    });
   }
 
   resize() {
