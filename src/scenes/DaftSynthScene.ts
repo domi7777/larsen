@@ -6,10 +6,6 @@ import Phaser from 'phaser';
 
 export class DaftSynthScene extends SimpleSynthScene {
 
-  create() {
-    super.create();
-  }
-
   getPadColor(numberOfPads: number, index: number): Phaser.Display.Color {
     const padColor = super.getPadColor(numberOfPads, index);
     return padColor.saturate(50)

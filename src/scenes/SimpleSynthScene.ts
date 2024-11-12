@@ -10,10 +10,6 @@ export class SimpleSynthScene extends PadsScene {
     super(6, 12);
   }
 
-  create() {
-    super.create();
-  }
-
   getPadText(index: number) {
     const note = allFrequencies[index];
     return note?.key;
