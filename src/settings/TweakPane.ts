@@ -34,12 +34,7 @@ export class TweakPane {
       container,
     });
     game.events.on(EVENTS.sceneChange, (settings?: PadsSceneSettings) => {
-      Object.values(this.sceneControls)
-        .filter(Boolean)
-        .forEach((binding) => {
-          binding.dispose();
-          this.pane.remove(binding)
-        });
+      this.deleteSettings();
       if (settings) {
         this.addSettings(settings);
       }
@@ -63,6 +58,15 @@ export class TweakPane {
     });
 
     this.resize();
+  }
+
+  private deleteSettings() {
+    Object.values(this.sceneControls)
+      .filter(Boolean)
+      .forEach((binding) => {
+        binding.dispose();
+        this.pane.remove(binding)
+      });
   }
 
   private addSettings(settings: PadsSceneSettings) {
