@@ -145,8 +145,7 @@ export abstract class PadsScene extends Phaser.Scene {
   protected getPadText(_index: number): string | undefined {
     return undefined;
   }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   onSettingChange(setting: Setting) {
     logger.log('Setting changed', JSON.stringify(setting));
   }
