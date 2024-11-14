@@ -18,6 +18,7 @@ export class DaftSynthScene extends SimpleSynthScene {
   }
 
   playSound(index: number): void {
+    index += this.getNoteIndexOffset();
     const note = allFrequencies[index].freq;
     logger.log('Playing note', note);
     return playDaftPunkSynth({

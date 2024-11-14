@@ -40,11 +40,11 @@ export class SimpleSynthScene extends PadsScene {
   /**
    * when changing the range of the notes, we need to offset the index to get the correct note
    */
-  private getNoteIndexOffset() {
+  protected getNoteIndexOffset() {
     return this.getLowerRangeIndex() * numberOfNotes;
   }
 
-  private getLowerRangeIndex() {
+  protected getLowerRangeIndex() {
     return this.settings.octaveRange!.min - 1;
   }
 
