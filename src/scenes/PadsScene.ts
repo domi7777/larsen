@@ -147,7 +147,7 @@ export abstract class PadsScene extends Phaser.Scene {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  onSettingChange(_setting: Setting) {
-    logger.log('Setting changed', _setting);
+  onSettingChange(setting: Setting) {
+    logger.log('Setting changed', JSON.stringify(setting));
   }
 }

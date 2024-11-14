@@ -69,6 +69,7 @@ export class TweakPane {
       multiline: true,
       rows: 10,
       hidden: true,
+      interval: 1000,
     });
 
     this.resize();
