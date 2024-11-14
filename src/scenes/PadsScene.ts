@@ -4,6 +4,7 @@ import {rotateArray} from '../utils/math.ts';
 import {hexToColor} from '../utils/colors.ts';
 import {FontColor, FontFamily, FontSize} from '../utils/fonts.ts';
 import {EVENTS} from '../events.ts';
+import {logger} from '../utils/logger.ts';
 
 type Pad = {
   instrument: number,
@@ -11,19 +12,27 @@ type Pad = {
   text?: Phaser.GameObjects.Text,
 }
 
+export type Setting = Partial<Omit<PadsSceneSettings, 'onChange'>>;
+
 export type PadsSceneSettings = {
   volume: number;
   noteDuration?: number;
+  octaveRange?: {
+    min: number;
+    max: number;
+  };
+  onChange?: (setting: Setting) => void;
 }
 
 export abstract class PadsScene extends Phaser.Scene {
 
   private pads: Pad[] = [];
   readonly settings: PadsSceneSettings = {
-    volume: 50
+    volume: 50,
+    onChange: (setting) => this.onSettingChange(setting),
   }
 
-  protected constructor(private cols: number, private rows: number) {
+  protected constructor(protected cols: number, protected rows: number) {
     super();
   }
 
@@ -32,6 +41,12 @@ export abstract class PadsScene extends Phaser.Scene {
   create() {
     this.createPads();
     this.game.events.emit(EVENTS.sceneChange, this.settings);
+  }
+
+  protected changePadNumber(cols: number, rows: number) {
+    this.cols = cols;
+    this.rows = rows;
+    this.scene.restart();
   }
 
   protected createPads() {
@@ -129,5 +144,10 @@ export abstract class PadsScene extends Phaser.Scene {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected getPadText(_index: number): string | undefined {
     return undefined;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onSettingChange(_setting: Setting) {
+    logger.log('Setting changed', _setting);
   }
 }

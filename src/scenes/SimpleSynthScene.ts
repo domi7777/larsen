@@ -1,14 +1,22 @@
-import {PadsScene, PadsSceneSettings} from './PadsScene.ts';
+import {PadsScene, PadsSceneSettings, Setting} from './PadsScene.ts';
 import {allFrequencies} from '../samples/synth-frequencies.ts';
 import {createAudioContext} from '../samples/sample-utils.ts';
 import Phaser from 'phaser';
 import {logger} from '../utils/logger.ts';
 
+const numberOfNotes = 12;
+const maxNumberOfOctaves = 6;
+const maxNumberOfPads = numberOfNotes * maxNumberOfOctaves;
+
 export class SimpleSynthScene extends PadsScene {
 
   constructor() {
-    super(6, 12);
+    super(maxNumberOfOctaves, numberOfNotes);
     this.settings.noteDuration = 1.5;
+    this.settings.octaveRange = {
+      min: 1,
+      max: maxNumberOfOctaves,
+    };
   }
 
   getPadText(index: number) {
@@ -16,8 +24,12 @@ export class SimpleSynthScene extends PadsScene {
     return note?.key;
   }
 
-  getPadColor(numberOfPads: number, index: number): Phaser.Display.Color {
-    const color = super.getPadColor(numberOfPads, index);
+  getPadColor(_numberOfPads: number, index: number): Phaser.Display.Color {
+    index += this.getNoteIndexOffset();
+    const color = super.getPadColor(
+      maxNumberOfPads,
+      index
+    );
     const key = allFrequencies[index]?.key;
     if (key?.includes('#')) {
       return color.darken(70);
@@ -25,7 +37,19 @@ export class SimpleSynthScene extends PadsScene {
     return color.darken(50);
   }
 
+  /**
+   * when changing the range of the notes, we need to offset the index to get the correct note
+   */
+  private getNoteIndexOffset() {
+    return this.getLowerRangeIndex() * numberOfNotes;
+  }
+
+  private getLowerRangeIndex() {
+    return this.settings.octaveRange!.min - 1;
+  }
+
   playSound(index: number): void {
+    index += this.getNoteIndexOffset();
     const note = allFrequencies[index].freq;
     logger.log('Playing note', note);
     // play the sound
@@ -33,6 +57,13 @@ export class SimpleSynthScene extends PadsScene {
       frequency: note,
       ...this.settings
     });
+  }
+
+  onSettingChange(setting: Setting) {
+    super.onSettingChange(setting);
+    if (setting.octaveRange) {
+      super.changePadNumber(setting.octaveRange.max + 1 - setting.octaveRange.min, 12);
+    }
   }
 }
 
