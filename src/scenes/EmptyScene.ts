@@ -14,12 +14,31 @@ export class EmptyScene extends Phaser.Scene {
   private readonly rowNumber = 5;
   private readonly colNumber = 5;
   private instrumentButtons!: Phaser.GameObjects.Rectangle[][];
+  private trackIndex!: number;
 
   constructor() {
     super(EmptyScene.key);
   }
 
+  activateButton({row, col, text, scene}: {
+    row: number,
+    col: number,
+    text: string,
+    scene: typeof Phaser.Scene | typeof SimpleSynthScene
+  }) {
+    const button = this.instrumentButtons[row][col];
+    const trackSceneKey = LoopTracksScene.getTrackSceneKey(this.trackIndex);
+    button.setData('text', this.addText(button, text))
+      .setFillStyle(hexToColor('#FFF'), 0.5)
+      .setInteractive()
+      .on(Phaser.Input.Events.POINTER_DOWN, () => {
+        this.scene.setVisible(false);
+        this.scene.add(trackSceneKey, scene, true);
+      })
+  }
+
   create({index: trackIndex}: { index: number }) {
+    this.trackIndex = trackIndex;
     this.scene.bringToTop();
     this.game.events.emit(EVENTS.sceneChange);
 
@@ -29,45 +48,10 @@ export class EmptyScene extends Phaser.Scene {
 
     this.createMatrix();
 
-    const simpleSynthButton = this.instrumentButtons[2][1];
-    simpleSynthButton.setData('text', this.addText(simpleSynthButton, 'Simple Synth'));
-
-    const drumsButton = this.instrumentButtons[1][2];
-    drumsButton.setData('text', this.addText(drumsButton, 'Drums'));
-
-    const daftSynthButton = this.instrumentButtons[3][2];
-    daftSynthButton.setData('text', this.addText(daftSynthButton, 'Daft synth'));
-
-    const gibberishButton = this.instrumentButtons[2][3];
-    gibberishButton.setData('text', this.addText(gibberishButton, 'Gibberish'));
-
-    const activeButtons = [
-      drumsButton,
-      daftSynthButton,
-      gibberishButton,
-      simpleSynthButton
-    ];
-    activeButtons.forEach(button => button
-      .setFillStyle(hexToColor('#FFF'), 0.5)
-      .setInteractive()
-      .on(Phaser.Input.Events.POINTER_DOWN, () => {
-        this.scene.setVisible(false);
-      })
-    );
-    const trackSceneKey = LoopTracksScene.getTrackSceneKey(trackIndex);
-
-    drumsButton.on(Phaser.Input.Events.POINTER_UP, () => {
-      this.scene.add(trackSceneKey, DrumsScene, true);
-    });
-    daftSynthButton.on(Phaser.Input.Events.POINTER_UP, () => {
-      this.scene.add(trackSceneKey, DaftSynthScene, true);
-    });
-    gibberishButton.on(Phaser.Input.Events.POINTER_UP, () => {
-      this.scene.add(trackSceneKey, GibberishScene, true);
-    });
-    simpleSynthButton.on(Phaser.Input.Events.POINTER_UP, () => {
-      this.scene.add(trackSceneKey, SimpleSynthScene, true);
-    });
+    this.activateButton({row: 1, col: 2, text: 'Drums', scene: DrumsScene});
+    this.activateButton({row: 3, col: 2, text: 'Daft synth', scene: DaftSynthScene});
+    this.activateButton({row: 2, col: 3, text: 'Gibberish', scene: GibberishScene});
+    this.activateButton({row: 2, col: 1, text: 'Synth', scene: SimpleSynthScene});
 
     window.addEventListener('resize', () => this.resizeScene());
     this.resizeScene();
