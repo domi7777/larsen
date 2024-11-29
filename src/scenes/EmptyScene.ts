@@ -1,13 +1,20 @@
 import Phaser from 'phaser';
 
 import {LoopTracksScene} from './LoopTracksScene.ts';
-import {hexToColor} from '../utils/colors.ts';
-import {FontFamily} from '../utils/fonts.ts';
+import {HexaColor, hexToColor} from '../utils/colors.ts';
+import {FontFamily, FontSize} from '../utils/fonts.ts';
 import {DrumsScene} from './DrumsScene.ts';
 import {GibberishScene} from './GiberishScene.ts';
 import {SimpleSynthScene} from './SimpleSynthScene.ts';
 import {EVENTS} from '../events.ts';
 import {DaftSynthScene} from './DaftSynthScene.ts';
+
+const colors = {
+  bg: '#333',
+  active: '#777',
+  text: '#FFF',
+  border: '#FFF',
+} satisfies Record<string, HexaColor>
 
 export class EmptyScene extends Phaser.Scene {
   static key = 'EmptyScene';
@@ -29,7 +36,7 @@ export class EmptyScene extends Phaser.Scene {
     const button = this.instrumentButtons[col][row];
     const trackSceneKey = LoopTracksScene.getTrackSceneKey(this.trackIndex);
     button.setData('text', this.addText(button, text))
-      .setFillStyle(hexToColor('#FFF'), 0.5)
+      .setFillStyle(hexToColor(colors.active), 0.5)
       .setInteractive()
       .on(Phaser.Input.Events.POINTER_DOWN, () => {
         this.scene.setVisible(false);
@@ -44,7 +51,8 @@ export class EmptyScene extends Phaser.Scene {
 
     this.cameras.main
       .setOrigin(0, 0)
-      .setBackgroundColor('#147');
+      .setBackgroundColor(colors.bg);
+
     this.createButtonsTable();
 
     this.activateButton({row: 0, col: 0, text: 'Synth', scene: SimpleSynthScene});
@@ -66,7 +74,7 @@ export class EmptyScene extends Phaser.Scene {
         this.instrumentButtons[i].push(
           this.add.rectangle()
             .setOrigin(0, 0)
-            .setStrokeStyle(2, hexToColor('#FFF'), 0.1)
+            .setStrokeStyle(2, hexToColor(colors.border), 0.1)
             .setInteractive()
         );
       }
@@ -75,8 +83,8 @@ export class EmptyScene extends Phaser.Scene {
 
   private addText(button: Phaser.GameObjects.Rectangle, text: string) {
     return this.add.text(button.x + button.width / 2, button.y + button.height / 2, text, {
-      fontSize: '24px',
-      color: '#FFF',
+      fontSize: FontSize.tiny,
+      color: colors.text,
       fontFamily: FontFamily.Text,
     }).setOrigin(0.5);
   }
