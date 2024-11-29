@@ -46,12 +46,12 @@ export class EmptyScene extends Phaser.Scene {
       .setOrigin(0, 0)
       .setBackgroundColor('#147');
 
-    this.createMatrix();
+    this.activateButton({row: 0, col: 0, text: 'Synth', scene: SimpleSynthScene});
+    this.activateButton({row: 1, col: 0, text: 'Daft synth', scene: DaftSynthScene});
 
-    this.activateButton({row: 1, col: 2, text: 'Drums', scene: DrumsScene});
-    this.activateButton({row: 3, col: 2, text: 'Daft synth', scene: DaftSynthScene});
-    this.activateButton({row: 2, col: 3, text: 'Gibberish', scene: GibberishScene});
-    this.activateButton({row: 2, col: 1, text: 'Synth', scene: SimpleSynthScene});
+    this.activateButton({row: 0, col: 1, text: 'Drums', scene: DrumsScene});
+
+    this.activateButton({row: 0, col: 2, text: 'Gibberish', scene: GibberishScene});
 
     window.addEventListener('resize', () => this.resizeScene());
     this.resizeScene();
