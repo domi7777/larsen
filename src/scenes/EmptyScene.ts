@@ -26,7 +26,7 @@ export class EmptyScene extends Phaser.Scene {
     text: string,
     scene: typeof Phaser.Scene | typeof SimpleSynthScene
   }) {
-    const button = this.instrumentButtons[row][col];
+    const button = this.instrumentButtons[col][row];
     const trackSceneKey = LoopTracksScene.getTrackSceneKey(this.trackIndex);
     button.setData('text', this.addText(button, text))
       .setFillStyle(hexToColor('#FFF'), 0.5)
