@@ -1,6 +1,6 @@
 export const FontFamily = {
   Icons: 'Icons', // source: https://fonts.google.com/icons
-  Text: 'Courier',
+  Text: 'Verdana, Geneva, sans-serif',
 }
 
 export const FontSize = {
