@@ -132,7 +132,7 @@ export class LoopTracksScene extends Phaser.Scene {
         loop: new Loop(index),
         button: this.add.rectangle()
           .setOrigin(0, 0)
-          .setStrokeStyle(2, hexToColor('#FFF'), 0.8)
+          .setStrokeStyle(2, hexToColor('#777'), 0.8)
           .setInteractive()
           .on(Phaser.Input.Events.POINTER_DOWN, () => this.selectTrack(index)),
         selected: false,
