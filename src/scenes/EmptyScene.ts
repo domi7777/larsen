@@ -45,6 +45,7 @@ export class EmptyScene extends Phaser.Scene {
     this.cameras.main
       .setOrigin(0, 0)
       .setBackgroundColor('#147');
+    this.createButtonsTable();
 
     this.activateButton({row: 0, col: 0, text: 'Synth', scene: SimpleSynthScene});
     this.activateButton({row: 1, col: 0, text: 'Daft synth', scene: DaftSynthScene});
@@ -57,7 +58,7 @@ export class EmptyScene extends Phaser.Scene {
     this.resizeScene();
   }
 
-  private createMatrix() {
+  private createButtonsTable() {
     this.instrumentButtons = [];
     for (let i = 0; i < this.colNumber; i++) {
       this.instrumentButtons.push([]);
