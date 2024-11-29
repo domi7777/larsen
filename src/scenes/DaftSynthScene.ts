@@ -1,6 +1,5 @@
 import {allFrequencies} from '../samples/synth-frequencies.ts';
 import {createAudioContext} from '../samples/sample-utils.ts';
-import {logger} from '../utils/logger.ts';
 import {SimpleSynthScene} from './SimpleSynthScene.ts';
 import Phaser from 'phaser';
 import {PadsSceneSettings} from './PadsScene.ts';
@@ -20,7 +19,6 @@ export class DaftSynthScene extends SimpleSynthScene {
   playSound(index: number): void {
     index += this.getNoteIndexOffset();
     const note = allFrequencies[index].freq;
-    logger.log('Playing note', note);
     return playDaftPunkSynth({
       frequency: note,
       ...this.settings

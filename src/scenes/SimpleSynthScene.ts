@@ -2,7 +2,6 @@ import {PadsScene, PadsSceneSettings, Setting} from './PadsScene.ts';
 import {allFrequencies} from '../samples/synth-frequencies.ts';
 import {createAudioContext} from '../samples/sample-utils.ts';
 import Phaser from 'phaser';
-import {logger} from '../utils/logger.ts';
 
 const numberOfNotes = 12;
 const maxNumberOfOctaves = 6;
@@ -51,7 +50,6 @@ export class SimpleSynthScene extends PadsScene {
   playSound(index: number): void {
     index += this.getNoteIndexOffset();
     const note = allFrequencies[index].freq;
-    logger.log('Playing note', note);
     // play the sound
     return playPianoTone({
       frequency: note,

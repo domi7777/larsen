@@ -171,7 +171,7 @@ export class Loop {
       const {callback, time} = this.events[this.currentLoopIndex];
       const previousTime = this.currentLoopIndex === 0 ? 0 : this.events[this.currentLoopIndex - 1].time;
       this.loopTimeout = setTimeout(() => {
-        this.log(`Playing event ${callback} after ${time}ms`);
+        // this.log(`Playing event ${callback} after ${time}ms`);
         if (callback !== 'endOfLoop') {
           callback();
         } else {
