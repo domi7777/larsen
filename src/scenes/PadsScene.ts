@@ -14,13 +14,15 @@ type Pad = {
 
 export type Setting = Partial<Omit<PadsSceneSettings, 'onChange'>>;
 
+export type Range = {
+  min: number;
+  max: number;
+};
+
 export type PadsSceneSettings = {
   volume: number;
   noteDuration?: number;
-  octaveRange?: {
-    min: number;
-    max: number;
-  };
+  octaveRange?: Range;
   onChange?: (setting: Setting) => void;
 }
 
@@ -145,7 +147,7 @@ export abstract class PadsScene extends Phaser.Scene {
   protected getPadText(_index: number): string | undefined {
     return undefined;
   }
-   
+
   onSettingChange(setting: Setting) {
     logger.log('Setting changed', JSON.stringify(setting));
   }

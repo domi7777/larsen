@@ -1,4 +1,4 @@
-import {PadsScene, PadsSceneSettings, Setting} from './PadsScene.ts';
+import {PadsScene, PadsSceneSettings, Range, Setting} from './PadsScene.ts';
 import {allFrequencies} from '../samples/synth-frequencies.ts';
 import {createAudioContext} from '../samples/sample-utils.ts';
 import Phaser from 'phaser';
@@ -7,15 +7,25 @@ const numberOfNotes = 12;
 const maxNumberOfOctaves = 6;
 const maxNumberOfPads = numberOfNotes * maxNumberOfOctaves;
 
+const getCols = (octaves: Range) => {
+  return octaves.max + 1 - octaves.min;
+}
+
+const getRows = () => {
+  return numberOfNotes;
+}
+
+const octaveRange = {
+  min: 2,
+  max: maxNumberOfOctaves - 2,
+};
+
 export class SimpleSynthScene extends PadsScene {
 
   constructor() {
-    super(maxNumberOfOctaves, numberOfNotes);
+    super(getCols(octaveRange), getRows());
     this.settings.noteDuration = 1.5;
-    this.settings.octaveRange = {
-      min: 1,
-      max: maxNumberOfOctaves,
-    };
+    this.settings.octaveRange = octaveRange;
   }
 
   getPadText(index: number) {
@@ -60,7 +70,7 @@ export class SimpleSynthScene extends PadsScene {
   onSettingChange(setting: Setting) {
     super.onSettingChange(setting);
     if (setting.octaveRange) {
-      super.changePadNumber(setting.octaveRange.max + 1 - setting.octaveRange.min, 12);
+      super.changePadNumber(getCols(setting.octaveRange), numberOfNotes);
     }
   }
 }
