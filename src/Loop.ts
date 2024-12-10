@@ -116,6 +116,11 @@ export class Loop {
       this.startRecordingTime = Date.now();
     } else {
       // master loop starts at first event
+      if (!this.startRecordingTime) {
+        // FIXME investigate
+        this.log('no startRecordingTime !');
+        this.startRecordingTime = Date.now();
+      }
     }
   }
 
