@@ -20,7 +20,7 @@ module.exports = {
         "no-multiple-empty-lines": ["error", { "max": 1, "maxEOF": 0 }],
         "@typescript-eslint/no-unused-vars": [
             "error",
-            {vars: "all", args: "after-used", ignoreRestSiblings: false},
+            {vars: "all", args: "after-used", ignoreRestSiblings: false, argsIgnorePattern: "^_"},
         ],
         "@typescript-eslint/explicit-function-return-type": "off", // Consider using explicit annotations for object literals and function return types even when they can be inferred.
         "no-empty": "warn",
