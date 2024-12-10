@@ -7,8 +7,8 @@ import {PadsScene} from './PadsScene.ts';
 import {EVENTS} from '../events.ts';
 
 const trackColorsState: Record<string, HexaColor> = {
-  selected: '#DDD',
-  unselected: '#000',
+  selected: Colors.white,
+  unselected: Colors.black,
 }
 
 const controlIcons = {

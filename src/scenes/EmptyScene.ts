@@ -11,7 +11,7 @@ import {DaftSynthScene} from './DaftSynthScene.ts';
 
 const colors = {
   bg: Colors.black,
-  active: '#777',
+  active: '#2b2d30',
   text: Colors.white,
   border: Colors.black,
 } satisfies Record<string, HexaColor>
