@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 
 import {LoopTracksScene} from './LoopTracksScene.ts';
-import {HexaColor, hexToColor} from '../utils/colors.ts';
+import {Colors, HexaColor, hexToColor} from '../utils/colors.ts';
 import {FontFamily, FontSize} from '../utils/fonts.ts';
 import {DrumsScene} from './DrumsScene.ts';
 import {GibberishScene} from './GiberishScene.ts';
@@ -10,10 +10,10 @@ import {EVENTS} from '../events.ts';
 import {DaftSynthScene} from './DaftSynthScene.ts';
 
 const colors = {
-  bg: '#333',
+  bg: Colors.black,
   active: '#777',
-  text: '#FFF',
-  border: '#FFF',
+  text: Colors.white,
+  border: Colors.black,
 } satisfies Record<string, HexaColor>
 
 export class EmptyScene extends Phaser.Scene {

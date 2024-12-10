@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import {LoopTracksScene} from './LoopTracksScene.ts';
 import {rotateArray} from '../utils/math.ts';
-import {hexToColor} from '../utils/colors.ts';
+import {Colors, HexaColor, hexToColor} from '../utils/colors.ts';
 import {FontColor, FontFamily, FontSize} from '../utils/fonts.ts';
 import {EVENTS} from '../events.ts';
 import {logger} from '../utils/logger.ts';
@@ -90,17 +90,17 @@ export abstract class PadsScene extends Phaser.Scene {
     const hitColor = padColor.brighten(40).color;
     const button = this.add.rectangle()
       .setFillStyle(inactiveColor)
-      .setStrokeStyle(2, hexToColor('#FFF'), 0.8)
+      .setStrokeStyle(2, hexToColor(Colors.white))
       .setInteractive()
       .setOrigin(0, 0);
     let buttonText: Pad['text'] = undefined;
     if (padText) {
-      buttonText = this.add.text(0, 0, padText, {
+      buttonText = this.add.text(0, 0, padText.text, {
         fontFamily: FontFamily.Text,
         fontSize: FontSize.tiny,
-        color: FontColor.white,
+        color: padText.color ?? FontColor.white,
       })
-        .setAlpha(0.5)
+        .setAlpha(padText.alpha ?? 0.5)
         .setOrigin(0.5, 0.5)
         .setResolution(2)
         .setPosition(button.getCenter().x, button.getCenter().y)
@@ -143,8 +143,7 @@ export abstract class PadsScene extends Phaser.Scene {
     return Phaser.Display.Color.HSLToColor((numberOfPads - index) / (numberOfPads * 1.5), 1, 0.5);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected getPadText(_index: number): string | undefined {
+  protected getPadText(_index: number): {text: string, color?: HexaColor, alpha?: number} | undefined {
     return undefined;
   }
 

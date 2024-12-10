@@ -30,7 +30,7 @@ export class SimpleSynthScene extends PadsScene {
 
   getPadText(index: number) {
     const note = allFrequencies[index];
-    return note?.key;
+    return note?.key ? { text: note?.key } : undefined;
   }
 
   getPadColor(_numberOfPads: number, index: number): Phaser.Display.Color {

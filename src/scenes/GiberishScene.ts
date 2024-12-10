@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import {hexToColor} from '../utils/colors.ts';
+import {Colors, hexToColor} from '../utils/colors.ts';
 import {LoopTracksScene} from './LoopTracksScene.ts';
 import {rotateArray} from '../utils/math.ts';
 import {logger} from '../utils/logger.ts';
@@ -108,7 +108,7 @@ export class GibberishScene extends Phaser.Scene {
     const hitColor = padColor.brighten(4).color;
     const button = this.add.rectangle()
       .setFillStyle(inactiveColor)
-      .setStrokeStyle(2, hexToColor('#FFF'), 0.8)
+      .setStrokeStyle(2, hexToColor(Colors.white), 0.8)
       .setInteractive()
       .setOrigin(0, 0);
     button.on('pointerdown', (e: Phaser.Input.Pointer) => {

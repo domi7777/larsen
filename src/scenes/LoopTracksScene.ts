@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import {HexaColor, hexToColor} from '../utils/colors.ts';
+import {Colors, HexaColor, hexToColor} from '../utils/colors.ts';
 import {FontColor, FontFamily, FontSize} from '../utils/fonts.ts';
 import {EmptyScene} from './EmptyScene.ts';
 import {Loop} from '../Loop.ts';
@@ -18,7 +18,7 @@ const controlIcons = {
 }
 
 const controlColors = {
-  idle: '#FFF',
+  idle: Colors.white,
   readyToRecord: '#0FF',
   recording: '#FD0041',
   playing: '#0F0',
@@ -136,7 +136,7 @@ export class LoopTracksScene extends Phaser.Scene {
           .setInteractive()
           .on(Phaser.Input.Events.POINTER_DOWN, () => this.selectTrack(index)),
         selected: false,
-        buttonSelectedCircle: this.add.ellipse(0, 0, 0, 0, hexToColor('#FFF')),
+        buttonSelectedCircle: this.add.ellipse(0, 0, 0, 0, hexToColor(Colors.white)),
         buttonText: this.add.text(0, 0, `${index + 1}`, {
           fontFamily: FontFamily.Text,
           fontSize: FontSize.medium,
@@ -237,10 +237,10 @@ export class LoopTracksScene extends Phaser.Scene {
     LoopTracksScene.tracks.forEach((track, index) => {
       track.button.setFillStyle(hexToColor(trackColorsState.unselected));
       track.buttonText
-        .setColor(track.selected ? '#000' : '#FFF');
+        .setColor(track.selected ? Colors.black : Colors.white);
       track.buttonSelectedCircle
         .setVisible(true)
-        .setFillStyle(hexToColor(track.selected ? '#FFF' : '#000'));
+        .setFillStyle(hexToColor(track.selected ? Colors.white : Colors.black));
 
       const trackScene = this.getTrackScene(index);
       const hasLoopControls = trackScene && trackScene instanceof PadsScene;

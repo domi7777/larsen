@@ -1,3 +1,5 @@
+import {Colors} from './colors.ts';
+
 export const FontFamily = {
   Icons: 'Icons', // source: https://fonts.google.com/icons
   Text: 'Verdana, Geneva, sans-serif',
@@ -11,7 +13,7 @@ export const FontSize = {
 }
 
 export const FontColor = {
-  white: '#FFF',
+  white: Colors.white,
 }
 
 export const loadFonts = async () => {
