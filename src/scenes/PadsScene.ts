@@ -85,11 +85,10 @@ export abstract class PadsScene extends Phaser.Scene {
 
   protected createPad(index: number, numberOfPads: number): Pad {
     const padColor = this.getPadColor(numberOfPads, index);
-    const padText = this.getPadText?.(index);
-    const inactiveColor = padColor.color;
-    const hitColor = padColor.brighten(40).color;
+    const hitColor = this.getHitColor(numberOfPads, index);
+    const padText = this.getPadText(index);
     const button = this.add.rectangle()
-      .setFillStyle(inactiveColor)
+      .setFillStyle(padColor.color)
       .setStrokeStyle(2, hexToColor(Colors.white))
       .setInteractive()
       .setOrigin(0, 0);
@@ -110,7 +109,7 @@ export abstract class PadsScene extends Phaser.Scene {
     const handlePadPress = () => {
       if (!isActivated) {
         this.playSound(index);
-        button.setFillStyle(hitColor);
+        button.setFillStyle(hitColor.color);
         this.game.events.emit(EVENTS.instrumentPlayed, {
           callback: () => this.playSound(index),
           scene: this
@@ -119,7 +118,7 @@ export abstract class PadsScene extends Phaser.Scene {
       }
     };
     const handlePadRelease = () => {
-      button.setFillStyle(inactiveColor);
+      button.setFillStyle(padColor.color);
       isActivated = false;
     }
     button.on('pointerdown', (e: Phaser.Input.Pointer) => {
@@ -143,11 +142,15 @@ export abstract class PadsScene extends Phaser.Scene {
     return Phaser.Display.Color.HSLToColor((numberOfPads - index) / (numberOfPads * 1.5), 1, 0.5);
   }
 
-  protected getPadText(_index: number): {text: string, color?: HexaColor, alpha?: number} | undefined {
+  protected getPadText(_index: number): { text: string, color?: HexaColor, alpha?: number } | undefined {
     return undefined;
   }
 
   onSettingChange(setting: Setting) {
     logger.log('Setting changed', JSON.stringify(setting));
+  }
+
+  protected getHitColor(numberOfPads: number, index: number): Phaser.Display.Color {
+    return this.getPadColor(numberOfPads, index).brighten(40);
   }
 }

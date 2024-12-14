@@ -35,6 +35,11 @@ export class DrumsScene extends PadsScene {
     return Phaser.Display.Color.IntegerToColor(hexToColor(Colors.black));
   }
 
+  protected getHitColor(_numberOfPads: number, index: number) {
+    console.log('getHitColor', index);
+    return Phaser.Display.Color.IntegerToColor(hexToColor(padColors[this.instruments[index]]));
+  }
+
   protected getPadText(index: number) {
     return { text: this.instruments[index], color: padColors[this.instruments[index]] };
   }
