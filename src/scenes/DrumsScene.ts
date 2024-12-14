@@ -1,17 +1,19 @@
-import {HexaColor, hexToColor, PhaserColors} from '../utils/colors.ts';
+import {Colors, HexaColor, hexToColor, PhaserColors} from '../utils/colors.ts';
 import {playSample, Sample} from '../samples/play-sample.ts';
 import {PadsScene} from './PadsScene.ts';
 
 const padColors: Record<Sample, HexaColor> = {
-  hihat: '#FDA341',
-  kick: '#F24E1E',
-  snare: '#4A90E2',
-  crash: '#A0D8C5',
-  'hihat-open': '#F9F871',
-  ride: '#F5C542',
-  'tom-low': '#FF7F50',
-  'tom-high': '#9B59B6',
+  hihat: Colors.orange,
+  kick: Colors.red,
+  snare: Colors.blue,
+  crash: Colors.green,
+  'hihat-open': Colors.yellow,
+  ride: Colors.yellow2,
+  'tom-low': Colors.orange2,
+  'tom-high': Colors.purple,
 };
+
+// create same object but instead of instrument, name colors
 
 export class DrumsScene extends PadsScene {
 
