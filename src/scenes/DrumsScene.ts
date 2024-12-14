@@ -1,5 +1,4 @@
-import Phaser from 'phaser';
-import {Colors, HexaColor, hexToColor} from '../utils/colors.ts';
+import {HexaColor, hexToColor, PhaserColors} from '../utils/colors.ts';
 import {playSample, Sample} from '../samples/play-sample.ts';
 import {PadsScene} from './PadsScene.ts';
 
@@ -32,16 +31,15 @@ export class DrumsScene extends PadsScene {
   }
 
   protected getPadColor(_numberOfPads: number, _index: number) {
-    return Phaser.Display.Color.IntegerToColor(hexToColor(Colors.black));
+    return PhaserColors.black;
   }
 
   protected getHitColor(_numberOfPads: number, index: number) {
-    console.log('getHitColor', index);
-    return Phaser.Display.Color.IntegerToColor(hexToColor(padColors[this.instruments[index]]));
+    return hexToColor(padColors[this.instruments[index]]);
   }
 
   protected getPadText(index: number) {
-    return { text: this.instruments[index], color: padColors[this.instruments[index]] };
+    return { text: this.instruments[index], color: hexToColor(padColors[this.instruments[index]]) };
   }
 
   playSound(index: number): void {

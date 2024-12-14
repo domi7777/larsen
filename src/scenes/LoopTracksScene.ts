@@ -1,15 +1,10 @@
 import Phaser from 'phaser';
-import {Colors, HexaColor, hexToColor} from '../utils/colors.ts';
+import {Colors, PhaserColors} from '../utils/colors.ts';
 import {FontColor, FontFamily, FontSize} from '../utils/fonts.ts';
 import {EmptyScene} from './EmptyScene.ts';
 import {Loop} from '../Loop.ts';
 import {PadsScene} from './PadsScene.ts';
 import {EVENTS} from '../events.ts';
-
-const trackColorsState: Record<string, HexaColor> = {
-  selected: Colors.white,
-  unselected: Colors.black,
-}
 
 const controlIcons = {
   play: 'play_arrow',
@@ -132,11 +127,11 @@ export class LoopTracksScene extends Phaser.Scene {
         loop: new Loop(index),
         button: this.add.rectangle()
           .setOrigin(0, 0)
-          .setStrokeStyle(2, hexToColor('#777'), 0.8)
+          .setStrokeStyle(2, PhaserColors.white.color, 0.8)
           .setInteractive()
           .on(Phaser.Input.Events.POINTER_DOWN, () => this.selectTrack(index)),
         selected: false,
-        buttonSelectedCircle: this.add.ellipse(0, 0, 0, 0, hexToColor(Colors.white)),
+        buttonSelectedCircle: this.add.ellipse(0, 0, 0, 0, PhaserColors.white.color),
         buttonText: this.add.text(0, 0, `${index + 1}`, {
           fontFamily: FontFamily.Text,
           fontSize: FontSize.medium,
@@ -235,12 +230,12 @@ export class LoopTracksScene extends Phaser.Scene {
 
   private updateControlsState() {
     LoopTracksScene.tracks.forEach((track, index) => {
-      track.button.setFillStyle(hexToColor(trackColorsState.unselected));
+      track.button.setFillStyle(PhaserColors.black.color);
       track.buttonText
         .setColor(track.selected ? Colors.black : Colors.white);
       track.buttonSelectedCircle
         .setVisible(true)
-        .setFillStyle(hexToColor(track.selected ? Colors.white : Colors.black));
+        .setFillStyle(track.selected ? PhaserColors.white.color : PhaserColors.black.color);
 
       const trackScene = this.getTrackScene(index);
       const hasLoopControls = trackScene && trackScene instanceof PadsScene;

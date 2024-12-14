@@ -1,7 +1,8 @@
-import {PadsScene, PadsSceneSettings, Range, Setting} from './PadsScene.ts';
+import {PadsScene, PadsSceneSettings, PadText, Range, Setting} from './PadsScene.ts';
 import {allFrequencies} from '../samples/synth-frequencies.ts';
 import {createAudioContext} from '../samples/sample-utils.ts';
 import Phaser from 'phaser';
+import {PhaserColors} from '../utils/colors.ts';
 
 const numberOfNotes = 12;
 const maxNumberOfOctaves = 6;
@@ -28,22 +29,46 @@ export class SimpleSynthScene extends PadsScene {
     this.settings.octaveRange = octaveRange;
   }
 
-  getPadText(index: number) {
-    const note = allFrequencies[index];
-    return note?.key ? { text: note?.key } : undefined;
+  protected getNoteColor(index: number): Phaser.Display.Color {
+    return super.getPadColor(
+      maxNumberOfPads,
+      index + this.getNoteIndexOffset()
+    );
+    // const key = allFrequencies[index]?.key;
+    // if (key?.includes('#')) {
+    //   return color.darken(70);
+    // }
+    // return color.darken(50);
   }
 
-  getPadColor(_numberOfPads: number, index: number): Phaser.Display.Color {
-    index += this.getNoteIndexOffset();
-    const color = super.getPadColor(
-      maxNumberOfPads,
-      index
-    );
-    const key = allFrequencies[index]?.key;
-    if (key?.includes('#')) {
-      return color.darken(70);
+  protected getPadText(index: number): PadText | undefined {
+    const note = allFrequencies[index];
+    return note?.key ? {
+      text: note?.key,
+      color: this.getNoteColor(index)
+    } : undefined;
+  }
+
+  protected getPadColor(_numberOfPads: number, index: number): Phaser.Display.Color {
+    if (this.isSharpKey(index)) {
+      return PhaserColors.black;
     }
-    return color.darken(50);
+    return this.getNoteColor(index).darken(90);
+  }
+
+  private isSharpKey(index: number) {
+    return this.getKey(index)?.includes('#');
+  }
+
+  protected getHitColor(_numberOfPads: number, index: number): Phaser.Display.Color {
+    if (this.isSharpKey(index)) {
+      return this.getNoteColor(index).darken(50);
+    }
+    return this.getNoteColor(index);
+  }
+
+  protected getKey(index: number) {
+    return allFrequencies[index + this.getNoteIndexOffset()]?.key;
   }
 
   /**

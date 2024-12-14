@@ -36,7 +36,7 @@ export class EmptyScene extends Phaser.Scene {
     const button = this.instrumentButtons[col][row];
     const trackSceneKey = LoopTracksScene.getTrackSceneKey(this.trackIndex);
     button.setData('text', this.addText(button, text))
-      .setFillStyle(hexToColor(colors.active), 0.5)
+      .setFillStyle(hexToColor(colors.active).color, 0.5)
       .setInteractive()
       .on(Phaser.Input.Events.POINTER_DOWN, () => {
         this.scene.setVisible(false);
@@ -74,7 +74,7 @@ export class EmptyScene extends Phaser.Scene {
         this.instrumentButtons[i].push(
           this.add.rectangle()
             .setOrigin(0, 0)
-            .setStrokeStyle(2, hexToColor(colors.border), 0.1)
+            .setStrokeStyle(2, hexToColor(colors.border).color, 0.1)
             .setInteractive()
         );
       }

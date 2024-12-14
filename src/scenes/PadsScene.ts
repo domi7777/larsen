@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import {LoopTracksScene} from './LoopTracksScene.ts';
 import {rotateArray} from '../utils/math.ts';
-import {Colors, HexaColor, hexToColor} from '../utils/colors.ts';
+import {colorToHex, PhaserColor, PhaserColors} from '../utils/colors.ts';
 import {FontColor, FontFamily, FontSize} from '../utils/fonts.ts';
 import {EVENTS} from '../events.ts';
 import {logger} from '../utils/logger.ts';
@@ -25,6 +25,12 @@ export type PadsSceneSettings = {
   octaveRange?: Range;
   onChange?: (setting: Setting) => void;
 }
+
+export type PadText = {
+  text: string,
+  color?: PhaserColor,
+  alpha?: number
+};
 
 export abstract class PadsScene extends Phaser.Scene {
 
@@ -89,7 +95,7 @@ export abstract class PadsScene extends Phaser.Scene {
     const padText = this.getPadText(index);
     const button = this.add.rectangle()
       .setFillStyle(padColor.color)
-      .setStrokeStyle(2, hexToColor(Colors.white))
+      .setStrokeStyle(2, PhaserColors.white.color)
       .setInteractive()
       .setOrigin(0, 0);
     let buttonText: Pad['text'] = undefined;
@@ -97,7 +103,7 @@ export abstract class PadsScene extends Phaser.Scene {
       buttonText = this.add.text(0, 0, padText.text, {
         fontFamily: FontFamily.Text,
         fontSize: FontSize.tiny,
-        color: padText.color ?? FontColor.white,
+        color: padText.color ? colorToHex(padText.color) : FontColor.white,
       })
         .setAlpha(padText.alpha ?? 0.5)
         .setOrigin(0.5, 0.5)
@@ -139,10 +145,11 @@ export abstract class PadsScene extends Phaser.Scene {
   }
 
   protected getPadColor(numberOfPads: number, index: number): Phaser.Display.Color {
+    // TODO move to colors.ts
     return Phaser.Display.Color.HSLToColor((numberOfPads - index) / (numberOfPads * 1.5), 1, 0.5);
   }
 
-  protected getPadText(_index: number): { text: string, color?: HexaColor, alpha?: number } | undefined {
+  protected getPadText(_index: number): PadText | undefined {
     return undefined;
   }
 
