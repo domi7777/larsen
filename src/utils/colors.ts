@@ -8,6 +8,8 @@ export const Colors = {
   white: '#D3D3D3',
   black: '#1F2023FF',
   // black: '#1a1a1ac',
+  grey: '#2C2C2C',
+  darkGrey: '#1F2023',
   orange: '#FDA341',
   red: '#F24E1E',
   blue: '#4A90E2',
@@ -26,6 +28,12 @@ export const PhaserColors = {
   },
   get black() {
     return hexToColor(Colors.black);
+  },
+  get grey() {
+    return hexToColor(Colors.grey);
+  },
+  get darkGrey() {
+    return hexToColor(Colors.darkGrey);
   },
   get orange() {
     return hexToColor(Colors.orange);
@@ -51,7 +59,7 @@ export const PhaserColors = {
   get purple() {
     return hexToColor(Colors.purple);
   },
-} as const;
+} as const satisfies Record<keyof typeof Colors, PhaserColor>;
 
 // @Deprecated
 export const hexToColor = (hexColor: HexaColor): PhaserColor => {

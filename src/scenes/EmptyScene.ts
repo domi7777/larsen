@@ -1,20 +1,13 @@
 import Phaser from 'phaser';
 
 import {LoopTracksScene} from './LoopTracksScene.ts';
-import {Colors, HexaColor, hexToColor} from '../utils/colors.ts';
+import {Colors, colorToHex, PhaserColor, PhaserColors} from '../utils/colors.ts';
 import {FontFamily, FontSize} from '../utils/fonts.ts';
 import {DrumsScene} from './DrumsScene.ts';
 import {GibberishScene} from './GiberishScene.ts';
 import {SimpleSynthScene} from './SimpleSynthScene.ts';
 import {EVENTS} from '../events.ts';
 import {DaftSynthScene} from './DaftSynthScene.ts';
-
-const colors = {
-  bg: Colors.black,
-  active: '#2b2d30',
-  text: Colors.white,
-  border: Colors.black,
-} satisfies Record<string, HexaColor>
 
 export class EmptyScene extends Phaser.Scene {
   static key = 'EmptyScene';
@@ -23,24 +16,28 @@ export class EmptyScene extends Phaser.Scene {
   private instrumentButtons!: Phaser.GameObjects.Rectangle[][];
   private trackIndex!: number;
 
+  public static sceneText = '+';
+  public static sceneTextColor: PhaserColor = PhaserColors.white;
+
   constructor() {
     super(EmptyScene.key);
   }
 
-  activateButton({row, col, text, scene}: {
+  activateButton(
     row: number,
     col: number,
     text: string,
-    scene: typeof Phaser.Scene | typeof SimpleSynthScene
-  }) {
+    sceneClass: typeof Phaser.Scene | typeof SimpleSynthScene,
+    color: PhaserColor
+  ) {
     const button = this.instrumentButtons[col][row];
     const trackSceneKey = LoopTracksScene.getTrackSceneKey(this.trackIndex);
-    button.setData('text', this.addText(button, text))
-      .setFillStyle(hexToColor(colors.active).color, 0.5)
+    button.setData('text', this.addText(button, text, color))
+      .setStrokeStyle(1, PhaserColors.grey.color)
       .setInteractive()
       .on(Phaser.Input.Events.POINTER_DOWN, () => {
         this.scene.setVisible(false);
-        this.scene.add(trackSceneKey, scene, true);
+        this.scene.add(trackSceneKey, sceneClass, true, {color, text});
       })
   }
 
@@ -51,16 +48,16 @@ export class EmptyScene extends Phaser.Scene {
 
     this.cameras.main
       .setOrigin(0, 0)
-      .setBackgroundColor(colors.bg);
+      .setBackgroundColor(Colors.black);
 
     this.createButtonsTable();
 
-    this.activateButton({row: 0, col: 0, text: 'Synth', scene: SimpleSynthScene});
-    this.activateButton({row: 1, col: 0, text: 'Daft synth', scene: DaftSynthScene});
+    this.activateButton(0, 0, 'Synth', SimpleSynthScene, PhaserColors.blue);
+    this.activateButton(1, 0, 'Daft synth', DaftSynthScene, PhaserColors.purple);
 
-    this.activateButton({row: 0, col: 1, text: 'Drums', scene: DrumsScene});
+    this.activateButton(0, 1, 'Drums', DrumsScene, PhaserColors.red);
 
-    this.activateButton({row: 0, col: 2, text: 'Gibberish', scene: GibberishScene});
+    this.activateButton(0, 2, 'Gibberish', GibberishScene, PhaserColors.green);
 
     window.addEventListener('resize', () => this.resizeScene());
     this.resizeScene();
@@ -74,17 +71,17 @@ export class EmptyScene extends Phaser.Scene {
         this.instrumentButtons[i].push(
           this.add.rectangle()
             .setOrigin(0, 0)
-            .setStrokeStyle(2, hexToColor(colors.border).color, 0.1)
             .setInteractive()
         );
       }
     }
   }
 
-  private addText(button: Phaser.GameObjects.Rectangle, text: string) {
+  private addText(button: Phaser.GameObjects.Rectangle, text: string, color: PhaserColor) {
     return this.add.text(button.x + button.width / 2, button.y + button.height / 2, text, {
       fontSize: FontSize.tiny,
-      color: colors.text,
+      color: colorToHex(color.darken(20)),
+      resolution: 2,
       fontFamily: FontFamily.Text,
     }).setOrigin(0.5);
   }

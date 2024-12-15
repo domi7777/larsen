@@ -40,13 +40,21 @@ export abstract class PadsScene extends Phaser.Scene {
     onChange: (setting) => this.onSettingChange(setting),
   }
 
+  public canRecord = true;
+  public canPlay = true;
+
+  public sceneText = '';
+  public sceneTextColor: PhaserColor = PhaserColors.white;
+
   protected constructor(protected cols: number, protected rows: number) {
     super();
   }
 
   abstract playSound(index: number): void;
 
-  create() {
+  create({color, text}: { color: PhaserColor, text: string }) {
+    this.sceneText = text;
+    this.sceneTextColor = color;
     this.createPads();
     this.game.events.emit(EVENTS.sceneChange, this.settings);
   }
@@ -93,9 +101,10 @@ export abstract class PadsScene extends Phaser.Scene {
     const padColor = this.getPadColor(numberOfPads, index);
     const hitColor = this.getHitColor(numberOfPads, index);
     const padText = this.getPadText(index);
+    const borderColor = this.getBorderColor(index);
     const button = this.add.rectangle()
       .setFillStyle(padColor.color)
-      .setStrokeStyle(2, PhaserColors.white.color)
+      .setStrokeStyle(1, borderColor.color, 0.8)
       .setInteractive()
       .setOrigin(0, 0);
     let buttonText: Pad['text'] = undefined;
@@ -159,5 +168,9 @@ export abstract class PadsScene extends Phaser.Scene {
 
   protected getHitColor(numberOfPads: number, index: number): Phaser.Display.Color {
     return this.getPadColor(numberOfPads, index).brighten(40);
+  }
+
+  protected getBorderColor(_index: number): Phaser.Display.Color {
+    return PhaserColors.darkGrey;
   }
 }

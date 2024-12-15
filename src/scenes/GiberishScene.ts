@@ -1,14 +1,7 @@
+import {logger} from '../utils/logger.ts';
+import {PadsScene} from './PadsScene.ts';
 import Phaser from 'phaser';
 import {PhaserColors} from '../utils/colors.ts';
-import {LoopTracksScene} from './LoopTracksScene.ts';
-import {rotateArray} from '../utils/math.ts';
-import {logger} from '../utils/logger.ts';
-import {EVENTS} from '../events.ts';
-
-type Pad = {
-  instrument: number,
-  button: Phaser.GameObjects.Rectangle,
-}
 
 declare const Freeverb: any, Bus2: any, Gibberish: any, Synth: any, Add: any, Sine: any, Sequencer: any;
 
@@ -59,82 +52,36 @@ const testNote = () => {
   noteSeq.start();
 }
 
-export class GibberishScene extends Phaser.Scene {
+export class GibberishScene extends PadsScene {
 
+  canRecord = false;
+  canPlay = false;
   isGibberishLoaded = false;
 
-  constructor() {
-    super();
-  }
-
-  create() {
-    this.createPads(8);
-    this.game.events.emit(EVENTS.sceneChange)
-  }
-
-  private createPads(numberOfPads: number) {
-    // change the order of the pads if needed, top to bottom and left to right
-    const pads: Pad[] = new Array(numberOfPads).fill(0).map((_, index) => {
-      return this.createPad(index);
-    });
-
-    const resizePads = () => {
-      // FIXME duplicates what's in PadsScene. Moreover they all play the same music
-      const isPortrait = window.innerWidth < window.innerHeight;
-      const colNumber = isPortrait ? 2 : 4;// FIXME should depend on numberOfPads
-      const rowNumber = isPortrait ? 4 : 2;
-      const width = isPortrait ? window.innerWidth / colNumber : (window.innerWidth - LoopTracksScene.sceneWidthHeight) / colNumber;
-      const height = isPortrait ? (window.innerHeight - LoopTracksScene.sceneWidthHeight) / rowNumber : window.innerHeight / rowNumber;
-
-      const currentPads = isPortrait ? rotateArray(pads, rowNumber, colNumber) : pads;
-
-      currentPads.forEach(({button}, index) => {
-        const x = (index % colNumber) * width;
-        const y = Math.floor(index / colNumber) * height;
-        const offsetX = isPortrait ? 0 : LoopTracksScene.sceneWidthHeight;
-        const offsetY = isPortrait ? LoopTracksScene.sceneWidthHeight : 0;
-        button.setSize(width, height).setPosition(offsetX + x, offsetY + y);
-      });
-    };
-
-    // Attach the event listener and initial call
-    window.addEventListener('resize', resizePads);
-    resizePads();
-  }
-
-  private createPad(index: number): Pad {
-    const padColor = Phaser.Display.Color.HSLToColor(index / 16, 1, 0.5)
-    const inactiveColor = padColor.darken(40).color;
-    const hitColor = padColor.brighten(4).color;
-    const button = this.add.rectangle()
-      .setFillStyle(inactiveColor)
-      .setStrokeStyle(2, PhaserColors.white.color, 0.8)
-      .setInteractive()
-      .setOrigin(0, 0);
-    button.on('pointerdown', (e: Phaser.Input.Pointer) => {
-      if (e.downElement?.tagName?.toLowerCase() !== 'canvas') {
-        return;
-      }
-      if (!this.isGibberishLoaded) {
-        this.isGibberishLoaded = true;
-        Gibberish.workletPath = './worklet.js';
-        logger.log('loading Gibberish 2...');
-        Gibberish.init().then(() => {
-          logger.log('Gibberish is ready!')
-          Gibberish.export(window)
-          testNote();
-        }).catch((e: unknown) => logger.error('oops', e));
-      } else {
+  playSound(_index: number): void {
+    if (!this.isGibberishLoaded) {
+      this.isGibberishLoaded = true;
+      Gibberish.workletPath = './worklet.js';
+      logger.log('loading Gibberish 2...');
+      Gibberish.init().then(() => {
+        logger.log('Gibberish is ready!')
+        Gibberish.export(window)
         testNote();
-      }
-      button.setFillStyle(hitColor);
-      // TODO send a call to the loop scene to play the instrument ? or an object
-      // this.scene.get(LoopTracksScene.key).events.emit(EVENTS.instrumentPlayed, {instrument, scene: this});
-    }).on('pointerup', () => button.setFillStyle(inactiveColor))
-      .on('pointerout', () => button.setFillStyle(inactiveColor));
-    return {
-      instrument: index,
-      button
-    };
+      }).catch((e: unknown) => logger.error('oops', e));
+    } else {
+      testNote();
+    }
+  }
+
+  constructor() {
+    super(1 , 1);
+  }
+
+  protected getPadColor(_numberOfPads: number, _index: number): Phaser.Display.Color {
+    return PhaserColors.black;
+  }
+
+  protected getPadText(_index: number): { text: string; color: Phaser.Display.Color } {
+    return { text: 'Play Gibberish', color: PhaserColors.green };
   }
 }
