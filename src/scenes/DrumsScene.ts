@@ -11,6 +11,7 @@ const padColors: Record<Sample, HexaColor> = {
   ride: Colors.yellow2,
   'tom-low': Colors.orange2,
   'tom-high': Colors.purple,
+  'tom-mid': Colors.pink,
 };
 
 // create same object but instead of instrument, name colors
@@ -18,18 +19,22 @@ const padColors: Record<Sample, HexaColor> = {
 export class DrumsScene extends PadsScene {
 
   private instruments: Sample[] = [
+    // cymbals
+    'crash',
     'crash',
     'ride',
     'hihat-open',
     'hihat',
+    // drums
     'snare',
-    'tom-low',
     'tom-high',
+    'tom-mid',
+    'tom-low',
     'kick',
   ]
 
   constructor() {
-    super(2, 4);
+    super(2, 5);
   }
 
   protected getPadColor(_numberOfPads: number, _index: number) {

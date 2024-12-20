@@ -18,6 +18,7 @@ export const Colors = {
   yellow2: '#F5C542',
   orange2: '#FF7F50',
   purple: '#9B59B6',
+  pink: '#FFC0CB',
 } as const;
 
 export type PhaserColor =  Phaser.Display.Color;
@@ -58,6 +59,9 @@ export const PhaserColors = {
   },
   get purple() {
     return hexToColor(Colors.purple);
+  },
+  get pink() {
+    return hexToColor(Colors.pink);
   },
 } as const satisfies Record<keyof typeof Colors, PhaserColor>;
 

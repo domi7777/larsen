@@ -4,10 +4,9 @@ import {playSnare} from './drums/snare.ts';
 import {playCrashCymbal} from './drums/crash.ts';
 import {playOpenHiHat} from './drums/hihat-open.ts';
 import {playRide} from './drums/ride.ts';
-import {playTom1Low} from './drums/tom-low.ts';
-import {playTom2High} from './drums/tom-high.ts';
 import {resetAudioContext} from './sample-utils.ts';
 import {logger} from '../utils/logger.ts';
+import {playHighTom, playLowTom, playMidTom} from './drums/toms.ts';
 
 const sampleToAudioFn: Record<Sample, (volume: number) => void> = {
   hihat: playHiHat,
@@ -16,8 +15,9 @@ const sampleToAudioFn: Record<Sample, (volume: number) => void> = {
   crash: playCrashCymbal,
   'hihat-open': playOpenHiHat,
   ride: playRide,
-  'tom-low': playTom1Low,
-  'tom-high': playTom2High,
+  'tom-low': playLowTom,
+  'tom-high': playHighTom,
+  'tom-mid': playMidTom,
 }
 
 export const playSample = (sample: Sample, volume: number) => {
@@ -34,4 +34,4 @@ export const playSample = (sample: Sample, volume: number) => {
 }
 
 export type Sample = 'hihat' | 'hihat-open' | 'ride' | 'crash'
-  | 'snare' | 'kick' | 'tom-low' | 'tom-high';
+  | 'snare' | 'kick' | 'tom-low' | 'tom-high' | 'tom-mid';
