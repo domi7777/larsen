@@ -21,6 +21,9 @@ const sampleToAudioFn: Record<Sample, (volume: number) => void> = {
 }
 
 export const playSample = (sample: Sample, volume: number) => {
+  if (volume === 0) {
+    return;
+  }
   try {
     sampleToAudioFn[sample](volume);
   } catch (e) {
