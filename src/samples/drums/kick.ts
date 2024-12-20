@@ -1,38 +1,44 @@
-// Create an Audio Context
-
-// How It Works:
-//     Low-Frequency Oscillator: We start with a sine wave, which provides the smooth, deep bass characteristic of a kick drum.
-//     Frequency Envelope: The frequency starts at 150 Hz (giving it an initial "punch") and quickly decays to 60 Hz, giving the typical bass drum "thump."
-// Gain Envelope: The volume starts high and quickly decays over 0.5 seconds to simulate the fast attack and tail of a real kick drum.
-//     Customization:
-// Pitch: Adjust the initial frequency (150 Hz) or the final frequency (60 Hz) to create different kinds of kicks (e.g., higher for more punch, lower for deeper bass).
-// Decay: The duration of the gain envelope can be adjusted to make the kick longer or shorter.
-
 import {createAudioContext} from '../sample-utils.ts';
 
 export function playKick(volume = 100) {
-  const audioContext = createAudioContext();
+  const context = createAudioContext();
+  const time = context.currentTime;
+  // Convert volume (0-100) to gain (0-1)
+  // Using a logarithmic scale for more natural volume control
+  const maxGain = Math.min(Math.max(volume, 0), 100) / 100;
+  const gainValue = Math.pow(maxGain, 2); // Square it for more natural volume scaling
 
-  // Create an oscillator for the low "thump"
-  const osc = audioContext.createOscillator();
-  osc.type = 'sine'; // Sine wave for a smooth, deep bass sound
+  // Create nodes
+  const osc = context.createOscillator();
+  const gain = context.createGain();
 
-  // Create a gain node to control the amplitude envelope
-  const gainNode = audioContext.createGain();
+  // Set initial frequency
+  osc.frequency.setValueAtTime(150, time);
 
-  // Frequency (pitch) envelope: Start higher and quickly decay to a lower frequency
-  osc.frequency.setValueAtTime(200, audioContext.currentTime); // Initial higher frequency for punch
-  osc.frequency.exponentialRampToValueAtTime(70, audioContext.currentTime + 0.05); // Drop to 60Hz
+  // Frequency envelope - sweep from 150 Hz down to nearly 0
+  osc.frequency.exponentialRampToValueAtTime(
+    0.01,
+    time + 0.5
+  );
 
-  // Gain envelope: Start loud and quickly decay
-  gainNode.gain.setValueAtTime(volume / 100, audioContext.currentTime); // Start loud
-  gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 1); // Decay to quiet over 1.5 seconds
+  // Amplitude envelope
+  gain.gain.setValueAtTime(gainValue, time);
 
-  // Connect oscillator to gain, then to the audio context destination
-  osc.connect(gainNode);
-  gainNode.connect(audioContext.destination);
+  // Make the gain reach 0 slightly before the oscillator stops
+  gain.gain.exponentialRampToValueAtTime(
+    gainValue * 0.01,
+    time + 0.48
+  );
+  gain.gain.linearRampToValueAtTime(
+    0,
+    time + 0.49
+  );
+
+  // Connect nodes
+  osc.connect(gain);
+  gain.connect(context.destination);
 
   // Start and stop the oscillator
-  osc.start();
-  osc.stop(audioContext.currentTime + 1.5); // Stop after 0.5 seconds (length of the kick)
+  osc.start(time);
+  osc.stop(time + 0.5);
 }
