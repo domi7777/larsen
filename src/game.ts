@@ -15,7 +15,7 @@ function resizeGame(game: Phaser.Game) {
 
 let isGameInitialized = false;
 
-export const Game = () => {
+export const createGame = () => {
   if (!isGameInitialized) {
     isGameInitialized = true;
     loadFonts().then(() => {
@@ -43,5 +43,4 @@ export const Game = () => {
       resizeGame(game);
     });
   }
-  return <></>;
 }
