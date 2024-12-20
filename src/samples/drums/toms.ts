@@ -58,27 +58,27 @@ export function triggerTom(volume = 50, settings = defaults) {
 
 export function playLowTom(volume = 100) {
   triggerTom(volume,  {
-    frequency: 160,    // Lower than mid tom
-    decayTime: 0.45,  // Longer decay
-    pitchDecay: 0.25, // More pitch decay
-    frequencyDrop: 0.6 // More pronounced drop than mid tom
+    frequency: 180,    // Lowest frequency
+    decayTime: 0.35,  // Longest decay
+    pitchDecay: 0.15, // Slowest pitch decay
+    frequencyDrop: 0.4 // Largest frequency drop
   });
 }
 
 export function playMidTom(volume = 100) {
   triggerTom(volume, {
-    frequency: 220,    // Between low and high tom
-    decayTime: 0.35,  // Medium decay
-    pitchDecay: 0.15, // Medium pitch decay
-    frequencyDrop: 0.4 // More pronounced drop than high tom
+    frequency: 225,    // Middle frequency
+    decayTime: 0.33,  // Medium decay
+    pitchDecay: 0.12, // Medium-fast pitch decay
+    frequencyDrop: 0.35 // Medium frequency drop
   });
 }
 
 export function playHighTom(volume = 100) {
   triggerTom(volume, {
-    frequency: 280,    // Higher than low tom
-    decayTime: 0.3,   // Shorter decay
-    pitchDecay: 0.1,  // Less pitch decay
-    frequencyDrop: 0.3 // Less pronounced drop than low tom
+    frequency: 300,    // Highest frequency
+    decayTime: 0.3,   // Shortest decay
+    pitchDecay: 0.1,  // Fast pitch decay
+    frequencyDrop: 0.3 // Moderate frequency drop
   });
 }
