@@ -43,6 +43,7 @@ export class LarsenGame extends Phaser.Game {
     this.events.on('ready', () => {
       console.log('ready');
       // TODO eventually restore previous state
+      this.startInstrumentScene(2, instrumentScenes.electroSynth);
       this.startInstrumentScene(1, instrumentScenes.synth);
       this.startInstrumentScene(0, instrumentScenes.drums);
     });
