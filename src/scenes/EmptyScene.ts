@@ -3,11 +3,8 @@ import Phaser from 'phaser';
 import {LoopTracksScene} from './LoopTracksScene.ts';
 import {Colors, colorToHex, PhaserColor, PhaserColors} from '../utils/colors.ts';
 import {FontFamily, FontSize} from '../utils/fonts.ts';
-import {DrumsScene} from './DrumsScene.ts';
-import {GibberishScene} from './GiberishScene.ts';
-import {SimpleSynthScene} from './SimpleSynthScene.ts';
 import {EVENTS} from '../events.ts';
-import {DaftSynthScene} from './DaftSynthScene.ts';
+import {InstrumentScene, instrumentScenes} from './instrumentScenes.ts';
 
 export class EmptyScene extends Phaser.Scene {
   static key = 'EmptyScene';
@@ -26,19 +23,26 @@ export class EmptyScene extends Phaser.Scene {
   activateButton(
     row: number,
     col: number,
-    text: string,
-    sceneClass: typeof Phaser.Scene | typeof SimpleSynthScene,
-    color: PhaserColor
+    instrumentScene : InstrumentScene,
   ) {
     const button = this.instrumentButtons[col][row];
-    const trackSceneKey = LoopTracksScene.getTrackSceneKey(this.trackIndex);
-    button.setData('text', this.addText(button, text, color))
+    button.setData('text', this.addText(button, instrumentScene.text, instrumentScene.color))
       .setStrokeStyle(1, PhaserColors.grey.color)
       .setInteractive()
       .on(Phaser.Input.Events.POINTER_DOWN, () => {
         this.scene.setVisible(false);
-        this.scene.add(trackSceneKey, sceneClass, true, {color, text});
+        this.startInstrumentScene(this.trackIndex, instrumentScene);
       })
+  }
+
+  private startInstrumentScene(trackSceneIndex: number, instrumentScene: InstrumentScene) {
+    const {clazz, ...rest} = instrumentScene;
+    this.scene.add(
+      LoopTracksScene.getTrackSceneKey(trackSceneIndex),
+      clazz,
+      true,
+      {...rest}
+    );
   }
 
   create({index: trackIndex}: { index: number }) {
@@ -52,12 +56,12 @@ export class EmptyScene extends Phaser.Scene {
 
     this.createButtonsTable();
 
-    this.activateButton(0, 0, 'Synth', SimpleSynthScene, PhaserColors.blue);
-    this.activateButton(1, 0, 'Daft synth', DaftSynthScene, PhaserColors.purple);
+    this.activateButton(0, 0, instrumentScenes.synth);
+    this.activateButton(1, 0, instrumentScenes.daftSynth);
 
-    this.activateButton(0, 1, 'Drums', DrumsScene, PhaserColors.red);
+    this.activateButton(0, 1, instrumentScenes.drums);
 
-    this.activateButton(0, 2, 'Gibberish', GibberishScene, PhaserColors.green);
+    this.activateButton(0, 2, instrumentScenes.gibberish);
 
     window.addEventListener('resize', () => this.resizeScene());
     this.resizeScene();
