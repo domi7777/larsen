@@ -8,22 +8,30 @@ import {ValueOf} from '../utils/types.ts';
 
 export const instrumentScenes = {
   synth: {
-    color: PhaserColors.blue,
+    get color() {
+      return PhaserColors.blue
+    },
     text: 'Synth',
     clazz: SimpleSynthScene,
   },
   daftSynth: {
-    color: PhaserColors.purple,
+    get color() {
+      return PhaserColors.purple
+    },
     text: 'Daft synth',
     clazz: DaftSynthScene,
   },
   drums: {
-    color: PhaserColors.red,
+    get color() {
+      return PhaserColors.red
+    },
     text: 'Drums',
     clazz: DrumsScene,
   },
   gibberish: {
-    color: PhaserColors.green,
+    get color() {
+      return PhaserColors.green
+    },
     text: 'Gibberish',
     clazz: GibberishScene,
   },
