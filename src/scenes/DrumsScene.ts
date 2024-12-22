@@ -34,6 +34,15 @@ export class DrumsScene extends PadsScene {
   ]
 
   constructor() {
+    // TODO make toms configurable
+    /*
+    {
+    frequency: 300,    // Highest frequency
+    decayTime: 0.3,   // Shortest decay
+    pitchDecay: 0.1,  // Fast pitch decay
+    frequencyDrop: 0.3 // Moderate frequency drop
+  }
+     */
     super(2, 5);
   }
 

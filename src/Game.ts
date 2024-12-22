@@ -5,6 +5,7 @@ import {isDarkMode} from './settings/color-settings.ts';
 import {EmptyScene} from './scenes/EmptyScene.ts';
 import {TweakPane} from './settings/TweakPane.ts';
 import {Colors} from './utils/colors.ts';
+import {InstrumentScene, instrumentScenes} from './scenes/instrumentScenes.ts';
 
 export class LarsenGame extends Phaser.Game {
   static isInitialized = false;
@@ -40,7 +41,10 @@ export class LarsenGame extends Phaser.Game {
     });
     this.scene.start(LoopTracksScene.key);
     this.events.on('ready', () => {
-      this.scene.start(EmptyScene.key);
+      console.log('ready');
+      // TODO eventually restore previous state
+      this.startInstrumentScene(1, instrumentScenes.synth);
+      this.startInstrumentScene(0, instrumentScenes.drums);
     });
     this.resizeGame();
   }
@@ -50,6 +54,16 @@ export class LarsenGame extends Phaser.Game {
     const height = window.innerHeight;
     this.scale.resize(width, height);
     this.scene.scenes.forEach(scene => scene.sys?.scale?.refresh());
+  }
+
+  startInstrumentScene(trackIndex: number, instrumentScene: InstrumentScene) {
+    const {clazz, ...rest} = instrumentScene;
+    this.scene.add(
+      LoopTracksScene.getTrackSceneKey(trackIndex),
+      clazz,
+      true,
+      {...rest}
+    );
   }
 
 }

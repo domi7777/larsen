@@ -5,6 +5,7 @@ import {Colors, colorToHex, PhaserColor, PhaserColors} from '../utils/colors.ts'
 import {FontFamily, FontSize} from '../utils/fonts.ts';
 import {EVENTS} from '../events.ts';
 import {InstrumentScene, instrumentScenes} from './instrumentScenes.ts';
+import {LarsenGame} from '../Game.ts';
 
 export class EmptyScene extends Phaser.Scene {
   static key = 'EmptyScene';
@@ -31,18 +32,8 @@ export class EmptyScene extends Phaser.Scene {
       .setInteractive()
       .on(Phaser.Input.Events.POINTER_DOWN, () => {
         this.scene.setVisible(false);
-        this.startInstrumentScene(this.trackIndex, instrumentScene);
+        LarsenGame.instance.startInstrumentScene(this.trackIndex, instrumentScene);
       })
-  }
-
-  private startInstrumentScene(trackSceneIndex: number, instrumentScene: InstrumentScene) {
-    const {clazz, ...rest} = instrumentScene;
-    this.scene.add(
-      LoopTracksScene.getTrackSceneKey(trackSceneIndex),
-      clazz,
-      true,
-      {...rest}
-    );
   }
 
   create({index: trackIndex}: { index: number }) {
