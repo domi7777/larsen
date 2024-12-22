@@ -1,5 +1,5 @@
-import {createGame} from './game.ts';
+import {LarsenGame} from './Game.ts';
 
-(()=> {
-  createGame();
+(async () => {
+  await LarsenGame.createGame();
 })();
