@@ -11,14 +11,14 @@ export const instrumentScenes = {
     get color() {
       return PhaserColors.blue
     },
-    text: 'Synth',
+    text: 'Piano',
     clazz: SimpleSynthScene,
   },
-  daftSynth: {
+  electroSynth: {
     get color() {
       return PhaserColors.purple
     },
-    text: 'Daft synth',
+    text: 'Electro',
     clazz: DaftSynthScene,
   },
   drums: {

@@ -48,7 +48,7 @@ export class EmptyScene extends Phaser.Scene {
     this.createButtonsTable();
 
     this.activateButton(0, 0, instrumentScenes.synth);
-    this.activateButton(1, 0, instrumentScenes.daftSynth);
+    this.activateButton(1, 0, instrumentScenes.electroSynth);
 
     this.activateButton(0, 1, instrumentScenes.drums);
 
