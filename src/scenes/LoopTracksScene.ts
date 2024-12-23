@@ -172,7 +172,11 @@ export class LoopTracksScene extends Phaser.Scene {
       }, index) => {
       const x = isPortrait ? buttonWidth * index : 0;
       const y = isPortrait ? 0 : buttonHeight * index;
-      button.setSize(buttonWidth, buttonHeight).setPosition(x, y);
+      // hack to make button border fully displayed, for some reason some pixels are missing...
+      const borderOffset = 2;
+      button
+        .setSize(buttonWidth - (borderOffset * 2) , buttonHeight - (borderOffset * 2))
+        .setPosition(x + borderOffset, y + borderOffset);
 
       const textX = isPortrait ? button.getCenter().x : button.getCenter().x - buttonWidth / 4;
       const textY = isPortrait ? button.getCenter().y - buttonHeight / 4 : button.getCenter().y;
