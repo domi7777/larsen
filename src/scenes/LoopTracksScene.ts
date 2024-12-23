@@ -22,8 +22,6 @@ const controlColors = {
 type Track = {
   button: Phaser.GameObjects.Rectangle;
   buttonText: Phaser.GameObjects.Text;
-  // TODO remove?
-  buttonSelectedCircle: Phaser.GameObjects.Ellipse;
   selected: boolean,
   loop: Loop;
   controlIcon: Phaser.GameObjects.Text;
@@ -96,28 +94,28 @@ export class LoopTracksScene extends Phaser.Scene {
     return this.scene.get(LoopTracksScene.getTrackSceneKey(index)) as PadsScene;
   }
 
-  updateProgressArc(track: Track) {
-    const loopLength = track.loop.getLoopLength();
-    if (!loopLength) {
-      throw new Error('Loop length is not defined');
-    }
-
-    const elapsed = Date.now() - track.loop.getStartPlayingTime();
-    const progress = elapsed / loopLength; // 0 to 1 based on loop progress
-
-    // Clear previous arc and redraw
-    track.loopProgressArc.clear();
-    track.loopProgressArc.lineStyle(4, 0x00FF00, 1); // green color with 4px thickness
-
-    // Calculate the angle for the arc based on progress
-    const startAngle = Phaser.Math.DegToRad(-90); // start from the top
-    const endAngle = startAngle + Phaser.Math.DegToRad(360 * progress);
-
-    // Draw the arc around the button
-    track.loopProgressArc.beginPath();
-    track.loopProgressArc.arc(track.buttonText.x, track.buttonText.y, track.buttonSelectedCircle.width / 2, startAngle, endAngle, false); // radius slightly larger than button
-    track.loopProgressArc.strokePath();
-  }
+  // updateProgressArc(track: Track) {
+  //   const loopLength = track.loop.getLoopLength();
+  //   if (!loopLength) {
+  //     throw new Error('Loop length is not defined');
+  //   }
+  //
+  //   const elapsed = Date.now() - track.loop.getStartPlayingTime();
+  //   const progress = elapsed / loopLength; // 0 to 1 based on loop progress
+  //
+  //   // Clear previous arc and redraw
+  //   track.loopProgressArc.clear();
+  //   track.loopProgressArc.lineStyle(4, 0x00FF00, 1); // green color with 4px thickness
+  //
+  //   // Calculate the angle for the arc based on progress
+  //   const startAngle = Phaser.Math.DegToRad(-90); // start from the top
+  //   const endAngle = startAngle + Phaser.Math.DegToRad(360 * progress);
+  //
+  //   // Draw the arc around the button
+  //   track.loopProgressArc.beginPath();
+  //   track.loopProgressArc.arc(track.buttonText.x, track.buttonText.y, track.buttonSelectedCircle.width / 2, startAngle, endAngle, false); // radius slightly larger than button
+  //   track.loopProgressArc.strokePath();
+  // }
 
   private createTracks() {
     LoopTracksScene.tracks = new Array(LoopTracksScene.numTracks).fill(null).map((_, index) => {
@@ -243,16 +241,12 @@ export class LoopTracksScene extends Phaser.Scene {
       track.button
         .setDepth(track.selected ? 0 : -1)
         .setFillStyle(PhaserColors.black.color)
-        .setStrokeStyle(1, trackColor)
+        .setStrokeStyle(1, trackColor);
 
       track.buttonText
         .setText(trackScene?.sceneText ?? EmptyScene.sceneText)
         .setColor(colorToHex(trackScene?.sceneTextColor ?? EmptyScene.sceneTextColor))
         .setAlpha(track.selected ? 1 : 0.5);
-
-      track.buttonSelectedCircle
-        .setVisible(false)
-        .setFillStyle(track.selected ? PhaserColors.white.color : PhaserColors.black.color);
 
       const hasLoopControls = trackScene?.canRecord || trackScene?.canPlay;
       if (hasLoopControls) {
