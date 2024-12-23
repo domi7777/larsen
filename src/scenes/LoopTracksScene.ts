@@ -188,11 +188,6 @@ export class LoopTracksScene extends Phaser.Scene {
         .setPosition(textX, textY)
         .setWordWrapWidth(buttonWidth - 10, true)
         .setRotation(isPortrait ? 0 : - Math.PI / 2);
-      //
-      // buttonSelectedCircle
-      //   .setSize(minWidthHeight / 3, minWidthHeight / 3)
-      //   .setPosition(textX, textY)
-      //   .setVisible(false);
 
       controlIcon
         .setOrigin(isPortrait ? 0.5 : 1, isPortrait ? 1 : 0.5)
