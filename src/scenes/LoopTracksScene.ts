@@ -235,10 +235,16 @@ export class LoopTracksScene extends Phaser.Scene {
     LoopTracksScene.tracks.forEach((track, index) => {
       const trackScene = this.getTrackScene(index);
       const sceneTextColor = trackScene?.sceneTextColor.color ?? EmptyScene.sceneTextColor.color;
+      const trackColor = track.selected ? sceneTextColor : PhaserColors.darkGrey.color;
+      track.button.clearFX();
+      if (track.selected) {
+        track.button.postFX.addGlow(trackColor, 1, 3)
+      }
       track.button
         .setDepth(track.selected ? 0 : -1)
         .setFillStyle(PhaserColors.black.color)
-        .setStrokeStyle(1, track.selected ? sceneTextColor : PhaserColors.darkGrey.color);
+        .setStrokeStyle(1, trackColor)
+
       track.buttonText
         .setText(trackScene?.sceneText ?? EmptyScene.sceneText)
         .setColor(colorToHex(trackScene?.sceneTextColor ?? EmptyScene.sceneTextColor))
