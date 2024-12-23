@@ -84,11 +84,12 @@ export class LoopTracksScene extends Phaser.Scene {
   }
 
   update() {
-    for (const track of LoopTracksScene.tracks) {
-      if (track.loop.isPlaying()) {
-        this.updateProgressArc(track);
-      }
-    }
+    // fixme eventually
+    // for (const track of LoopTracksScene.tracks) {
+    //   if (track.loop.isPlaying()) {
+    //     this.updateProgressArc(track);
+    //   }
+    // }
   }
 
   public getTrackScene(index: number): PadsScene | undefined {
