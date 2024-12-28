@@ -38,7 +38,7 @@ export const instrumentScenes = {
 } satisfies Record<string, {
   color: PhaserColor;
   text: string;
-  clazz: typeof Phaser.Scene;
+  clazz: typeof Phaser.Scene | typeof SimpleSynthScene | typeof DaftSynthScene | typeof DrumsScene | typeof GibberishScene;
 }>;
 
 export type InstrumentScene = ValueOf<typeof instrumentScenes>;
