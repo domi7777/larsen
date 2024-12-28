@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import {PhaserColor, PhaserColors} from '../utils/colors.ts';
 import {GibberishScene} from './GiberishScene.ts';
 import {DrumsScene} from './DrumsScene.ts';
-import {DaftSynthScene} from './DaftSynthScene.ts';
+import {ElectroScene} from './ElectroScene.ts';
 import {PianoScene} from './PianoScene.ts';
 import {ValueOf} from '../utils/types.ts';
 
@@ -19,7 +19,7 @@ export const instrumentScenes = {
       return PhaserColors.purple
     },
     text: 'Electro',
-    clazz: DaftSynthScene,
+    clazz: ElectroScene,
   },
   drums: {
     get color() {
@@ -38,7 +38,7 @@ export const instrumentScenes = {
 } satisfies Record<string, {
   color: PhaserColor;
   text: string;
-  clazz: typeof Phaser.Scene | typeof PianoScene | typeof DaftSynthScene | typeof DrumsScene | typeof GibberishScene;
+  clazz: typeof Phaser.Scene | typeof PianoScene | typeof ElectroScene | typeof DrumsScene | typeof GibberishScene;
 }>;
 
 export type InstrumentScene = ValueOf<typeof instrumentScenes>;

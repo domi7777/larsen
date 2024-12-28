@@ -4,7 +4,7 @@ import {PianoScene} from './PianoScene.ts';
 import Phaser from 'phaser';
 import {PadsSceneSettings} from './PadsScene.ts';
 
-export class DaftSynthScene extends PianoScene {
+export class ElectroScene extends PianoScene {
 
   constructor() {
     super({
