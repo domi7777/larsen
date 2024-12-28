@@ -189,7 +189,7 @@ export class LoopTracksScene extends Phaser.Scene {
         .setOrigin(isPortrait ? 0.5 : 1, isPortrait ? 1 : 0.5)
         .setPosition(
           isPortrait ? button.getCenter().x : button.getRightCenter().x,
-          isPortrait ? button.getBottomCenter().y : button.getCenter().y
+          isPortrait ? button.getBottomCenter().y : button.getCenter().y + 5 // +5 because of font not being centered vertically
         );
     });
 
