@@ -1,10 +1,10 @@
 import Phaser from 'phaser';
-import {PhaserColor, PhaserColors} from '../utils/colors.ts';
+import {PhaserColor, PhaserColors} from '../../utils/colors.ts';
 import {GibberishScene} from './GiberishScene.ts';
 import {DrumsScene} from './DrumsScene.ts';
 import {ElectroScene} from './ElectroScene.ts';
 import {PianoScene} from './PianoScene.ts';
-import {ValueOf} from '../utils/types.ts';
+import {ValueOf} from '../../utils/types.ts';
 
 export const instrumentScenes = {
   synth: {

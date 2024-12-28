@@ -5,7 +5,7 @@ import {LoopTracksScene} from '../scenes/LoopTracksScene.ts';
 import {logger} from '../utils/logger.ts';
 import {BindingApi} from '@tweakpane/core';
 import {EVENTS} from '../events.ts';
-import {PadsSceneSettings} from '../scenes/PadsScene.ts';
+import {PadsSceneSettings} from '../scenes/instruments/PadsScene.ts';
 
 type MinMax = { min: number; max: number; };
 

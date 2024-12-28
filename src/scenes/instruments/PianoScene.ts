@@ -1,8 +1,8 @@
 import {PadsScene, PadsSceneSettings, PadText, Range, Setting} from './PadsScene.ts';
-import {allFrequencies} from '../samples/synth-frequencies.ts';
-import {createAudioContext} from '../samples/sample-utils.ts';
+import {allFrequencies} from '../../samples/synth-frequencies.ts';
+import {createAudioContext} from '../../samples/sample-utils.ts';
 import Phaser from 'phaser';
-import {PhaserColors} from '../utils/colors.ts';
+import {PhaserColors} from '../../utils/colors.ts';
 
 export class PianoScene extends PadsScene {
 

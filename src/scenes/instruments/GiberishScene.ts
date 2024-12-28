@@ -1,7 +1,7 @@
-import {logger} from '../utils/logger.ts';
+import {logger} from '../../utils/logger.ts';
 import {PadsScene} from './PadsScene.ts';
 import Phaser from 'phaser';
-import {PhaserColors} from '../utils/colors.ts';
+import {PhaserColors} from '../../utils/colors.ts';
 
 declare const Freeverb: any, Bus2: any, Gibberish: any, Synth: any, Add: any, Sine: any, Sequencer: any;
 

@@ -4,7 +4,7 @@ import {LoopTracksScene} from './LoopTracksScene.ts';
 import {Colors, colorToHex, PhaserColor, PhaserColors} from '../utils/colors.ts';
 import {FontFamily, FontSize} from '../utils/fonts.ts';
 import {EVENTS} from '../events.ts';
-import {InstrumentScene, instrumentScenes} from './instrumentScenes.ts';
+import {InstrumentScene, instrumentScenes} from './instruments/instrumentScenes.ts';
 import {LarsenGame} from '../Game.ts';
 
 export class EmptyScene extends Phaser.Scene {

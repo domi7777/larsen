@@ -5,7 +5,7 @@ import {isDarkMode} from './settings/color-settings.ts';
 import {EmptyScene} from './scenes/EmptyScene.ts';
 import {TweakPane} from './settings/TweakPane.ts';
 import {Colors} from './utils/colors.ts';
-import {InstrumentScene, instrumentScenes} from './scenes/instrumentScenes.ts';
+import {InstrumentScene, instrumentScenes} from './scenes/instruments/instrumentScenes.ts';
 
 export class LarsenGame extends Phaser.Game {
   static isInitialized = false;

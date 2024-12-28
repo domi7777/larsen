@@ -3,7 +3,7 @@ import {Colors, colorToHex, HexaColor, hexToColor, PhaserColors} from '../utils/
 import {FontColor, FontFamily, FontSize} from '../utils/fonts.ts';
 import {EmptyScene} from './EmptyScene.ts';
 import {Loop} from '../Loop.ts';
-import {PadsScene} from './PadsScene.ts';
+import {PadsScene} from './instruments/PadsScene.ts';
 import {EVENTS} from '../events.ts';
 
 const controlIcons = {

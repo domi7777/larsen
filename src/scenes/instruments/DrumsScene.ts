@@ -1,5 +1,5 @@
-import {Colors, HexaColor, hexToColor, PhaserColors} from '../utils/colors.ts';
-import {playSample, Sample} from '../samples/play-sample.ts';
+import {Colors, HexaColor, hexToColor, PhaserColors} from '../../utils/colors.ts';
+import {playSample, Sample} from '../../samples/play-sample.ts';
 import {PadsScene} from './PadsScene.ts';
 
 const padColors: Record<Sample, HexaColor> = {

@@ -1,5 +1,5 @@
-import {allFrequencies} from '../samples/synth-frequencies.ts';
-import {createAudioContext} from '../samples/sample-utils.ts';
+import {allFrequencies} from '../../samples/synth-frequencies.ts';
+import {createAudioContext} from '../../samples/sample-utils.ts';
 import {PianoScene} from './PianoScene.ts';
 import Phaser from 'phaser';
 import {PadsSceneSettings} from './PadsScene.ts';

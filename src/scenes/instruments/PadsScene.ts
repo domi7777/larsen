@@ -1,10 +1,10 @@
 import Phaser from 'phaser';
-import {LoopTracksScene} from './LoopTracksScene.ts';
-import {rotateArray} from '../utils/math.ts';
-import {colorToHex, PhaserColor, PhaserColors} from '../utils/colors.ts';
-import {FontColor, FontFamily, FontSize} from '../utils/fonts.ts';
-import {EVENTS} from '../events.ts';
-import {logger} from '../utils/logger.ts';
+import {LoopTracksScene} from '../LoopTracksScene.ts';
+import {rotateArray} from '../../utils/math.ts';
+import {colorToHex, PhaserColor, PhaserColors} from '../../utils/colors.ts';
+import {FontColor, FontFamily, FontSize} from '../../utils/fonts.ts';
+import {EVENTS} from '../../events.ts';
+import {logger} from '../../utils/logger.ts';
 
 type Pad = {
   instrument: number,
