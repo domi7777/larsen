@@ -4,7 +4,7 @@ import {createAudioContext} from '../samples/sample-utils.ts';
 import Phaser from 'phaser';
 import {PhaserColors} from '../utils/colors.ts';
 
-export class SimpleSynthScene extends PadsScene {
+export class PianoScene extends PadsScene {
 
   protected static numberOfNotes = 12;
   protected static minNumberOfOctaves = 1;
@@ -24,15 +24,15 @@ export class SimpleSynthScene extends PadsScene {
     return this.numberOfNotes;
   }
 
-  constructor(octaveRange: Range = SimpleSynthScene.octaveRange) {
-    super(SimpleSynthScene.getCols(octaveRange), SimpleSynthScene.getRows());
+  constructor(octaveRange: Range = PianoScene.octaveRange) {
+    super(PianoScene.getCols(octaveRange), PianoScene.getRows());
     this.settings.noteDuration = 1.5;
     this.settings.octaveRange = octaveRange;
   }
 
   protected getNoteColor(index: number): Phaser.Display.Color {
     return super.getPadColor(
-      SimpleSynthScene.maxNumberOfPads,
+      PianoScene.maxNumberOfPads,
       index + this.getNoteIndexOffset()
     );
     // const key = allFrequencies[index]?.key;
@@ -76,7 +76,7 @@ export class SimpleSynthScene extends PadsScene {
    * when changing the range of the notes, we need to offset the index to get the correct note
    */
   protected getNoteIndexOffset() {
-    return this.getLowerRangeIndex() * SimpleSynthScene.numberOfNotes;
+    return this.getLowerRangeIndex() * PianoScene.numberOfNotes;
   }
 
   protected getLowerRangeIndex() {
@@ -96,7 +96,7 @@ export class SimpleSynthScene extends PadsScene {
   onSettingChange(setting: Setting) {
     super.onSettingChange(setting);
     if (setting.octaveRange) {
-      super.changePadNumber(SimpleSynthScene.getCols(setting.octaveRange), SimpleSynthScene.numberOfNotes);
+      super.changePadNumber(PianoScene.getCols(setting.octaveRange), PianoScene.numberOfNotes);
     }
   }
 }

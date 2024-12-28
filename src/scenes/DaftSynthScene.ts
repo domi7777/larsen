@@ -1,15 +1,15 @@
 import {allFrequencies} from '../samples/synth-frequencies.ts';
 import {createAudioContext} from '../samples/sample-utils.ts';
-import {SimpleSynthScene} from './SimpleSynthScene.ts';
+import {PianoScene} from './PianoScene.ts';
 import Phaser from 'phaser';
 import {PadsSceneSettings} from './PadsScene.ts';
 
-export class DaftSynthScene extends SimpleSynthScene {
+export class DaftSynthScene extends PianoScene {
 
   constructor() {
     super({
-      min: SimpleSynthScene.minNumberOfOctaves,
-      max: SimpleSynthScene.maxNumberOfOctaves,
+      min: PianoScene.minNumberOfOctaves,
+      max: PianoScene.maxNumberOfOctaves,
     });
     this.settings.noteDuration = 2;
   }
