@@ -7,12 +7,14 @@ import {playRide} from './drums/ride.ts';
 import {resetAudioContext} from './sample-utils.ts';
 import {logger} from '../utils/logger.ts';
 import {playHighTom, playLowTom, playMidTom} from './drums/toms.ts';
+import {playCowBell} from './drums/cow-bell.ts';
 
 const sampleToAudioFn: Record<Sample, (volume: number) => void> = {
   hihat: playHiHat,
   kick: playKick,
   snare: playSnare,
   crash: playCrashCymbal,
+  'cow-bell': playCowBell,
   'hihat-open': playOpenHiHat,
   ride: playRide,
   'tom-low': playLowTom,
@@ -33,5 +35,5 @@ export const playSample = (sample: Sample, volume: number) => {
   }
 }
 
-export type Sample = 'hihat' | 'hihat-open' | 'ride' | 'crash'
+export type Sample = 'hihat' | 'hihat-open' | 'ride' | 'crash' | 'cow-bell'
   | 'snare' | 'kick' | 'tom-low' | 'tom-high' | 'tom-mid';

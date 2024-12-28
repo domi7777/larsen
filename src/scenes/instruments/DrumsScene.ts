@@ -7,6 +7,7 @@ const padColors: Record<Sample, HexaColor> = {
   kick: Colors.red,
   snare: Colors.blue,
   crash: Colors.green,
+  'cow-bell': Colors.white,
   'hihat-open': Colors.yellow,
   ride: Colors.yellow2,
   'tom-low': Colors.orange2,
@@ -21,7 +22,7 @@ export class DrumsScene extends PadsScene {
   private instruments: Sample[] = [
     // cymbals
     'crash',
-    'crash',
+    'cow-bell',
     'ride',
     'hihat-open',
     'hihat',
