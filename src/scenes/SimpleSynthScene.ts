@@ -4,34 +4,35 @@ import {createAudioContext} from '../samples/sample-utils.ts';
 import Phaser from 'phaser';
 import {PhaserColors} from '../utils/colors.ts';
 
-const numberOfNotes = 12;
-const maxNumberOfOctaves = 6;
-const maxNumberOfPads = numberOfNotes * maxNumberOfOctaves;
-
-const getCols = (octaves: Range) => {
-  return octaves.max + 1 - octaves.min;
-}
-
-const getRows = () => {
-  return numberOfNotes;
-}
-
-const octaveRange = {
-  min: 2,
-  max: maxNumberOfOctaves - 2,
-};
-
 export class SimpleSynthScene extends PadsScene {
 
-  constructor() {
-    super(getCols(octaveRange), getRows());
+  protected static numberOfNotes = 12;
+  protected static minNumberOfOctaves = 1;
+  protected static maxNumberOfOctaves = 6;
+  protected static maxNumberOfPads = this.numberOfNotes * this.maxNumberOfOctaves;
+
+  protected static octaveRange = {
+    min: 2,
+    max: this.maxNumberOfOctaves - 2,
+  };
+
+  protected static getCols(octaves: Range) {
+    return octaves.max + 1 - octaves.min;
+  }
+
+  protected static getRows() {
+    return this.numberOfNotes;
+  }
+
+  constructor(octaveRange: Range = SimpleSynthScene.octaveRange) {
+    super(SimpleSynthScene.getCols(octaveRange), SimpleSynthScene.getRows());
     this.settings.noteDuration = 1.5;
     this.settings.octaveRange = octaveRange;
   }
 
   protected getNoteColor(index: number): Phaser.Display.Color {
     return super.getPadColor(
-      maxNumberOfPads,
+      SimpleSynthScene.maxNumberOfPads,
       index + this.getNoteIndexOffset()
     );
     // const key = allFrequencies[index]?.key;
@@ -75,7 +76,7 @@ export class SimpleSynthScene extends PadsScene {
    * when changing the range of the notes, we need to offset the index to get the correct note
    */
   protected getNoteIndexOffset() {
-    return this.getLowerRangeIndex() * numberOfNotes;
+    return this.getLowerRangeIndex() * SimpleSynthScene.numberOfNotes;
   }
 
   protected getLowerRangeIndex() {
@@ -95,12 +96,12 @@ export class SimpleSynthScene extends PadsScene {
   onSettingChange(setting: Setting) {
     super.onSettingChange(setting);
     if (setting.octaveRange) {
-      super.changePadNumber(getCols(setting.octaveRange), numberOfNotes);
+      super.changePadNumber(SimpleSynthScene.getCols(setting.octaveRange), SimpleSynthScene.numberOfNotes);
     }
   }
 }
 
-const playPianoTone = ({ frequency, volume = 50, noteDuration = 1.5 }: { frequency: number } & PadsSceneSettings) => {
+const playPianoTone = ({frequency, volume = 50, noteDuration = 1.5}: { frequency: number } & PadsSceneSettings) => {
   const audioContext = createAudioContext();
   // Create an oscillator for the main tone
   const oscillator = audioContext.createOscillator();

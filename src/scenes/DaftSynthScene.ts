@@ -7,7 +7,10 @@ import {PadsSceneSettings} from './PadsScene.ts';
 export class DaftSynthScene extends SimpleSynthScene {
 
   constructor() {
-    super();
+    super({
+      min: SimpleSynthScene.minNumberOfOctaves,
+      max: SimpleSynthScene.maxNumberOfOctaves,
+    });
     this.settings.noteDuration = 2;
   }
 
